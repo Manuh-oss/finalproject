@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <link rel="stylesheet" href="quiz.css" />
+  </head>
+  <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span><i class="fa fa-user-graduate"></i></span>
+              highschool</strong
+            >
+          </div>
+          <div class="body">
+            <a href="#"
+              ><i class="fa fa-home"></i>
+              <span class="writing">Dashboard</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-user-plus"></i>
+              <span class="writing">Enrol</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-users"></i>
+              <span class="writing">Profiles</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-clipboard"></i>
+              <span class="writing">Result</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-calendar"></i>
+              <span class="writing">event</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-table"></i>
+              <span class="writing">Timetable</span></a
+            >
+          </div>
+        </nav>
+      </aside>
+      <div class="main-main" style="background-color: #f6f9fc">
+        <div class="tittle">
+          <h1>
+            <span class="material-symbols-outlined" id="apps">apps</span> Event
+          </h1>
+          <div class="icons-profile">
+            <div class="search">
+              <i class="fa fa-search fa-beat open-search"></i>
+              <div class="search-dropdown hide">
+                <form class="search-input">
+                  <input
+                    type="text"
+                    name="search"
+                    id=""
+                    class="search"
+                    required
+                  />
+                  <button type="submit" class="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+
+                <div class="recents">
+                  <h3>recent search</h3>
+                  <ul>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="notification">
+              <i class="fa-regular fa-bell"></i>
+              <div class="notification-dropdown closed">
+                <ul>
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <i class="fa fa-cog fa-spin"></i>
+            <span class="profile-box">
+              <img src="./teachers/martin.jpg" alt="" />
+            </span>
+          </div>
+        </div>
+        <div class="main">
+          <form class="topic-container">
+            <div class="select">
+              <span>
+                <h3>class:</h3>
+                <select name="class" id="class" class="required">
+                  <option value="1">--choose class--</option>
+                  <option value="1">Form1</option>
+                  <option value="2">Form2</option>
+                  <option value="3">Form3</option>
+                  <option value="4">Form4</option>
+                </select>
+              </span>
+              <span>
+                <h3>subject:</h3>
+                <select name="subject" id="subject-one" class="required">
+                  <option value="geography">--choose subject--</option>
+                  <option value="english">English</option>
+                  <option value="kiswahili">Kiswahili</option>
+                  <option value="mathematics">Mathematics</option>
+                  <option value="chemistry">Chemistry</option>
+                  <option value="biology">Biology</option>
+                  <option value="physics">Physics</option>
+                  <option value="geography">Geography</option>
+                  <option value="history">History</option>
+                  <option value="cre">C.R.E</option>
+                  <option value="business">Business</option>
+                  <option value="computer">Computer</option>
+                  <option value="french">French</option>
+                  <option value="agriculture">Agriculture</option>
+                </select>
+              </span>
+            </div>
+
+            <div class="body">
+              <h1 class="heading">chemistry</h1>
+              <ul></ul>
+              <div class="noresult">
+                <img src="./subjects/noresultsix.jpeg" alt="" />
+                <h3>no results were found</h3>
+              </div>
+            </div>
+          </form>
+
+          <div class="reattempt" style="display: none">
+            <div class="container">
+              <h2 class="topic-heading">introduction to chemistry</h2>
+              <div class="body">
+                <h2 class="instructions">instructions to students</h2>
+                <ol>
+                  <li>answer all questions</li>
+                  <li>
+                    highschools observes zero tolerance of examination cheating
+                  </li>
+                  <li>
+                    if duration time ends the quiz will be submitted
+                    automatically
+                  </li>
+                  <li>by clicking 'start' the quiz starts</li>
+                </ol>
+                <h3 id="duration"></h3>
+              </div>
+              <div class="reattempt-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>attempt</th>
+                      <th>score</th>
+                      <th>date</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="button">
+                <button type="button" class="start">start</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="main-quiz-container" style="display: none">
+            <div class="quiz-container">
+              <div class="left">
+                <div class="question-heading">
+                  <h2>simple quiz</h2>
+                </div>
+                <div class="body">
+                  <div class="question">
+                    <h3>
+                      <span class="count">1.</span> Lorem ipsum dolor sit amet
+                      consectetur adipisicing elit. Ipsam magni, eaque eligendi
+                      nobis vel cum accusamus odit voluptates dolorum distinctio
+                      laboriosam cumque ex totam consectetur! Quis voluptatibus
+                      dolores sit reprehenderit.
+                    </h3>
+                  </div>
+                  <div class="answers">
+                    <button class="btn">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Veritatis at ut autem voluptatum atque asperiores
+                      voluptatibus vero, inventore amet neque natus? Quo, unde
+                      totam? Dolore numquam distinctio incidunt ratione quos!
+                    </button>
+                    <button class="btn">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Veritatis at ut autem voluptatum atque asperiores
+                      voluptatibus vero, inventore amet neque natus? Quo, unde
+                      totam? Dolore numquam distinctio incidunt ratione quos!
+                    </button>
+                    <button class="btn">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Veritatis at ut autem voluptatum atque asperiores
+                      voluptatibus vero, inventore amet neque natus? Quo, unde
+                      totam? Dolore numquam distinctio incidunt ratione quos!
+                    </button>
+                    <button class="btn">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Veritatis at ut autem voluptatum atque asperiores
+                      voluptatibus vero, inventore amet neque natus? Quo, unde
+                      totam? Dolore numquam distinctio incidunt ratione quos!
+                    </button>
+                  </div>
+                  <div class="solution" style="display: none">
+                    <h3>solution</h3>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Alias ad a, laborum commodi fugiat delectus in, quod
+                      libero, inventore nulla neque quam cupiditate modi sed
+                      deserunt eos beatae quis ex.
+                    </p>
+                  </div>
+                  <div class="next-button">
+                    <button type="button" class="next" id="next">next</button>
+                  </div>
+                  <div class="small-screen-timer">
+                    <div class="box">
+                      <p class="time-text-display">10:10</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="right">
+              <div class="timer">
+                <div class="timer-container">
+                  <svg class="timer-svg">
+                    <circle class="base" cx="50%" cy="50%" r="45"></circle>
+                    <circle class="progress" cx="50%" cy="50%" r="45"></circle>
+                  </svg>
+                  <div class="time-text" id="timeDisplay">01:00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="finished-box" style="display: none">
+            <div class="finished">
+            <h2>quiz completed</h2>
+            <ul>
+              <li><span>topic:</span> 1</li>
+              <li><span>score:</span> 2/5</li>
+              <li><span>remarks:</span>fair</li>
+              <li><span>date:</span> 15/6/2025</li>
+              <li>
+                quiz was done and results for 6219 were submitted succesfully
+              </li>
+            </ul>
+            <div class="button">
+              <button type="button" class="back">back</button>
+              <button type="button" class="restart">
+                <i class="fa-solid fa-history"></i> reattempt
+              </button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="quiz.js"></script>
+    <script src="tittle.js"></script>
+  </body>
+</html>

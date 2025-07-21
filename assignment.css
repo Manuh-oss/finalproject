@@ -1,0 +1,353 @@
+.main .select{
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+}
+
+.main .main-body{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+    border: 1px solid #d1d5db;
+    background-color: #fff;
+    border-radius: 1.5rem;
+}
+
+.main{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding:0 2rem;
+}
+
+.main .select span{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1 1 0;
+}
+
+.main .select span select{
+    min-height: 4rem;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    outline: none;
+    padding: 0 1rem;
+}
+
+.main-body .head{
+    display: flex;
+    gap: 1.5rem;
+    justify-content: flex-start;
+}
+
+.main-body .head button{
+    height: 4rem;
+    background: none;
+    border: none;
+    outline: none;
+    color: black;
+}
+
+.active{
+    border-bottom: 2px solid navy;
+    color: navy;
+}
+
+.assignment-body{
+    flex-grow: 1;
+    width: 100%;
+}
+
+.assignment-body ul{
+    list-style: none;
+    padding: 0;
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.assignment-body ul li{
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    height: 7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #f8f8ff;
+    border-left: 2px solid red;
+    border-radius: 1rem;
+    justify-content: center;
+}
+
+.assignment-body ul li h3{
+    font-size: 2rem;
+    font-family: 'Gill Sans', sans-serif;
+    font-weight: 400;
+}
+
+.assignment-body ul li h4{
+    font-size: 1rem;
+    color: navy;
+}
+
+.assignment-body ul li p{
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+}
+
+/*this are the uploading styles*/
+.upload{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.upload .upload-box{
+    border: 2px dashed #d1d5db;
+    height: 23rem;
+    width: 50%;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    align-items: center;
+    font-size: 1.6rem;
+}
+
+.upload-box .box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.upload-box .box h3{
+   color: #a1a9b6;
+   text-transform: none;
+}
+
+.upload-box .box h4{
+    color: #a1a9b6;
+    font-size: 1.2rem;
+    text-transform: none;
+}
+.upload-box:hover{
+    border: 2.5px dashed black;
+}
+.upload-box:hover h4 label{
+    text-decoration: underline;
+    color: blue;
+}
+.upload-box .box i{
+    height: 7rem;
+    width: 7rem;
+    background-color: var(--light-navy);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 3rem;
+    border-radius: 50%;
+}
+
+.text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.uploading{
+    width: 80%;
+    height: 1rem;
+    display: flex;
+    gap: .5rem;
+    margin-top: 2rem;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.uploading .progress{
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+}
+
+.file-name{
+    text-align: center;
+    font-size: 1.5rem;
+    color: #2d3e50;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+}
+
+.button button{
+    background-color: #d1d5db;
+    color: #2d3e50;
+    border: none;
+    outline: none;
+    border-radius: .5rem;
+    height: 3.5rem;
+}
+
+.uploading h5{
+    font-size: 1.3rem;
+    color: #a1a9b6;
+    font-weight: 400;
+}
+
+.uploading .bar{
+    width: 100%;
+    height: .5rem;
+    background-color: #d1d5db;
+}
+
+.uploading .bar .juice{
+    background-color: orangered;
+    width: 50%;
+    height: 100%;
+}
+
+.myassingments{
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow: auto;
+}
+
+.main-body h2{
+    font-size: 2.5rem;
+    color: #2d3e50;
+    font-weight: bolder;
+}
+
+.myassingments .body{
+    flex-grow: 1;
+}
+
+.myassingments .body ul{
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+    display: none;
+}
+
+.myassingments .body ul li{
+    height: 8rem;
+    border-left: 2px solid red;
+    background-color: #f8f9fb;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0 2rem;
+}
+
+.myassingments .body ul li a{
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.myassingments .body ul li h3{
+    font-size: 2rem;
+}
+
+.noresult{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+@media (max-width:1025px) {
+    .main-main{
+        min-width: 100%;
+    }
+}
+
+@media (max-width:800px) {
+    .upload .upload-box{
+        width: 75%;
+    }
+}
+
+@media (max-width:600px){
+    .main{
+        padding: 0 1rem;
+    }
+    .main .main-body{
+        padding: 2rem 1rem;
+    }
+    .upload .upload-box{
+        width: 95%;
+    }
+    .main .select{
+        overflow: auto;
+        white-space:nowrap ;
+    }
+    .main .select span h3{
+        display: none;
+    }
+    .main-body .head button{
+        flex:1 1 0;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .upload .upload-box{
+        width: 100%;
+    }
+    .myassingments .body ul{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .myassingments .body ul li{
+        height: 6rem;
+    }
+    .myassingments .body ul li h3{
+        font-size: 1.4rem;
+    }
+    .assignment-body ul{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .assignment-body ul li{
+        height: 6rem;
+    }
+    .assignment-body ul li h3{
+        font-size: 1.4rem;
+    }
+    .upload-box .box{
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .upload-box .box h3{
+        overflow: auto;
+        white-space: nowrap;
+    }
+}

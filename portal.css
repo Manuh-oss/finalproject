@@ -1,0 +1,710 @@
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f2f5;
+  overflow: auto;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+main aside {
+  position: sticky;
+  top: 0;
+  width: 25rem;
+  background-color: #0052a5;
+  height: 100vh;
+  min-width: 25rem;
+  z-index: 100;
+}
+
+.navigation .body {
+  height: 90%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation .body a {
+  width: 100%;
+  padding: 2.1rem 0.8rem;
+  font-size: 1.5rem;
+  color: white;
+  display: flex;
+  position: relative;
+}
+
+.navigation .body a .writing {
+  position: absolute;
+  left: 15%;
+  flex-grow: 1;
+}
+
+.navigation .body a:hover {
+  background-color: navy;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  padding: 2rem;
+  background-color: #0052a5;
+  justify-content: space-between;
+  color: #eee;
+  font-size: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.main-main {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.main-main h2 {
+  font-size: 3rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.main {
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  grid-template-areas:
+    "welcome-message calendar"
+    "termprogress notification"
+    "teachers notification";
+  gap: 2rem;
+}
+
+.main-main .welcome-message {
+  grid-area: welcome-message;
+  display: flex;
+  background-color: #fff;
+  width: 100%;
+  border-radius: 1rem;
+  align-items: center;
+  overflow: auto;
+}
+
+.main-main .welcome-message h2 {
+  font-size: 3rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.main-main .welcome-message .text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  flex: 1 1 0;
+  font-size: 1.5rem;
+}
+
+.main-main .welcome-message .text p {
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  color: #333;
+}
+
+.main-main .welcome-message .profile {
+  padding: 1rem;
+  height: 15rem;
+  width: 15rem;
+}
+
+.main-main .welcome-message .profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*calendar styles start here*/
+.calendar {
+  width: 30rem;
+  grid-area: calendar;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  color: #2d3e50;
+  border-radius: 1rem;
+}
+.calendar .head {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+}
+
+.calendar .month {
+  flex: 1 1 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.calendar .body {
+  display: flex;
+  justify-content: space-between;
+}
+.calendar .body span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+  height: 8rem;
+  border-radius: 0.75rem;
+  justify-content: center;
+  width: 5rem;
+  padding: 1rem 0;
+  background-color: #f0f2f5;
+  text-transform: capitalize;
+}
+
+.active {
+  background-color: #0052a5;
+  color: #eee;
+}
+
+.calendar .body span h3 {
+  flex-grow: 1;
+}
+
+.calendar .event {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  padding: 1rem;
+  border-left: 3px solid #0052a5;
+  border-radius: 1rem;
+}
+
+.calendar .event h3 {
+  font-size: 1.5rem;
+}
+/*calendar styles end here*/
+
+/*notification styles start here*/
+.notification {
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  grid-area: notification;
+}
+
+.notification h3:not(i) {
+  font-size: 2rem;
+  text-transform: capitalize;
+  padding: 0 1rem;
+}
+
+.notification ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.notification ul li:not(.expanded) {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  height: 6rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  align-items: center;
+  padding: 1rem;
+  max-height: fit-content;
+}
+
+.notification ul li:not(.expanded) i {
+  height: 4rem;
+  width: 4rem;
+  min-height: 4rem;
+  min-width: 4rem;
+  border-radius: 0.5rem;
+  background-color: #0052a5;
+  color: #eee;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.notification ul li p {
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+  overflow: auto;
+}
+
+.notification ul .expanded {
+  min-height: 7rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notification ul .expanded .head {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1em;
+  text-transform: capitalize;
+}
+
+.notification ul .expanded .head i {
+  font-size: 1.5rem;
+  color: navy;
+}
+.notification ul .expanded .head h3 {
+  font-size: 1.2rem;
+  flex: 1 1 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification ul .expanded .body p {
+  line-height: 2rem;
+}
+
+.notification ul .expanded .link {
+  width: 100%;
+}
+
+.notification ul .expanded .link a {
+  text-decoration: none;
+  color: navy;
+  font-size: 1.2rem;
+}
+/*notification styles end here*/
+/*term progress styles start here*/
+.term-progress {
+  grid-area: termprogress;
+  width: 100%;
+  padding: 0 2rem;
+  gap: 2rem;
+  display: flex;
+  height: fit-content;
+  max-height: fit-content;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.term-progress .progress {
+  height: 8rem;
+  flex: 1 1 0;
+  background-color: #0052a5;
+  display: flex;
+  padding: 1.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 1rem;
+  min-width: 30rem;
+}
+
+.term-progress .progress i {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background-color: #f0f2f5;
+  font-size: 1.5rem;
+}
+
+.term-progress .progress .text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  flex: 1 1 0;
+  color: #eee;
+  padding: 0.5rem 0;
+}
+
+.term-progress .progress .text h3 {
+  flex-grow: 1;
+}
+
+.term-progress .progress .text .progress-bar {
+  height: 0.5rem;
+  width: 100%;
+  background-color: #ddd;
+}
+
+.term-progress .progress .text .progress-bar .juice {
+  height: 100%;
+  width: 50%;
+  background-color: orangered;
+}
+
+/*term progress styles end here*/
+.teacher-section {
+  display: grid;
+  gap: 1.5rem;
+  grid-area: teachers;
+  height: fit-content;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.teacher-section .bodies {
+  display: flex;
+  gap: 1.5rem;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.teacher-section .box {
+  width: 24rem;
+  height: 28rem;
+  min-width: 24rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  position: relative;
+  border-radius: 1rem;
+}
+
+.teacher-section .box:hover .image {
+  transform: scale(1.1);
+}
+
+.teacher-section .box .upper {
+  height: 62%;
+  display: grid;
+  place-items: center;
+}
+
+.teacher-section .box .upper .image {
+  height: 14rem;
+  width: 14rem;
+  border-radius: 50%;
+}
+
+.teacher-section .box .upper .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.teacher-section .box .lower {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.teacher-section .box .lower h3 {
+  text-transform: capitalize;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.teacher-section .box .lower p {
+  font-size: 1.3rem;
+  color: #575555c4;
+}
+
+.teacher-section .box .lower .links {
+  display: flex;
+  gap: 0.5rem;
+  width: 80%;
+  justify-content: space-evenly;
+  padding: 0 1rem;
+}
+
+.teacher-section .box .lower .links i {
+  height: 4rem;
+  width: 4rem;
+  background-color: #0052a5;
+  color: #eee;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.teacher-section .box .lower .links i:hover {
+  background-color: #fff;
+  border: 1px solid #0052a5;
+  color: #0052a5;
+  transform: scale(1.2);
+}
+
+.fa-hand-paper {
+  color: #ffd54f;
+  animation: emoji 3s ease-in-out;
+}
+
+/*notification styles mobile styles*/
+
+.notification-div {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 999;
+  background-color: rgba(245, 245, 245, 0);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: height 0.6s linear;
+  padding: 2rem 1rem;
+  visibility: none;
+}
+
+.notification-div ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.notification-div ul li:not(.close-li) {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  height: 6rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  align-items: center;
+  padding: 1rem;
+  max-height: fit-content;
+}
+
+.notification-div ul li i {
+  height: 4rem;
+  width: 4rem;
+  min-height: 4rem;
+  min-width: 4rem;
+  border-radius: 0.5rem;
+  background-color: #0052a5;
+  color: #eee;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.notification-div ul li p {
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+}
+
+.notification-div ul .expanded {
+  min-height: fit-content;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: fit-content;
+}
+
+.notification-div ul .expanded .head {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1em;
+  text-transform: capitalize;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.notification-div ul .expanded .head i {
+  font-size: 1.5rem;
+  color: navy;
+  background: none;
+}
+.notification-div ul .expanded .head h3 {
+  font-size: 1.2rem;
+  flex: 1 1 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-div ul .expanded .link {
+  width: 100%;
+}
+
+.notification-div ul .expanded .body {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.notification-div ul .expanded .body p {
+  line-height: 2rem;
+}
+
+.notification-div ul .expanded .link a {
+  text-decoration: none;
+  color: navy;
+  font-size: 1.2rem;
+}
+
+.close-li {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  height: 5rem;
+  border-radius: 1rem;
+  background: none;
+  justify-content: flex-end;
+  padding: 0 1.5rem;
+  align-items: center;
+}
+
+.close-li .fa-times {
+  height: 4rem;
+  width: 4rem;
+  color: #2d3e50;
+  font-size: 2rem;
+  background-color: #fff;
+}
+
+@keyframes emoji {
+  0% {
+    transform: scale(3);
+    position: absolute;
+  }
+  10% {
+    transform: rotate(18deg);
+  }
+  20% {
+    transform: rotate(-18deg);
+  }
+  40% {
+    transform: rotate(18deg);
+  }
+  60% {
+    transform: rotate(-18deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/*media queries*/
+@media (max-width: 1025px) {
+  .main {
+    display: grid;
+    gap: 2rem;
+    grid-template-areas:
+      "welcome-message welcome-message calendar"
+      "termprogress termprogress notification"
+      "teachers teachers notification";
+    grid-template-columns: 1fr 1fr 1fr;
+    max-width: 100%;
+  }
+  .main-main {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 990px) {
+  .main {
+    display: grid;
+    gap: 2rem;
+    grid-template-areas:
+      "welcome-message welcome-message welcome-message"
+      "calendar calendar notification"
+      "termprogress termprogress notification"
+      "teachers teachers teachers";
+    grid-template-columns: 1fr 1fr 1fr;
+    max-width: 100%;
+  }
+  .calendar {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .main {
+    display: grid;
+    gap: 1rem;
+    grid-template-areas:
+      "welcome-message"
+      "calendar"
+      "termprogress"
+      "teachers";
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  .notification{
+    display: none;
+  }
+  .welcome-message .profile{
+    display: none;
+  }
+  .welcome-message .text{
+    color: #eee;
+  }
+  .main-main .welcome-message .text h2{
+    font-size: 2rem;
+  }
+  .main-main .welcome-message .text p{
+    font-size: 1.2rem;
+    line-height: 2rem;
+    color: #ddd;
+  }
+  .main-main{
+    padding: 2rem 1rem;
+  }
+  .teacher-section h2{
+    font-size: 2rem;
+  }
+}
+/*media queries end here*/

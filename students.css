@@ -1,0 +1,311 @@
+.main{
+    width: 100%;
+    padding:0 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.main .centralise{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 2rem;
+    border-radius: 1.5rem;
+}
+
+.buttons-navigation{
+    width: 100%;
+}
+.main .buttons-navigation button{
+    background: none;
+    border: none;
+    padding: 1rem;
+} 
+.main .buttons-navigation button:nth-child(1){
+    color: navy;
+    border-bottom: 2px solid navy;
+}
+.main .select{
+    height: fit-content;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    justify-content: center;
+    display: flex;
+    margin-top: 1rem;
+}
+.main .select form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main .select form .input{
+    height: 4rem;
+    width: 50%;
+    background: none;
+    outline: none;
+    caret-color: navy;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+.main .select .input input{
+    min-height: 4rem;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    outline: none;
+    padding: 0 1rem;
+    flex: 1 1 0;
+    color: var(--dark-text-two);
+}
+.main .select input::placeholder{
+    color: var(--dark-text-two);
+}
+
+.input button{
+    height: 100%;
+    padding: 0 1rem;
+    background: none;
+    outline: none;
+    color: navy;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    border: none;
+}
+/*table styles start here*/
+.student-table{
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.student-table h2{
+    color: navy;
+    font-size: 2rem;
+    flex:  1 1 0;
+}
+.student-table .head{
+    display: flex;
+    width: 100%;
+    flex: 1 1 0;
+    align-items: center;
+    height: 4rem;
+}
+.student-table .head button{
+   width: 15rem;
+   padding: .5rem;
+   color: var(--dark-text-two);
+   background-color: #f1f5f9;
+   border: 1px solid #d1d5db;
+   outline: none;
+   display: flex;
+   justify-content: space-between;
+   cursor: pointer;
+   position: relative;
+   height: 4rem;
+   align-items: center;
+}
+
+.student-table .head .sort{
+    position: relative;
+}
+
+.student-table .head .dropdown{
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    transition: .6s linear;
+}
+
+.student-table .body{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow: auto;
+    height: fit-content;
+    white-space: nowrap;
+}
+.student-table table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.5rem;
+}
+.student-table table td,th{
+   padding: 1rem;
+   flex: 1 1 0;
+   text-align: center;
+   overflow: auto;
+   white-space: nowrap;
+}
+.student-table table td:nth-child(3){
+    text-align: left;
+}
+.student-table table tr:nth-child(even){
+    background-color: var(--light-gray);
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+.student-table table tr:nth-child(odd){
+    background-color: var(--soft-white);
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+.student-table table th{
+    background-color:#0052A5;
+    color: #eee;
+    padding: 1.4rem;
+}
+.student-table table td .btn{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-evenly;
+}
+.student-table table td .btn .delete{
+    background-color: #ED0028;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 1.3rem;
+    color:#eee;
+    cursor: pointer;
+}
+.student-table table td .btn .edit{
+    background-color: #14aaf5;
+    color: #eee;
+    padding: .5rem 2rem;
+    border-radius: 1.3rem;
+    border: none;
+    cursor: pointer;
+}
+.student-table table td input{
+    height: 100%;
+    width: 100%;
+    background: none;
+    border: 1px solid #ddd;
+    outline: none;
+    text-align: center;
+}
+.student-table .image{
+    width: 100%;
+    height: 3rem;
+}
+.student-table .image img{
+    height: 3rem;
+    width:  3rem;
+    border-radius: 50%;
+}
+.hide{
+    height: 0;
+    overflow: hidden;
+    transition: .4s linear;
+    margin: 0;
+}
+
+.student-table table h2{
+    margin: 1.5rem .5rem;
+}
+/*table styles end here*/
+
+/* media queries bana*/
+@media (max-width:1020px) {
+    .student-table table tr td:nth-child(3){
+        min-width:18rem ;
+        font-size: 1.3rem;
+        text-align: left;
+        padding: 1rem 0 1rem .3rem;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .main{
+        padding:0 1rem ;
+    }
+    .main-main{
+        min-width: 100%;
+    }
+}
+
+@media (max-width:999px) {
+    .main{
+        min-width: 100%;
+        height: fit-content;
+        max-height: 90vh;
+        overflow: auto;
+        padding-bottom: 5rem;
+    }
+    .main .centralise{
+        min-width: 100%;
+    }
+    .main-main{
+        min-width: 100%;
+    }
+    .student-table{
+        justify-content: flex-start;
+        padding: 0;
+    }
+    .main .select{
+        padding: 0;
+    }
+}
+@media (max-width:600px){
+    .main{
+        padding: 0 1rem;
+    }
+    .main .centralise{
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+    }
+    .main .select form{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .main .select {
+        height: fit-content;
+    }
+    .main .select form select,.main .select form .input , .main .select form button{
+        width: 100%;
+        padding: 1rem 0;
+    }
+    .main .select form .input{
+        height: 100%;
+        position: relative;
+        width: 100%;
+    }
+    .main .select form .input input{
+        height: 100%;
+        padding: 1.5rem;
+    }
+    .input button{
+       position: absolute;
+       right: 0;
+       translate: 40%;
+    }
+    .main{
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow: auto;
+        padding: 0 1rem;
+    }
+    .buttons-navigation button:last-child{
+        position: absolute;
+        right: 2rem;
+    }       
+    .buttons-navigation{
+        padding: 0;
+    }
+}

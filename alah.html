@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" name="file" id="file">
+  <progress style="width: 100%;" class="progress"></progress>
+  <span id="status"></span>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+   document.getElementById("file").addEventListener("change" , function () {
+    const file = this.files[0];
+    const formData = new FormData();
+    formData.append("file" , file);
+
+    var xhr = new XMLHttpRequest();
+     xhr.open('POST' , 'uploads.php' , true);
+     xhr.upload.onprogress = (event) => {
+        if(event.lengthComputable){
+            var percent = (event.loaded / event.total) * 100;
+            document.querySelector(".progress").value = percent;
+            document.getElementById("status").textContent = Math.round(percent) + "% uploaded";
+        }   
+     }
+
+     xhr.onload = () => {
+        if(xhr.status == 200){
+            document.getElementById("status").textContent = "file uploaded";
+            window.location.href = "uploads.php";
+        }else{
+            document.getElementById("status").textContent = "file not uploaded";
+        }
+     }
+
+     xhr.send(formData);
+   })
+  </script>
+</body>
+</html>

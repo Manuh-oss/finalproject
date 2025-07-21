@@ -1,0 +1,619 @@
+ divElement.innerHTML = `
+              <h2 class="heading">${selectTopic.querySelector("#topics").value}</h2>
+              <h3 class="tally">${count} questions</h3>
+              <h3 class="message">quiz setting is done</h3>
+        `
+        questions.forEach(question => {
+          submitForm.innerHTML =  `
+            <div class="body">
+              <ul>
+                <li>
+                  <span class="question">what is the capital of france</span>
+                  <span class="answer">paris</span>
+                </li>
+
+              </ul>
+            </div>
+            <div class="submit">
+              <button type="button" class="backing">back</button>
+              <button type="button" class="submiting">finish</button>
+            </div>
+        `;
+        })<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="todo.css">
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css">
+    <script defer src="todo.js"></script>
+</head>
+<body>
+    <h1>todo app</h1>
+    <div class="wrapper">
+        <form action="">
+            <input type="text" id="todo-input" placeholder="write anything you want to add" autocomplete="off">
+            <button class="add-button">add</button>
+        </form>
+        <ul class="todo-list" id="todo-list">
+            <li class="todo">
+                <input type="checkbox" name="" id="todo-1">
+                <label for="todo-1" class="custom-checkbox"><i class="fa fa-check"></i></label>
+                <label for="todo-1" class="todo-text">watch a movie</label>
+                <button type="button" class="delete-button"><i class="fa fa-remove"></i></button>
+            </li>
+        </ul>
+        <form action="" enctype="application/x-www-form-urlencoded"></form>
+        <div class="post-quiz-section" style="background-color: #ffffff;">
+          <h1 class="heading">post question</h1>
+          <div class="question">
+              <h3>question</h3>
+              <input class="required" type="text" name="question[]" id="question" placeholder="enter a question...">
+          </div>
+
+          <div class="answers">
+              <ul>
+                  <li>
+                      <span>a.</span>
+                      <input class="required" type="text" name="answerOne[]" id="answerOne" placeholder="enter option a">
+                  </li>
+                  <li>
+                      <span>b.</span>
+                      <input class="required" type="text" name="answerTwo[]" id="answerTwo" placeholder="enter option b">
+                  </li>
+                  <li>
+                      <span>c.</span>
+                      <input class="required" type="text" name="answerThree[]" id="answerThree" placeholder="enter option c">
+                  </li>
+                  <li>
+                      <span>d.</span>
+                      <input class="required" type="text" name="answerFour[]" id="answerFour" placeholder="enter option d / correct answer">
+                  </li>
+              </ul>
+          </div>
+
+          <div class="solution">
+              <h3>solution</h3>
+              <textarea class="required" name="solutions[]" id="solution" placeholder="provide an explanation for your answer..."></textarea>
+          </div>
+
+          <div class="submit-btn">
+            <div class="left">
+              <button type="button" class="prev">previous</button>
+              <button type="button" class="next">next</button>
+            </div>
+            <div class="rigth">
+              <button type="button" class="submit">submit</button>
+            </div>
+          </div>
+
+       </div>
+    </div> divElement.innerHTML = `
+    <h2 class="heading">${selectTopic.querySelector("#topics").value}</h2>
+    <h3 class="tally">${count} questions</h3>
+    <h3 class="message">quiz setting is done</h3>
+`
+questions.forEach(question => {
+submitForm.innerHTML =  `
+  <div class="body">
+    <ul>
+      <li>
+        <span class="question">what is the capital of france</span>
+        <span class="answer">paris</span>
+      </li>
+
+    </ul>
+  </div>
+  <div class="submit">
+    <button type="button" class="backing">back</button>
+    <button type="button" class="submiting">finish</button>
+  </div>
+
+  <tr>
+    <td class="break"></td>
+    <td class="double-lesson"><input type="text" name="first[]" id=""></td>
+    <td class="no-double-lesson"><input type="text" name="second[]" id=""></td>
+    <td class="break"></td>
+    <td class="double-lesson"><input type="text" name="third[]" id=""></td>
+    <td class="no-double-lesson"><input type="text" name="forth[]" id=""></td>
+    <td class="break"></td>
+    <td class="double-lesson"><input type="text" name="fifth[]" id=""></td>
+    <td class="double-lesson"><input type="text" name="sixth[]" id=""></td>
+    <td class="no-double-lesson"><input type="text" name="seventh[]" id=""></td>
+    <td class="break"></td>
+    <td class="double-lesson"><input type="text" name="eigth[]" id=""></td>
+    <td class="double-lesson"><input type="text" name="ninth[]" id=""></td>
+    <td class="no-double-lesson"><input type="text" name="tenth[]" id=""></td>
+  </tr>
+
+`;
+})
+    <script>
+ 
+        const visibleTerm = document.getElementById("main-term");
+const visibleExam = document.getElementById("main-exam");
+
+const updateHiddenInputs = () => {
+  document.getElementById("class-input").value = document.getElementById("class").value;
+  document.getElementById("stream-input").value = document.getElementById("stream").value;
+  document.getElementById("term").value = visibleTerm.value;
+  document.getElementById("exam").value = visibleExam.value;
+};
+
+
+visibleTerm.addEventListener("change", () => {
+  updateHiddenInputs();
+  examForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+});
+
+visibleExam.addEventListener("change", () => {
+  updateHiddenInputs();
+  examForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+});
+
+Array.from(children).forEach(child => {
+  child.addEventListener("click", function () {
+    updateHiddenInputs();
+    document.getElementById("subject").value = this.textContent.trim();
+    examForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+});
+
+
+    </script>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+function assignDepartment() {
+  const subjectOne = document.getElementById("subject-one");
+  const subjectTwo = document.getElementById("subject-two");
+
+  function determineDepartment() {
+    const one = subjectOne.value.toLowerCase();
+    const two = subjectTwo.value.toLowerCase();
+
+    const science = ["biology", "chemistry", "physics"];
+    const humanities = ["geography", "history", "cre"];
+    const technicals = ["business", "agriculture", "french", "computer"];
+
+    let department = "";
+
+    if (one === "english" || two === "english") {
+      department = "english";
+    } else if (science.includes(one) || science.includes(two)) {
+      department = "science";
+    } else if (one === "mathematics" || two === "mathematics") {
+      department = "mathematics";
+    } else if (humanities.includes(one) || humanities.includes(two)) {
+      department = "humanity";
+    } else if (technicals.includes(one) || technicals.includes(two)) {
+      department = "technicals";
+    }
+
+    console.log(department);
+    assignTeacherCode(department); // note: corrected spelling here too
+    document.getElementById("department").value = department;
+  }
+
+  subjectOne.addEventListener("input", determineDepartment);
+  subjectTwo.addEventListener("input", determineDepartment);
+}
+
+const children = [
+  { name: "John", gender: "male" },
+  { name: "Sarah", gender: "female" },
+  { name: "Brian", gender: "male" },
+  { name: "Mary", gender: "female" },
+  { name: "Alex", gender: "male" }
+];
+
+
+
+function displayByGender(children) {
+  const container = document.getElementById("display-container"); // make sure this div exists
+  container.innerHTML = ""; // clear previous content
+
+  const males = children.filter(child => child.gender === "male");
+  const females = children.filter(child => child.gender === "female");
+
+  if (males.length > 0) {
+    const maleSection = document.createElement("div");
+    maleSection.innerHTML = `<h2>Male</h2>` + males.map(child => `<p>${child.name}</p>`).join("");
+    container.appendChild(maleSection);
+  }
+
+  if (females.length > 0) {
+    const femaleSection = document.createElement("div");
+    femaleSection.innerHTML = `<h2>Female</h2>` + females.map(child => `<p>${child.name}</p>`).join("");
+    container.appendChild(femaleSection);
+  }
+}
+
+
+function displayByGender(children) {
+  const container = document.getElementById("display-container");
+  container.innerHTML = ""; // Clear previous content
+
+  // Filter out males and females
+  const males = children.filter(child => child.gender === "male");
+  const females = children.filter(child => child.gender === "female");
+
+  // Function to create the table rows
+  function createTableRows(data) {
+    return data.map(child => {
+      return `
+        <tr>
+          <td>${child.name}</td>
+          <td>${child.gender}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // If there are males, create the male section
+  if (males.length > 0) {
+    const maleSection = document.createElement("div");
+    maleSection.innerHTML = `
+      <h2>Male</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Gender</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${createTableRows(males)}
+        </tbody>
+      </table>
+    `;
+    container.appendChild(maleSection);
+  }
+
+  // If there are females, create the female section
+  if (females.length > 0) {
+    const femaleSection = document.createElement("div");
+    femaleSection.innerHTML = `
+      <h2>Female</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Gender</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${createTableRows(females)}
+        </tbody>
+      </table>
+    `;
+    container.appendChild(femaleSection);
+  }
+}
+
+
+function shuffleAnswers(questions) {
+  return questions.map(q => {
+    // Step 1: Get the answers as an array of values (no keys)
+    const answerArray = Object.values(q.answers); 
+
+    // Step 2: Shuffle the array of values
+    answerArray.sort(() => Math.random() - 0.5);
+
+    // Step 3: Return the updated question with shuffled answers (as an array)
+    return {
+      ...q,
+      answers: answerArray // Now answers is just an array of values
+    };
+  });
+}
+
+
+let usedQuestions = []; // Global to track used questions
+
+function startQuiz() {
+  // If all questions have been used, stop the quiz
+  if (usedQuestions.length === thisQuestion.length) {
+    console.log("All questions have been asked.");
+    return;
+  }
+
+  const randomIndex = Math.floor(thisQuestion.length * Math.random());
+  const selectedQuestion = thisQuestion[randomIndex];
+
+  // Prevent repeating questions
+  if (usedQuestions.includes(selectedQuestion)) {
+    startQuiz(); // Pick another one
+    return;
+  }
+
+  usedQuestions.push(selectedQuestion); // Track the used question
+
+  // Clear previous answers and show the question
+  answerDiv.innerHTML = "";
+  questionDiv.innerHTML = `<h3>${selectedQuestion.question}</h3>`;
+
+  // Shuffle and show answer options
+  const answerArray = selectedQuestion.answers;
+  const shuffledAnswers = answerArray.sort(() => Math.random() - 0.5);
+
+  shuffledAnswers.forEach((answer) => {
+    const button = document.createElement("button");
+    button.className = "btn";
+    button.innerText = answer;
+    answerDiv.appendChild(button);
+  });
+
+  // Show solution and handle answer marking
+  solutionDiv.innerHTML = `<p>${selectedQuestion.solution}</p>`;
+  const answerButtons = answerDiv.querySelectorAll(".btn");
+  markQuestions(answerButtons, selectedQuestion);
+}
+
+
+// Declare a global variable
+let groupedQuestions = [];
+
+function organiseQuestions(questions) {
+    const grouped = {};
+
+    questions.forEach((item) => {
+        const code = item.quizCode;
+        if (!grouped[code]) {
+            grouped[code] = [];
+        }
+        grouped[code].push(item);
+    });
+
+    // Store the result in the global variable
+    groupedQuestions = Object.values(grouped);
+
+    // You can still call the function if needed
+    chooseQuiz(groupedQuestions);
+}
+
+
+location.reload();
+
+
+function correctSubjectSimple(inputValue) {
+  const knownSubjects = ["English", "Math", "Mathematics", "Science", "Biology", "Kiswahili", "History", "CRE", "Geography"];
+
+  const input = inputValue.toLowerCase();
+  let bestMatch = inputValue;
+  let highestScore = 0;
+
+  for (let subject of knownSubjects) {
+    const correct = subject.toLowerCase();
+
+    // New: Prioritize strong prefix match (like "eng" for "english")
+    if (correct.startsWith(input) && input.length >= 2) {
+      return subject;
+    }
+
+    // Also check character-level similarity
+    const score = getCharacterMatchScore(input, correct);
+    if (score > highestScore && score >= 0.7) {
+      highestScore = score;
+      bestMatch = subject;
+    }
+  }
+
+  return bestMatch;
+}
+
+
+
+function getCharacterMatchScore(input, correct) {
+  const inputArr = input.split('');
+  const correctArr = correct.split('');
+  const minLength = Math.min(inputArr.length, correctArr.length);
+
+  let matchCount = 0;
+  for (let i = 0; i < minLength; i++) {
+    if (inputArr[i] === correctArr[i]) {
+      matchCount++;
+    }
+  }
+
+  return matchCount / correctArr.length; // score between 0 and 1
+}
+
+<script>
+  function renderTimetable(timetable) {
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const periodsPerDay = 10;
+  const tbody = document.getElementById("table-body"); // Get the table body element
+  tbody.innerHTML = ""; // Clear previous timetable
+
+  for (let period = 1; period <= periodsPerDay; period++) {
+    const row = document.createElement("tr"); // Create a new row for each period
+
+    // Add the period label (e.g., Period 1, Period 2)
+    const label = document.createElement("td");
+    label.textContent = `Period ${period}`;
+    row.appendChild(label);
+
+    // Add the class and subject for each day
+    days.forEach(day => {
+      const cell = document.createElement("td");
+      const slot = timetable.find(s => s.period === period && s.day === day);
+      
+      if (slot) {
+        // If a slot is found for the given period and day, display the class and subject
+        cell.innerHTML = `<strong>${slot.classCode}</strong><br>${slot.subject}`;
+      } else {
+        // If no slot is found, leave the cell empty
+        cell.textContent = "-"; // Empty slot
+      }
+      
+      row.appendChild(cell); // Add the cell to the row
+    });
+
+    tbody.appendChild(row); // Add the row to the table body
+  }
+}
+
+
+function generateTimetable(teachers) {
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const periodsPerDay = 10;
+  const timetable = [];
+
+  teachers.forEach(t => {
+    t.assignmentsPerDay = {}; // Track how many lessons per day
+
+    t.teaching.forEach(pair => {
+      const classCode = pair.classCode;
+      const subject = pair.subject;
+
+      days.forEach(day => {
+        for (let period = 1; period <= periodsPerDay; period++) {
+          // Check for conflicts: no double-booking a class/teacher in the same period
+          const conflict = timetable.find(slot =>
+            (slot.classCode === classCode && slot.day === day && slot.period === period) ||
+            (slot.teacherCode === t.teacherCode && slot.day === day && slot.period === period)
+          );
+          
+          // Check if the teacher has already been assigned 5 lessons on that day
+          const dailyCount = t.assignmentsPerDay[day] || 0;
+
+          // If no conflict and the teacher has less than 5 lessons for the day, assign
+          if (!conflict && dailyCount < 5) {
+            timetable.push({
+              day,
+              period,
+              classCode,
+              subject,
+              teacherCode: t.teacherCode
+            });
+
+            // Update the teacher's assignment count for that day
+            t.assignmentsPerDay[day] = dailyCount + 1;
+            break; // Exit the loop once the teacher is assigned
+          }
+        }
+      });
+    });
+  });
+
+  return timetable;
+}
+
+</script>
+
+<script>
+  
+// Assuming this is the response from your PHP backend
+const data = [
+  {
+    "teacherCode": "T001",
+    "lessonone": "Math",
+    "lessontwo": "English",
+    "lessonthree": "History",
+    "lessonfour": "Chemistry",
+    "lessonfive": "Biology",
+    "lessonsix": "",
+    "lessonseven": "",
+    "lessoneigth": "",
+    "lessonnine": "Geography",
+    "lessonten": "",
+    "day": "Monday"
+  }
+];
+
+// Convert data into the required format
+const convertTimetable = (data) => {
+  const timetable = {
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: []
+  };
+
+  data.forEach(item => {
+    // Get the lessons for each day (lessonone, lessontwo, etc.)
+    const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+    daysOfWeek.forEach(day => {
+      // Loop through all 10 lessons for each day and add them
+      for (let i = 1; i <= 10; i++) {
+        const lessonKey = `lesson${i}`;
+        // If the lesson exists for that period, push it; otherwise, push an empty string
+        if (item[lessonKey]) {
+          timetable[day].push(item[lessonKey]);
+        } else {
+          timetable[day].push("");
+        }
+      }
+    });
+  });
+
+  return timetable;
+};
+
+// Get the timetable in the new format
+const formattedTimetable = convertTimetable(data);
+console.log(formattedTimetable);
+
+
+
+
+// Simulated response from PHP (with lessons for Monday, Tuesday, Wednesday, and Friday)
+const data = [
+  {
+    "teacherCode": "T001",
+    "monday": ["Math", "English", "History", "Chemistry", "Biology", "", "", "", "", "Geography"],
+    "tuesday": ["Physics", "Art", "Music", "PE", "Geography", "", "", "", "", ""],
+    "wednesday": [], // No lessons for Wednesday
+    "thursday": ["Math", "", "", "Chemistry", "Biology", "Physics", "", "PE", "Geography", "Art"],
+    "friday": ["Art", "Music", "Geography", "PE", "History", "", "", "", "", ""]
+  }
+];
+
+// Function to populate the timetable
+function populateTimetable(data) {
+    const tableBody = document.querySelector("#timetable tbody");
+
+    // Days of the week to display as rows
+    const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+    // Iterate over the days of the week
+    daysOfWeek.forEach(day => {
+        const row = document.createElement("tr");
+
+        // Add the day name in the first column
+        const dayCell = document.createElement("td");
+        dayCell.textContent = capitalizeFirstLetter(day);
+        row.appendChild(dayCell);
+
+        // Loop through the 10 periods (Period 1 to Period 10)
+        for (let i = 0; i < 10; i++) {
+            const periodCell = document.createElement("td");
+
+            // Get the lessons for the current day, or display nothing if not available
+            const lessons = data[0][day]; // Assuming there's one teacher in the data for now
+
+            // If there are lessons for that period, display it; otherwise, leave the cell empty
+            periodCell.textContent = lessons[i] || ""; // If no lesson, leave the cell empty
+
+            row.appendChild(periodCell);
+        }
+
+        // Append the row to the table body
+        tableBody.appendChild(row);
+    });
+}
+
+// Capitalize the first letter of the day (e.g., "monday" -> "Monday")
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Call the function to populate the table
+populateTimetable(data);
+
+</script>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Custom File Input with Remove Button</title>
+<style>
+  .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+  }
+  #file-name-container {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  #file-name {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  #remove-file {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0;
+  }
+  #remove-file:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<label for="file-upload" class="custom-file-upload">
+  Choose File
+</label>
+<input id="file-upload" type="file" style="display:none;" />
+
+<div id="file-name-container">
+  <div id="file-name">No file chosen</div>
+  <button id="remove-file" type="button" style="display:none;">Remove</button>
+</div>
+
+<script>
+  const fileUpload = document.getElementById('file-upload');
+  const fileNameDisplay = document.getElementById('file-name');
+  const removeFileButton = document.getElementById('remove-file');
+
+  fileUpload.addEventListener('change', function() {
+    if (fileUpload.files.length > 0) {
+      fileNameDisplay.textContent = fileUpload.files[0].name;
+      removeFileButton.style.display = 'inline';
+    } else {
+      fileNameDisplay.textContent = 'No file chosen';
+      removeFileButton.style.display = 'none';
+    }
+    console.log(fileUpload.files);
+  });
+
+  removeFileButton.addEventListener('click', function() {
+    fileUpload.value = ''; // Clear the file input
+    fileNameDisplay.textContent = 'No file chosen';
+    removeFileButton.style.display = 'none';
+  });
+
+
+
+</script>
+
+</body>
+</html>

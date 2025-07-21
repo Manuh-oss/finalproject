@@ -1,0 +1,6 @@
+{
+    "from": "parents",
+    "type": true,
+    "message": "congrats! student added succesfully",
+    "messageType": "success"
+}

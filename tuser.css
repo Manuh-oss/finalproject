@@ -1,0 +1,473 @@
+.dash-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+aside {
+  min-width: 25rem;
+}
+
+.main {
+  display: grid;
+  gap: 2rem;
+  grid-template-areas:
+    "welcome-message welcome-message calendar"
+    "graph graph notification"
+    "marks clases clases";
+}
+
+/*welcome message styles start here*/
+.welcome-message {
+  grid-area: welcome-message;
+  display: flex;
+  gap: 2rem;
+  background-color: #fff;
+  padding: 1.5rem;
+  max-height: fit-content;
+  border-radius: 1.5rem;
+  align-items: center;
+}
+
+.welcome-message .text {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+  height: 100%;
+  padding-top: 1.5rem;
+}
+
+.welcome-message .text p,
+.welcome-message .text h2 {
+  flex-grow: 1;
+}
+
+.welcome-message .text p {
+  line-height: 3rem;
+}
+
+.welcome-message .image {
+  width: 17rem;
+  height: 17rem;
+  min-width: 17rem;
+}
+
+.welcome-message .image img {
+  width: 100%;
+  height: 100%;
+}
+/*welcome message styles end here*/
+
+/*calendar styles start here*/
+.calendar {
+  width: 30rem;
+  grid-area: calendar;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  color: #2d3e50;
+  border-radius: 1rem;
+}
+.calendar .head {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+}
+
+.calendar .month {
+  flex: 1 1 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.calendar .body {
+  display: flex;
+  justify-content: space-between;
+}
+.calendar .body span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+  height: 8rem;
+  border-radius: 0.75rem;
+  justify-content: center;
+  width: 5rem;
+  padding: 1rem 0;
+  background-color: #f0f2f5;
+  text-transform: capitalize;
+}
+
+.active {
+  background-color: #0052a5;
+  color: #eee;
+}
+
+.calendar .body span h3 {
+  flex-grow: 1;
+}
+
+.calendar .event {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  padding: 1rem;
+  border-left: 3px solid #0052a5;
+  border-radius: 1rem;
+}
+
+.calendar .event h3 {
+  font-size: 1.5rem;
+}
+/*calendar styles end here*/
+
+/*notification styles start here*/
+.notification {
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  grid-area: notification;
+  max-height: 30rem;
+  overflow: auto;
+}
+
+.notification h3:not(i) {
+  font-size: 2rem;
+  text-transform: capitalize;
+  padding: 0 1rem;
+}
+
+.notification ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.notification ul li:not(.expanded) {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  height: 6rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  align-items: center;
+  padding: 1rem;
+  max-height: fit-content;
+}
+
+.notification ul li:not(.expanded) i {
+  height: 4rem;
+  width: 4rem;
+  min-height: 4rem;
+  min-width: 4rem;
+  border-radius: 0.5rem;
+  background-color: #0052a5;
+  color: #eee;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.notification ul li p {
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+  overflow: auto;
+}
+
+.notification ul .expanded {
+  min-height: 7rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notification ul .expanded .head {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1em;
+  text-transform: capitalize;
+}
+
+.notification ul .expanded .head i {
+  font-size: 1.5rem;
+  color: navy;
+}
+.notification ul .expanded .head h3 {
+  font-size: 1.2rem;
+  flex: 1 1 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification ul .expanded .body p {
+  line-height: 2rem;
+}
+
+.notification ul .expanded .link {
+  width: 100%;
+}
+
+.notification ul .expanded .link a {
+  text-decoration: none;
+  color: navy;
+  font-size: 1.2rem;
+}
+/*notification styles end here*/
+
+/*marks svg styles start here*/
+.marks-completion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25rem;
+  font-size: 1.5rem;
+  grid-area: marks;
+}
+
+.marks-completion .percentage {
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.svg {
+  height: 15rem;
+  width: 15rem;
+  position: relative;
+}
+
+.svg svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.mark-svg circle {
+  fill: none;
+  stroke-width: 1rem;
+}
+
+.mark-svg .base {
+  stroke: #f0f2f5;
+}
+
+.mark-svg .progress {
+  stroke: #28c76f;
+  stroke-dasharray: calc(2 * 3.142 * 54);
+  stroke-dashoffset: -100;
+  transition: stroke-dashoffset 0.5s linear;
+}
+/*marks svg styles end here*/
+
+/*my clases section start here*/
+.my-classes-box {
+  width: 100%;
+  display: flex;
+  gap: 1.5rem;
+  grid-area: clases;
+  position: relative;
+}
+.my-classes-box .box {
+  background: url(./subjects/biology-bg.jpg);
+  height: 15rem;
+  width: 25rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.4s linear, transform 0.4s linear;
+  min-width: 25rem;
+}
+.my-classes-box .box:hover {
+  transform: scale(1.2);
+  z-index: 10;
+  border: 0.5rem solid #fff;
+}
+.my-classes-box .box .opacity {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  gap: 1rem;
+}
+
+.box h3 {
+  flex-grow: 1;
+  font-size: 1.5rem;
+}
+.box h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.box h5 {
+  font-size: 1.1rem;
+}
+.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/*my clases section end here*/
+
+/*graph section start here*/
+.graph-section {
+  max-height: 30rem;
+  height: 25rem;
+  grid-area: graph;
+  overflow: auto;
+  width: 100%;
+}
+.graph-section .overflow {
+  width: 100%;
+  height: 100%;
+  min-width: 60rem;
+}
+.graph-section .overflow canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+/*graph section end here*/
+
+/*media quesries start here*/
+@media (max-width: 1025px) {
+  .main {
+    display: grid;
+    gap: 2rem;
+    grid-template-areas:
+      "welcome-message calendar"
+      "graph notification"
+      "marks clases clases";
+    max-width: 100%;
+    grid-template-columns: 1fr 1fr;
+  }
+  .my-classes-box {
+    overflow: auto;
+    position: relative;
+    min-height: 17rem;
+  }
+  @keyframes scale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+@media (max-width: 920px) {
+  .main {
+    display: grid;
+    gap: 2rem;
+    grid-template-areas:
+      "welcome-message welcome-message welcome-message"
+      "calendar notification notification"
+      "marks graph graph"
+      "clases clases clases";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr auto;
+    padding-bottom: 2rem;
+  }
+  .notification {
+    min-width: 100%;
+  }
+  .welcome-message .text {
+    padding: 1rem 0;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .main {
+    display: grid;
+    grid-template-areas:
+      "welcome-message"
+      "calendar"
+      "graph"
+      "marks"
+      "clases";
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .dash-main {
+    padding: 2rem 1rem;
+  }
+  .welcome-message .image {
+    display: none;
+  }
+  .notification {
+    display: none;
+  }
+  .calendar,
+  .marks-completion {
+    min-width: 100%;
+  }
+  .welcome-message .text p {
+    color: #d3d3d3;
+    font-size: 1.1rem;
+  }
+  .welcome-message .text {
+    padding: 1rem 0;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: #eee;
+  }
+  .welcome-message h2 {
+    font-size: 2rem;
+  }
+  .my-classes-box .box:hover {
+    transform: scale(1);
+    border: none;
+    z-index: 0;
+  }
+  .my-classes-box {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+  }
+}
+/*media quesries end here*/

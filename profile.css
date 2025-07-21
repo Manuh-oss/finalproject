@@ -1,0 +1,535 @@
+
+.main{
+    background-color: #fff;
+    display: flex;
+    gap: 2rem;
+    border-radius: 1rem;
+    border: 1px solid #d1d5db;
+}
+.mains{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    padding: 0 2rem;
+    height: fit-content;
+}
+.main .profile-container{
+    flex: 1 1 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.main .change{
+    flex: 0 1 25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 2rem;
+}
+
+.main .profile-container .up{
+    height: 30rem;
+    position: relative;
+    width: 100%;
+}
+
+.main .profile-container .up .background-image{
+    height: 65%;
+    background-image: url(./teachers/images\ \(97\).jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.main .profile-container .up .background-image .the-image{
+    height: 15rem;
+    width: 15rem;
+    position: absolute;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 50%;
+    bottom: 0;
+    left: 2rem;
+    translate: 0 50%;
+}
+
+.main .profile-container .up .background-image .the-image img{
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.main .profile-container .up .nothing{
+    height: 35%;
+    position: relative;
+}
+
+.main .profile-container .up .nothing .the-icon{
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 2rem;
+    color: navy;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+    flex: 1 1 0;
+}
+
+.main .profile-container .up .nothing .the-icon button{
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.7)
+     4px 4px 8px rgba(0, 0, 0, 0.1),
+     -4px -4px 8px rgba(255, 255, 255, 0.7);
+    height: 4rem;
+}
+
+/* profile styles upper are done */
+
+/* profile down styles start here*/
+
+.main .profile-container .down{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 3rem;
+}
+
+.main .profile-container .down .name h3{
+    color: rgb(20, 20, 63);
+    font-size: 2.5rem;
+    font-style: normal;
+}
+
+.main .profile-container .down .name h4{
+    color: navy;
+    margin-top: .5rem;
+    font-size: 1.4rem;
+}
+.main .profile-container .down .links{
+    display: grid;
+    grid-template-columns: repeat(2 , 1fr);
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+.main .profile-container .down .links .box{
+    display: flex;
+    gap: 1rem;
+    height: 5rem;
+    align-items: center;
+}
+.main .profile-container .down .links .box i {
+    height: 4rem;
+    width: 4rem;
+    background-color: #ED0028;
+    font-size: 2rem;
+    color: #eee;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main .profile-container .down .links .box .text{
+    flex-grow: 1;
+    overflow: auto;
+    white-space: nowrap;
+}
+.main .profile-container .down .links span{
+    flex: 1 1 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.main .profile-container .down .links span h3{
+    margin: .3rem 0;
+    font-size: 1.5rem;
+    color:#888888 ;
+}
+.main .profile-container .down .links span h4{
+    font-size: 1.5rem;
+}
+/* profile down styles end here*/
+
+/* change styles start here*/
+
+.main .change .box{
+  display: flex;
+  gap: 1rem;
+}
+.main .change .box .icon i{
+   height: 4rem;
+   width: 4rem;
+   border-radius: 50%;
+   background-color: #0052A5;
+   color: #eee;
+   font-size: 1.5rem;
+   justify-content: center;
+   align-items: center;
+   display: flex;
+}
+
+.main .change .box .text{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+/* change styles end here*/
+
+/* payment details styles start here*/
+
+.mains .payment-details{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex:  1 1 0;
+    border: 1px solid #d1d5db;
+    display: none;
+}
+.mains .payment-details .head{
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    color: #0052A5;
+    width: 100%;
+    background-color: #fff;
+}
+
+.mains .payment-details .table{
+    min-width: 100%;
+    overflow: auto;
+    white-space: nowrap;
+    display: flex;
+}
+.mains .payment-details table{
+    background-color: #eee;
+    overflow: auto;
+    border-collapse: collapse;
+    max-height: 20rem;
+    width: 100%;
+    flex: 1 1 0;
+}
+.mains .payment-details table th{
+    padding: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    background-color: #eee;
+    color: #444;
+}
+.mains .payment-details table td{
+    padding: 1rem .5rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+.mains .payment-details table tr{
+    border-bottom: 1px dotted black;
+}
+.main .payment-details table tr:nth-child(odd) {
+    background-color: #f3f3f3; /* light grey */
+  }
+  
+  .main .payment-details table  tr:nth-child(even) {
+    background-color:#fdfdfd ; /* very light blue */
+  }
+table .status{
+    color: green;
+
+}
+/* payment details styles end here*/
+
+/*displinary details*/
+.centralise{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.displinary-action{
+    width: 95%;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.displinary-action .table{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.centralise .btn{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.centralise .btn button{
+    display: flex;
+    gap: 1.2rem;
+    background-color: var(--red);
+    color: #fff;
+    border: none;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-radius: .7rem;
+    cursor: pointer;
+    height: 3.5rem;
+}
+
+.displinary-action .no-result{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.centralise h2{
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.displinary-action table{
+    border-collapse: collapse;
+    flex: 1 1 0;
+}
+
+.displinary-action table th{
+    background-color: var(--soft-white);
+    height: 4rem;
+    font-size: 1.3rem;
+}
+
+.displinary-action table td{
+    height: 5rem;
+    text-align: left;
+    font-size: 1.2rem;
+    padding: 0 .5rem;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.displinary-action table tbody tr:nth-child(even) {
+    background-color: #f3f3f3; 
+    border-bottom: 1px solid dotted;
+  }
+  
+.displinary-action table tbody  tr:nth-child(odd) {
+    background-color:#fdfdfd ; 
+    border-bottom: 1px solid dotted;
+}
+
+/*enrolled classes styles*/
+
+.enrolled-classes{
+    width: 80%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction:column ;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.enrolled-classes .table{
+    width: 100%;
+    display: flex;
+}
+
+.enrolled-classes table{
+    border: 1px solid #d1d5db;
+    border-collapse: collapse;
+    flex: 1 1 0;
+}
+
+.enrolled-classes table th{
+    height: 4rem;
+    font-size: 1.4rem;
+    border-bottom: 1px solid #d1d5db;
+    background-color: #f3f3f3;
+    overflow: auto;
+    white-space: nowrap;
+}
+.enrolled-classes table td{
+    text-align: center;
+    height: 4rem;
+    font-size: 1.3rem;
+    border-bottom: 1px dotted #d1d5db;
+}
+.enrolled-classes table td:nth-child(2),.enrolled-classes table td:nth-child(3){
+    text-align: left;
+    padding: 0 1rem;
+    overflow: auto;
+    white-space: nowrap;
+}
+.enrolled-classes table td span{
+    padding: .5rem;
+    color: #fff;
+    background-color: var(--red);
+}
+/*media queries */
+
+@media (max-width:1025px) {
+    .main-main{
+        min-width: 100%;
+    }
+    .main .profile-container .up{
+        height: 24rem;
+    }
+    .main .profile-container .up .background-image .the-image{
+        padding: .5rem;
+        height: 12rem;
+        width: 12rem;
+    }
+    .main .profile-container .up .nothing{
+        height: 15%;
+    }
+}
+
+@media (max-width:800px){
+    .main{
+        display: flex;
+        flex-direction: column;
+    }
+    .main .change{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        padding: 0rem;
+        margin: 0 2rem 2rem;
+        overflow: auto;
+        white-space: nowrap;
+        max-height: fit-content;
+    }
+    .main .change .box{
+        display: inline-flex;
+        flex-direction: row;
+        max-height: 4rem;
+    }
+    .main .change .box .text{
+        max-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    .mains .payment-details table td{
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .mains .payment-details table th{
+        overflow: auto;
+        white-space: nowrap;  
+    }
+}
+
+@media (max-width:600px){
+    .main{
+        height: fit-content;
+        min-height: fit-content;
+    }
+    .mains{
+        padding: 0 1rem;
+    }
+    .centralise{
+        padding: 0;
+    }
+    .main .profile-container .up{
+        max-height: 17rem;
+    }
+    .main .profile-container .up .background-image .the-image{
+        height: 8rem;
+        width: 8rem;
+        left: 1rem;
+        padding: .3rem;
+    }
+    .main .profile-container .up .background-image{
+        height: 80%;
+    }
+    .main .profile-container .down{
+        margin: 0;
+        padding: 0 1rem;
+        gap: 2rem;
+    }
+    .main .profile-container .down .links{
+        display: grid;
+        grid-template-columns: repeat(1 , 1fr);
+    }
+    .main .change{
+        max-height: fit-content;
+        margin: 0 2rem 2rem;
+    }
+    .main .profile-container .down .name h3{
+        font-size: 1.8rem;
+    }
+    .displinary-action{
+        min-width: 100%;
+        width: 100%;
+        height: fit-content;
+        padding: 2rem 1rem;
+    }
+    .displinary-action .table{
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .displinary-action .table table{
+        min-width: 40rem;
+    }
+    .enrolled-classes{
+        width: 100%;
+        padding: 2rem 1rem;
+    }
+    .enrolled-classes .table{
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .enrolled-classes .table table{
+        min-width: 40rem;
+    }
+    .centralise h2{
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+}
+
+@media (max-width:450px){
+    .main .change{
+        display: grid;
+        grid-template-columns: repeat(auto-fit , minmax(17rem , 1fr));
+        height: fit-content;
+        min-height: fit-content;
+        max-height: none;
+        margin: 0;
+        padding: 0 1rem;
+    }
+    .main .change .box .text{
+        justify-content: flex-start;
+        font-size: 1.2rem;
+    }
+    .main .profile-container .down .links .box i{
+        height: 3rem;
+        width: 3rem;
+        font-size: 1.2rem;
+    }
+    .main .profile-container .down .links span h3{
+        font-size: 1.2rem;
+    }
+    .main .profile-container .down .links span h4{
+        font-size: 1.1rem;
+    }
+    .main .profile-container .down .links{
+        gap: 1rem;
+    }
+    .main .change .box .icon i{
+        height: 3rem;
+        width: 3rem;
+        font-size: 1.2rem;
+    }
+}

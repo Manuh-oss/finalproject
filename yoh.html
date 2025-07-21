@@ -1,0 +1,2720 @@
+
+const statisticalReport = document.querySelector(".statistic-report");
+const subjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+];
+let n;
+const streams = ["111", "333", "222", "444"];
+const classes = ["1", "2", "3", "4"];
+
+function getStudents(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "students.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        callback(response);
+      }
+    } catch (error) {
+      console.log("Student Error", error);
+    }
+  };
+  xhr.send();
+}
+
+function getStudentMarks(clas, term, exam, callback) {
+  const data = new FormData();
+  data.append("class", clas);
+  data.append("term", term);
+  data.append("exam", exam);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "result.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        callback(response);
+      }
+    } catch (error) {
+      console.log("Marks Error", error);
+    }
+  };
+  xhr.send(data);
+}
+
+function separateGender(marks, callback) {
+  getStudents((students) => {
+    const male = students.flatMap((s) =>
+      marks.filter((m) => m.admission === s.admission && s.gender === "male")
+    );
+    const female = students.flatMap((s) =>
+      marks.filter((m) => m.admission === s.admission && s.gender === "female")
+    );
+    callback({
+      male: male,
+      female: female,
+    });
+  });
+}
+
+//function to get ten random students
+function getTenRandomItems(array, n) {
+  if (array.length < n) {
+    throw new Error("Array must contain at least 10 items.");
+  }
+
+  const shuffled = [...array].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+}
+
+//function find mean
+function findMean(raw) {
+  let mean = 0;
+  raw.forEach((element) => {
+    mean += Number(element.mean);
+  });
+  return mean / raw.length;
+}
+//functionto find the deviation
+function findVariance(mean, raw) {
+  let added = 0;
+  const deviation = raw.map((value) => Math.pow(mean - Number(value.total), 2));
+  deviation.forEach((dev) => {
+    added += dev;
+  });
+  return added / (raw.length - 1);
+}
+
+//function to get the pooled varioance
+function calculatePooledVariance(male, maleVariance, female, femaleVariance) {
+  const pooledVariance =
+    ((male.length - 1) * maleVariance + (female.length - 1) * femaleVariance) /
+    (male.length + female.length - 2);
+  return pooledVariance;
+}
+
+//function to calcilate t statistic
+function tTest(pooledVariance, meanOne, meanTwo) {
+  const tValue =
+    (meanOne - meanTwo) / Math.sqrt(pooledVariance * (1 / 10 + 1 / 10));
+  return tValue;
+}
+
+//function to accept or reject
+function acceptReject(calcvalue, type) {
+  const oneTailed = 1.734;
+  const twoTailed = 2.101;
+  let decision;
+  console.log(calcvalue);
+  if (type === "one-tailed") {
+    decision = calcvalue > oneTailed ? "reject" : "accept";
+  } else if (type === "two-tailed") {
+    decision = calcvalue >= twoTailed ? "reject" : "accept";
+  }
+
+  return decision;
+}
+
+//function wxpnation
+function explanation(decision, calcvalue, data) {}
+
+/* this below function include the f test function
+   to calculate grand mean and 
+*/
+
+function getSubjectLengths(randomStudents, callback) {
+  let completed = 0;
+  n = 0;
+  let subjectLength = []; //this is the length assign suppose a student dropped a subject this stores how many students actually do the subject
+  randomStudents.forEach((student) => {
+    getStudents((students) => {
+      const foundStudent = students.find(
+        (s) => s.admission === student.admission
+      );
+      //loop through each subject to check if student dropped or not
+      subjects.forEach((subject) => {
+        if (!subjectLength[subject]) {
+          subjectLength[subject] = 0;
+        }
+        if (foundStudent[subject] !== "not-selected") {
+          subjectLength[subject]++;
+          n++;
+        }
+      });
+      completed++;
+      if (completed === randomStudents.length) {
+        callback(subjectLength);
+      }
+    });
+  });
+}
+
+function getSubjectValues(randomStudents, callback) {
+  let subjectValues = []; //this are the column or treatment values
+  //this selets all marks of all subjects and places them each in one array
+  subjects.forEach((subject) => {
+    randomStudents.forEach((student) => {
+      if (!subjectValues[subject]) {
+        subjectValues[subject] = [];
+      }
+      subjectValues[subject].push(student[subject]);
+    });
+  });
+  callback(subjectValues);
+}
+
+function findGrandMean(randomStudents, callback) {
+  const subjects = [
+    "english",
+    "kiswahili",
+    "mathematics",
+    "chemistry",
+    "biology",
+    "physics",
+    "geography",
+    "history",
+    "cre",
+    "business",
+    "agriculture",
+    "computer",
+    "french",
+  ];
+
+  const subjectMeans = {};
+  const subjectTotals = {};
+  let grandTotal = 0;
+  let countedSubjects = 0;
+
+  getSubjectLengths(randomStudents, (subjectLength) => {
+    getSubjectValues(randomStudents, (subjectValues) => {
+      subjects.forEach((subject) => {
+        const values = subjectValues[subject] || [];
+
+        // Calculate total
+        const total = values.reduce((sum, val) => sum + parseInt(val || 0), 0);
+        subjectTotals[subject] = total;
+
+        const count = subjectLength[subject] || 0;
+        if (count > 0) {
+          const mean = total / count;
+          subjectMeans[subject] = mean;
+          grandTotal += mean;
+          countedSubjects++;
+        }
+      });
+
+      const grandMean = grandTotal / countedSubjects;
+      callback({
+        grandMean: grandMean,
+        subjectTotals: subjectTotals,
+        subjectLength: subjectLength,
+        subjectMean: subjectMeans,
+      });
+    });
+  });
+}
+
+function findGranSum(students, grandMean, callback) {
+  getSubjectValues(students, (subjectValues) => {
+    let grandSum = 0;
+    subjects.forEach((subject) => {
+      const values = subjectValues[subject] || [];
+      const squeredDiff = values.map((val) =>
+        Math.pow(parseFloat(val) - grandMean, 2)
+      );
+      const subjectSum = squeredDiff.reduce((sum, val) => sum + val, 0);
+      grandSum += subjectSum;
+    });
+    callback(grandSum);
+  });
+}
+
+function findColumnSums(students, subjectMean, callback) {
+  getSubjectValues(students, (subjectValues) => {
+    let columnTotal = 0;
+
+    subjects.forEach((subject) => {
+      const values = subjectValues[subject] || [];
+
+      // Skip subject if mean is undefined or not a number
+      const mean = parseFloat(subjectMean[subject]);
+      if (isNaN(mean)) return;
+
+      const squaredDiff = values.map((val) => {
+        const num = parseFloat(val);
+        return isNaN(num) ? 0 : Math.pow(num - mean, 2);
+      });
+
+      const subjectTotal = squaredDiff.reduce((sum, val) => sum + val, 0);
+      columnTotal += subjectTotal;
+    });
+
+    callback(columnTotal);
+  });
+}
+
+function checkFSignificance(df1, df2, fRatio, alpha = 0.05) {
+  const fCritical = jStat.centralF.inv(1 - alpha, df1, df2);
+
+  console.log("F-ratio:", fRatio.toFixed(4));
+  console.log("F-critical value (α = " + alpha + "):", fCritical.toFixed(4));
+
+  if (fRatio > fCritical) {
+    return {
+      significant: true,
+      message: "✅ Statistically significant. Reject the null hypothesis.",
+    };
+  } else {
+    return {
+      significant: false,
+      message: " Not statistically significant. Fail to reject the null.",
+    };
+  }
+}
+
+
+if (data) {
+  separateGender(data.marks, (separeted) => {
+    const male = getTenRandomItems(separeted.male, 10);
+    const female = getTenRandomItems(separeted.female, 10);
+    const maleMean = findMean(male); //this function gets the mean for males
+    const maleVariation = findVariance(maleMean, male); //this gets the deviation; for females
+    const femaleMean = findMean(female); //this function gets the mean for males
+    const femaleVariation = findVariance(femaleMean, female); //this gets the deviation; for females
+    const pooledVariance = calculatePooledVariance(
+      male,
+      maleVariation,
+      female,
+      femaleVariation
+    );
+    const getTstatistic = tTest(pooledVariance, maleMean, femaleMean);
+    const descision = acceptReject(getTstatistic, "two-tailed");
+    const data = {
+      male: {
+        mean: maleMean,
+        deviation: maleVariation,
+        sample: male.length,
+      },
+      female: {
+        mean: femaleMean,
+        deviation: femaleVariation,
+        sample: female.length,
+      },
+    };
+    explanation(descision, getTstatistic, data);
+    genderChart(maleMean, femaleMean);
+    getAllStudents(male[0].class, male[0].stream);
+  });
+
+  const students = getTenRandomItems(data.marks, 20);
+  const randomStudents = getTenRandomItems(students, 20);
+  findGrandMean(randomStudents, (subjectData) => {
+    findGranSum(randomStudents, subjectData.grandMean, (totalSquareDiff) => {
+      findColumnSums(
+        randomStudents,
+        subjectData.subjectMean,
+        (columnTotals) => {
+          const SSE = columnTotals;
+          const SST = totalSquareDiff;
+          const SSC = SST - SSE;
+          const ns = n;
+          const k = subjects.length;
+          const MSSE = SSE / (ns - k);
+          const MSSC = SSC / (k - 1);
+          const FRation = MSSC / MSSE;
+          const rada = checkFSignificance(k - 1, ns - k, FRation);
+          console.log(rada);
+          subjectChart(subjectData.subjectMean);
+        }
+      );
+    });
+  });
+
+  if (data.mode === "classes") {
+    showClassChart();
+  }
+
+  if (data.mode === "stream") {
+    console.log("detected");
+    separateGender(data.marks, (separeted) => {
+      const male = getTenRandomItems(separeted.male, 10);
+      showStreamChart(male[0].class, male[0].term, male[0].exam);
+    });
+  }
+}
+
+//charts rada
+
+function getAllStudents(clas, stream) {
+  getStudents((students) => {
+    const allStudents = students.filter(
+      (s) => s.class === clas && s.stream === stream
+    );
+    console.log(allStudents);
+    const males = allStudents.filter((s) => s.gender === "male");
+    const females = allStudents.filter((s) => s.gender === "female");
+    allStudentsChart(males.length, females.length);
+  });
+}
+
+function subjectChart(means) {
+  const myChart = document.getElementById("my-chart");
+  let subjectMeanArray = [];
+
+  subjects.forEach((subject) => {
+    let value = {
+      subject: subject,
+      val: isNaN(parseInt(means[subject])) ? 1 : parseInt(means[subject]),
+    };
+    subjectMeanArray.push(value);
+  });
+
+  const sortedArray = subjectMeanArray.sort((a, b) =>
+    a.subject.localeCompare(b.subject)
+  );
+  let values = [];
+  let subject = [];
+
+  sortedArray.forEach((sortedArr) => {
+    values.push(sortedArr.val);
+    subject.push((sortedArr.subject));
+  });
+
+  const mediaQuery = window.matchMedia("(max-width:1330px)");
+  if(mediaQuery.matches){
+    subject = subject.map(subj => getInitials(subj))
+  }
+
+  const datas = {
+    labels: subject,
+    datasets: [
+      {
+        data: values,
+        label: "subjects",
+      },
+    ],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  };
+
+  const chart = new Chart(myChart, {
+    type: "bar",
+    data: datas,
+  });
+}
+
+function genderChart(male, female) {
+  const chartBox = document.getElementById("gender-chart");
+  const genderData = {
+    labels: ["male", "female"],
+    datasets: [
+      {
+        data: [male, female],
+        label: "gender graph",
+      },
+    ],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  };
+  const genderChart = new Chart(chartBox, {
+    type: "bar",
+    data: genderData,
+  });
+}
+
+function getInitials(value) {
+  let originalValue = value.toLowerCase();
+  if (originalValue.trim() !== "") {
+    switch (originalValue) {
+      case "english":
+        originalValue = "ENG";
+        break;
+      case "kiswahili":
+        originalValue = "KIS";
+        break;
+      case "mathematics":
+        originalValue = "MATH";
+        break;
+      case "chemistry":
+        originalValue = "CHEM";
+        break;
+      case "biology":
+        originalValue = "BIO";
+        break;
+      case "physics":
+        originalValue = "PHY";
+        break;
+      case "geography":
+        originalValue = "GEO";
+        break;
+      case "history":
+        originalValue = "HIST";
+        break;
+      case "cre":
+        originalValue = "CRE";
+        break;
+      case "business":
+        originalValue = "B/S";
+        break;
+      case "agriculture":
+        originalValue = "AGRI";
+        break;
+      case "computer":
+        originalValue = "COMP";
+        break;
+      case "french":
+        originalValue = "FREN";
+        break;
+      default:
+        originalValue = originalValue;
+    }
+  }
+  return originalValue;
+}
+
+function allStudentsChart(male, female) {
+  const allChart = document.querySelector("#all-students");
+  const allStudents = {
+    labels: ["male", "female"],
+    datasets: [
+      {
+        data: [male, female],
+        label: "all students",
+      },
+    ],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  };
+  const chart = new Chart(allChart, {
+    type: "doughnut",
+    data: allStudents,
+  });
+}
+
+function showClassChart() {}
+
+function selectDistinctStreams(clas, term, exam, callback) {
+  getStudentMarks(clas, term, exam, (studentMarks) => {
+    let separatedStreams = {};
+    studentMarks.forEach((thisClassMark) => {
+      const stream = thisClassMark.stream;
+      if (!separatedStreams[stream]) {
+        separatedStreams[stream] = [];
+      }
+      separatedStreams[stream].push(thisClassMark);
+    });
+    callback(separatedStreams);
+  });
+}
+
+function getMeanStreamMark(rawStreamData, callback) {
+  let streamMean = {};
+  let completed = 0;
+  for (let stream in rawStreamData) {
+    const thisClass = rawStreamData[stream];
+    const totalStreamMark = thisClass.reduce(
+      (totals, value) => totals + Number(value.mean),
+      0
+    );
+    const streamMeanMark =
+      totalStreamMark > 0 ? totalStreamMark / thisClass.length : 0;
+    completed++;
+
+    if (!streamMean[stream]) streamMean[stream] = 0;
+    streamMean[stream] = streamMeanMark;
+    if (completed === Object.keys(rawStreamData).length) callback(streamMean);
+  }
+}
+
+function showStreamChart(clas, term, exam) {
+  selectDistinctStreams(clas, term, exam, (allStreams) => {
+    getMeanStreamMark(allStreams, (streamMeans) => {
+      const arranged = Object.keys(streamMeans).sort((a, b) => a - b);
+      let objectValues = [];
+      arranged.forEach((keys) => {
+        objectValues.push(streamMeans[keys]);
+      });
+      console.log(objectValues);
+      const convertedStreams = arranged.map((rawStream) =>
+        convertStream(rawStream)
+      );
+      const streamChartCont = document.querySelector("#agenda");
+      const backGroundColors = arranged.map((rawStream) =>
+        getBackgroundColor(rawStream)
+      );
+
+      const streamData = {
+        labels: convertedStreams,
+        datasets: [
+          {
+            data: objectValues,
+            label: "stream chart",
+            backgroundColor: backGroundColors,
+          },
+        ],
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      };
+
+      const streamChart = new Chart(streamChartCont, {
+        type: "bar",
+        data: streamData,
+      });
+    });
+  });
+}
+
+function convertStream(rawStream) {
+  switch (rawStream) {
+    case "111":
+      return "green";
+      break;
+    case "222":
+      return "blue";
+      break;
+    case "333":
+      return "red";
+      break;
+    case "444":
+      return "purple";
+      break;
+    default:
+      return "green";
+  }
+}
+
+function getBackgroundColor(rawStream) {
+  switch (rawStream) {
+    case "111":
+      return "#28c76f";
+      break;
+    case "222":
+      return "#3b82f6";
+      break;
+    case "333":
+      return "#ED0028";
+      break;
+    case "444":
+      return "#884DFF";
+      break;
+    default:
+      return "#28c76f";
+  }
+}
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Image Tooltip</title>
+</head>
+<body>
+   <form id="form">
+            <select id="class" name="class">
+                <option value="">--Choose class--</option>
+                <option value="1">Form1</option>
+                <option value="2">Form2</option>
+                <option value="3">Form3</option>
+                <option value="4">Form4</option>
+            </select><br>
+            <select name="term" id="exam">
+                <option value="">--Choose the term--</option>
+                <option value="1">Term1</option>
+                <option value="2">Term2</option>
+                <option value="3">Term3</option>
+            </select><br>
+            <select name="exam" id="term">
+                <option value="">--Choose the exam--</option>
+                <option value="11">Opener</option>
+                <option value="22">Midterm</option>
+                <option value="33">Endterm</option>
+            </select>
+            <select name="stream" id="stream" >
+            <option value="">--Choose Stream--</option>
+            <option value="111">Green</option>
+            <option value="222">Blue</option>
+            <option value="333">Red</option>
+            <option value="444">Purple</option>
+        </select><br>
+        <input type="text" name="subject" id=""value="cre">
+            <button type="submit" id="hide-btn">Check</button><br>
+   </form>
+   <script>
+    const form = document.getElementById("form");
+    const button = document.getElementById("hide-btn");
+
+    form.addEventListener("submit" , postNames)
+    button.addEventListener("click" , postNames)
+
+     function postNames(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST' , 'marks.php' , true);
+        xhr.onload = () => {
+            if(xhr.status == 200){
+                const response = JSON.parse(xhr.responseText);
+                console.log(response)
+            }
+        }
+        xhr.send(formData);
+    }
+
+   </script>
+       </main>
+       <script>
+         const topicBox = document.querySelector(".centralise");
+         const hiddenForm = document.querySelector(".vefiried");
+         const classInput = document.getElementById("class");
+         const improvedError = document.getElementById("error-message");
+         const tCode = document.getElementById("code");
+         const improvedSuccess = document.getElementById("success-message");
+         const verifyForm = document.querySelector(".verify");
+         const selectinputs = verifyForm.querySelectorAll(".requiredz");
+         const children = verifyForm.querySelectorAll(".body .subject");
+         const subjectverify = document.getElementById("subject");
+         const selectTopic = verifyForm.querySelector(".button");
+         const startBtn = selectTopic.querySelector("button");
+         const topicPostForm = document.querySelector(".verify-topic");
+         const classSelect = document.getElementById("class");
+         const submitSelect = document.getElementById("classes");
+         const submitSelectSub = document.getElementById("subject-one");
+         const main = document.querySelector(".main");
+         let currentIndex = -1;
+         let divCount = 0;
+         const colors = [
+           "#AEDFF7",
+           "#F4D19B",
+           "#CFF2E1",
+           "#B2EBF2",
+           "#D1F2A5",
+           "#B0C4DE",
+           "#DDECC9",
+           "#E6CFC1",
+           "#E4DEF3",
+           "#F9E7C3",
+           "#D0E6B3",
+           "#F8C8DC",
+           "#A7FOF9",
+         ];
+         for (let c = 0; c < children.length; c++) {
+           children[c].style.background = `${colors[c]}`;
+         }
+   
+         topicBox.style.display = "none";
+   
+         classInput.addEventListener("change", function () {
+           document.querySelector(".verify-class").value = this.value;
+           submitSelect.value = this.value;
+         });
+   
+         function getTcode() {
+           const xhr = new XMLHttpRequest();
+           xhr.open("GET", "login.json", true);
+           xhr.onload = () => {
+             if (xhr.status == 200) {
+               const tcode = JSON.parse(xhr.responseText);
+               tCode.value = tcode[0].code;
+               document.querySelector(".verify-code").value = tcode[0].code;
+             }
+           };
+           xhr.send();
+         }
+   
+         function getSubject() {
+           children.forEach((child) => {
+             child.addEventListener("click", function () {
+               const subject = this.textContent.trim();
+               subjectverify.value = subject;
+               document.querySelector(".verify-subject").value = subject;
+               submitSelectSub.value = subject;
+               validateVerifyInputs();
+             });
+           });
+         }
+   
+         function validateVerifyInputs() {
+           selectinputs.forEach((input) => input.classList.remove("errors"));
+           let allFilled = true;
+   
+           selectinputs.forEach((input) => {
+             if (input.value.trim() === "") {
+               allFilled = false;
+               input.classList.add("errors");
+             } else {
+               allFilled = true;
+             }
+           });
+   
+           if (allFilled) {
+             submitVerifyForm();
+           } else {
+             showErrorMessage("all input fields are required");
+           }
+         }
+   
+         function submitVerifyForm() {
+           const xhr = new XMLHttpRequest();
+           const formData = new FormData(hiddenForm);
+           xhr.open("POST", "validate2.php", true);
+           xhr.onload = () => {
+             if (xhr.status == 200) {
+               const response = JSON.parse(xhr.responseText);
+               showTopic(response);
+             }
+           };
+           xhr.send(formData);
+         }
+   
+         function showTopic(response) {
+           if (response.message === "validated" && response.type === true) {
+             showSuccessMessage("access granted");
+             selectTopic.style.display = "flex";
+           } else if (response.message === "unvalid" && response.type === false) {
+             showErrorMessage("access denied");
+           }
+         }
+   
+         function startTopics() {
+           divCount++;
+           currentIndex = divCount - 1;
+           let topicArray = [];
+           verifyForm.style.display = "none";
+           topicBox.style.display = "flex";
+           const topicChildren = topicBox.querySelectorAll(".topic-box");
+           Array.from(topicChildren).forEach((child) => {
+             child.style.display = "none";
+           });
+   
+           const newTopic = document.createElement("div");
+           newTopic.classList.add("topic-box");
+           newTopic.style.minWidth = "100%";
+           newTopic.innerHTML = `
+                   <h2>topics ${divCount}</h2>
+                   <span>
+                       <h3>topic number</h3>
+                       <input type="text" class="required topic-number" name="topic-number[]" id="">
+                   </span>
+                   <span>
+                       <h3>topic tittle</h3>
+                       <input type="text" class="required topic-title" name="topic-tittle[]" id="">
+                   </span>
+                   <span>
+                       <h3>topic description</h3>
+                       <textarea name="topic-description[]" class="required topic-dec" id=""></textarea>
+                   </span>
+   
+                   <div class="btn">
+                       <span>
+                         <button type="button" class="prev">prev</button>
+                         <button type="button" class="next">next</button>  
+                       </span>
+                       <button type="button" class="submit">submit</button>
+                   </div>
+          `;
+           topicBox.appendChild(newTopic);
+   
+           const submit = topicBox.querySelectorAll(".submit");
+           const next = topicBox.querySelectorAll(".next");
+           const prev = topicBox.querySelectorAll(".prev");
+   
+           submit.forEach((button) =>
+             button.addEventListener("click", redirectToVerify)
+           );
+   
+           next.forEach((button) =>
+             button.addEventListener("click", nextQuestion)
+           );
+           prev.forEach((button) =>
+             button.addEventListener("click", showPrevious)
+           );
+   
+           function validateTopicInputs() {
+             const currentTopic =
+               topicBox.querySelectorAll(".topic-box")[currentIndex];
+             const selectinput = currentTopic.querySelectorAll(".required");
+             selectinput.forEach((input) => input.classList.remove("errors"));
+             let allFilled = true;
+   
+             selectinput.forEach((input) => {
+               if (input.value.trim() === "") {
+                 allFilled = false;
+                 input.classList.add("errors");
+               } else {
+                 allFilled = true;
+               }
+             });
+   
+             if (allFilled) {
+               nextQuestion();
+             } else {
+               showErrorMessage("all input fields are required");
+             }
+           }
+           function nextQuestion() {
+             const topicChildren = topicBox.querySelectorAll(".topic-box");
+             if(currentIndex + 1 < topicChildren.length){
+               showNextQuestion(currentIndex + 1);
+             }else{
+               startTopics()
+             }
+     
+           }
+           function showNextQuestion(index) {
+             const topicChildrens = topicBox.querySelectorAll(".topic-box");
+             if (index >= topicChildren.length || index < 0) return;
+   
+             topicChildrens.forEach((child, i) => {
+               child.style.display = i === index ? "flex" : "none";
+             });
+             currentIndex = index;
+           }
+           function showPrevious() {
+             showQuestion(currentIndex - 1);
+           }
+           function showQuestion(index) {
+             const topicChildrens = topicBox.querySelectorAll(".topic-box");
+             if (index >= topicChildren.length || index < 0) return;
+   
+             topicChildrens.forEach((child, i) => {
+               child.style.display = i === index ? "flex" : "none";
+             });
+             currentIndex = index;
+           }
+           function redirectToVerify() {
+             const currentTopic =
+               topicBox.querySelectorAll(".topic-box")[currentIndex];
+             const selectinput = currentTopic.querySelectorAll(".required");
+             let allFilled = true;
+   
+             // Check if all required fields are filled
+             selectinput.forEach((input) => {
+               if (input.value.trim() === "") {
+                 allFilled = false;
+                 input.classList.add("errors");
+               }
+             });
+   
+             if (allFilled) {
+               // Push the current topic into topicArray if not already present
+               const currentTopicData =
+                 currentTopic.querySelector(".topic-title").value;
+               if (
+                 !topicArray.some(
+                   (topic) =>
+                     topic.querySelector(".topic-title").value === currentTopicData
+                 )
+               ) {
+                 topicArray.push(currentTopic);
+                 hideTopic(topicArray, divCount); // Hide the current topic and proceed to the next
+               }
+             } else {
+               showErrorMessage("All input fields are required");
+             }
+           }
+   
+           function hideTopic(array, idx) {
+             const ul = topicPostForm.querySelector(".main-body ul");
+             ul.innerHTML = "";
+             verifyForm.style.display = "none";
+             topicBox.style.display = "none";
+             topicPostForm.style.display = "flex";
+             array.forEach((arr, index) => {
+               const newLi = document.createElement("li");
+               newLi.innerHTML = `
+               <input type="hidden" class="submit-index" value="${index}" >
+                       <h2>topic ${arr.querySelector(".topic-number").value}: ${
+                 arr.querySelector(".topic-title").value
+               }</h2>
+                       <p>${arr.querySelector(".topic-dec").value}</p>
+               `;
+               ul.appendChild(newLi);
+             });
+             function redirectToTopic() {
+               const lis = topicPostForm.querySelector(".main-body ul").children;
+               Array.from(lis).forEach((li) => {
+                 li.addEventListener("click", function () {
+                   const input = this.querySelector(".submit-index");
+                   const index = parseInt(input.value, 10);
+                   verifyForm.style.display = "none";
+                   topicBox.style.display = "flex";
+                   topicPostForm.style.display = "none";
+   
+                   showQuestion(index);
+                 });
+               });
+             }
+             redirectToTopic();
+           }
+         }
+   
+         function showErrorMessage(message) {
+           improvedError.classList.add("show-error");
+           improvedError.querySelector("#error-text").textContent =
+             message || "an error just occurred";
+   
+           setTimeout(hideErrorMessage, 5000);
+         }
+   
+         function hideErrorMessage() {
+           improvedError.classList.remove("show-error");
+           improvedSuccess.classList.remove("show-error");
+         }
+   
+         function hideSuccessMessage() {
+           improvedSuccess.classList.remove("show-success");
+           improvedError.classList.remove("show-error");
+         }
+   
+         function showSuccessMessage(messages) {
+           improvedSuccess.classList.add("show-success");
+           improvedSuccess.querySelector("#error-text").textContent =
+             messages || "congrats!";
+   
+           setTimeout(hideSuccessMessage, 5000);
+         }
+   
+       
+       </script>
+       <script>
+         const parent = document.querySelector(".grid-container");
+      const children = parent.children;
+      const subjectGrid = parent.querySelectorAll(".subject-grid");
+      const delay = 0.2;
+      const classSelect = document.getElementById("class");
+      const streamSelect = document.getElementById("stream");
+      const form = document.querySelector(".main");
+      const subjectContainers = document.querySelectorAll(".subject-all");
+      const tableContainers = document.querySelectorAll(".table");
+      const improvedError = document.getElementById("error-message");
+      const improvedSuccess = document.getElementById("success-message");
+      const closePopup = document.querySelectorAll(".close-btn");
+      const backBtn = document.querySelector(".back");
+      const tableBody = document.querySelector(".marks-table table tbody");
+      const examForm = document.getElementById("exam-selects");
+      const submit = document.getElementById("submit");
+      const submitBtn = document.getElementById("submit-btn");
+      let totalInputs = [];
+
+      const visibleTerm = document.getElementById("main-term");
+      const visibleExam = document.getElementById("main-exam");
+      document.querySelector(
+        ".marks-table .centralise .noresult"
+      ).style.display = "none";
+
+      const updateHiddenInputs = () => {
+        document.getElementById("class-input").value =
+          document.getElementById("class").value;
+        document.getElementById("stream-input").value =
+          document.getElementById("stream").value;
+        document.getElementById("term").value = visibleTerm.value || "2";
+        document.getElementById("exam").value = visibleExam.value || "22";
+      };
+
+      visibleTerm.addEventListener("change", () => {
+        updateHiddenInputs();
+        examForm.dispatchEvent(
+          new Event("submit", { bubbles: true, cancelable: true })
+        );
+      });
+
+      visibleExam.addEventListener("change", () => {
+        updateHiddenInputs();
+        examForm.dispatchEvent(
+          new Event("submit", { bubbles: true, cancelable: true })
+        );
+      });
+
+      Array.from(children).forEach((child) => {
+        child.addEventListener("click", function () {
+          updateHiddenInputs();
+          document.getElementById("subject").value = this.textContent.trim();
+          examForm.dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true })
+          );
+        });
+      });
+
+      examForm.style.display = "none";
+      document.getElementById("marks-table").style.display = "none";
+
+      examForm.addEventListener("submit", postNames);
+
+      for (let x = 0; x < children.length; x++) {
+        children[x].style.transitionDelay = `${delay * x}` + "s";
+      }
+
+      function assignValues(clases, stream, term, exam) {}
+
+      function examInputs(clases, stream) {
+        document
+          .getElementById("main-exam")
+          .addEventListener("input", function (e) {
+            const examValue = e.target.value;
+            document
+              .getElementById("main-term")
+              .addEventListener("input", function (m) {
+                const termValue = m.target.value;
+                if (
+                  termValue.value.trim() === "" ||
+                  examValue.value.trim() === ""
+                ) {
+                  //  assignValues(clases,stream,"1","22");
+                } else {
+                  //  assignValues(clases,stream,termValue,examValue);
+                }
+              });
+          });
+      }
+
+      window.addEventListener("load", function () {
+        subjectGrid.forEach((element) => {
+          element.style.opacity = "1";
+          element.style.transform = "scale(1)";
+        });
+      });
+
+      function checkTeacher() {
+        Array.from(children).forEach((child) => {
+          child.addEventListener("click", function () {
+            const subject = this.textContent.trim();
+            return subject;
+          });
+        });
+      }
+
+      function checkUserExam(subject) {
+        const examInputs = document.querySelectorAll(".requireds");
+        examInputs.forEach((eInput) => eInput.classList.remove("errors"));
+        let allFilled = false;
+        examInputs.forEach((input) => {
+          if (input.value.trim() === "") {
+            allFilled = false;
+            showErrorMessage("please input exam to proceed");
+          } else {
+            allFilled = true;
+          }
+
+          if (allFilled) {
+            const exam = document.getElementById("exam");
+            const term = document.getElementById("term");
+
+            exam.addEventListener("input", function (e) {
+              const examInput = e.target.value;
+
+              term.addEventListener("input", (e) => {
+                const termInput = e.target.value;
+
+                getMarks(termInput, examInput, subject);
+              });
+            });
+          }
+        });
+      }
+
+      function postNames(e) {
+        e.preventDefault();
+        const formData = new FormData(examForm);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "marks.php", true);
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            displayStudents(response);
+          }
+        };
+        xhr.send(formData);
+      }
+
+      function getStudents(classes, stream) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "marks.json", true);
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+          }
+        };
+        xhr.send();
+      }
+
+      function getAllMarks(){
+        const params = "exam=" + visibleExam.value + "&term=" + visibleTerm.value + "&class=" + classSelect.value;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST' , 'result.php' , true);
+        xhr.setRequestHeader('Content-type' , 'application/x-www-form-urlencoded');
+        xhr.onload = () => {
+          if(xhr.status === 200){
+            const response = (xhr.responseText);
+            console.log(response);
+          }
+        }
+        xhr.send(params)
+      }
+
+      function postMarks(){
+        getAllMarks();
+        const formData = new FormData(form);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST' , 'upload.php' , true);
+        xhr.onload = () => {
+          if(xhr.status === 200){
+            const response = (xhr.responseText);
+            console.log(response);
+          }
+        }
+        xhr.send(formData);
+      }
+
+      function displayStudents(data) {
+        tableBody.innerHTML = "";
+        const newDiv = document.createElement("div");
+        newDiv.className = "noresult";
+
+        if (data.length > 0) {
+          document.querySelector(
+            ".marks-table .centralise .noresult"
+          ).style.display = "none";
+          document.querySelector(
+            ".marks-table .centralise .table "
+          ).style.display = "flex";
+          data.forEach((student) => {
+            switch (student.class) {
+              case "1":
+                student.class = "form1";
+                break;
+              case "2":
+                student.class = "form2";
+                break;
+              case "3":
+                student.class = "form3";
+                break;
+              case "4":
+                student.class = "form4";
+                break;
+            }
+            switch (student.stream) {
+              case "111":
+                student.stream = "green";
+                break;
+              case "222":
+                student.stream = "blue";
+                break;
+              case "333":
+                student.stream = "red";
+                break;
+              case "444":
+                student.stream = "purple";
+                break;
+            }
+            switch (student.exam) {
+              case "11":
+                student.exam = "opener";
+                break;
+              case "22":
+                student.exam = "midtern";
+                break;
+              case "33":
+                student.exam = "endterm";
+                break;
+              default:
+                student.exam = "midterm";
+                break;
+            }
+            document.querySelector(
+              ".marks-table .centralise .table table caption"
+            ).textContent = `term ${student.term} ${student.exam} exam`;
+            const row = document.createElement("tr");
+            newDiv.innerHTML = "";
+            row.innerHTML = `
+            <td>${student.admission}</td>
+            <td>${student.firstname} ${student.middlename} ${student.lastname}</td>
+            <td>${student.class}</td>
+            <td>${student.stream}</td>
+            <td>${student.gender}</td>
+            <td><input type="number" name="marks[]" value="${student.subject}" /></td>
+            <td class="hidden"><input type="number" name="admissions[]" id="" class="mark" value="${student.admission}"></td>
+            <input type="hidden" name="ids[]" id="" class="mark" value="${student.id}">
+            <input type="hidden" name="totals[]" id="" class="totals" value="">
+        `;
+
+            tableBody.appendChild(row);
+            let currentMark = {
+              input : tableBody.querySelector(".totals"),
+              admission : student.admission
+            }
+            totalInputs.push(currentMark);
+          });
+        } else {
+          document.querySelector(
+            ".marks-table .centralise .noresult"
+          ).style.display = "flex";
+          document.querySelector(
+            ".marks-table .centralise .table"
+          ).style.display = "none";
+        }
+
+      }
+
+      function checkUserInput(user, text) {
+        const allInputs = document.querySelectorAll(".required");
+        allInputs.forEach((item) => item.classList.remove("errors"));
+        let alfilled = false;
+
+        allInputs.forEach((input) => {
+          if (input.value.trim() === "") {
+            alfilled = false;
+            input.classList.add("errors");
+          } else {
+            alfilled = true;
+          }
+
+          if (alfilled) {
+            getLessons(user, text);
+          } else {
+            showErrorMessage("please input all input fields");
+          }
+        });
+      }
+
+      function getUserInputs() {
+        document
+          .getElementById("class")
+          .addEventListener("input", function (e) {
+            const userClass = e.target.value;
+
+            document
+              .getElementById("stream")
+              .addEventListener("input", function (e) {
+                const userStream = e.target.value;
+
+                getStudents(userClass, userStream);
+                assignValues(userClass, userStream);
+              });
+          });
+      }
+
+      function getLessons(user, subject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "lesson.php", true);
+        xhr.setRequestHeader('Content-type' , '')
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            const response = JSON.parse(xhr.responseText);
+            response.forEach(res => {
+              if(res.teacherCode === user && res.subject === subject){
+                  hideSubjects();
+                  getUserInputs();
+                  showSuccessMessage("success ! proceed to upload");
+              }else{
+                 showErrorMessage("user does not teach the class");
+              }
+            })
+          }
+        };
+        xhr.send();
+      }
+
+      getUserInputs();
+
+      function getSubject(user) {
+        Array.from(children).forEach((child) => {
+          child.addEventListener("click", function () {
+            const subject = this.textContent.trim();
+            document.getElementById("subject-input").value = subject;
+            document.querySelector(".subject-tittle").textContent =
+              subject || "subject";
+            checkUserInput(user, subject);
+          });
+        });
+      }
+
+      function getTCode() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "login.json", true);
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            const tcode = JSON.parse(xhr.responseText);
+            getSubject(tcode[0].code);
+          }
+        };
+        xhr.send();
+      }
+
+      getTCode();
+
+      function hideSubjects() {
+        parent.style.display = "none";
+        document.getElementById("subject-container").style.display = "none";
+        document.getElementById("marks-table").style.display = "flex";
+        document.querySelector(".submit-btn").style.display = "flex";
+      }
+
+      function hideTable() {
+        parent.style.display = "grid";
+        document.getElementById("subject-container").style.display = "flex";
+        document.getElementById("marks-table").style.display = "none";
+        document.querySelector(".submit-btn").style.display = "none";
+       // window.location.reload();
+      }
+
+      function showErrorMessage(message) {
+        improvedError.classList.add("show-error");
+        improvedError.querySelector("#error-text").textContent =
+          message || "an error just occurred";
+
+        setTimeout(hideErrorMessage, 5000);
+      }
+
+      function hideErrorMessage() {
+        improvedError.classList.remove("show-error");
+        improvedSuccess.classList.remove("show-error");
+      }
+
+      function hideSuccessMessage() {
+        improvedSuccess.classList.remove("show-success");
+        improvedError.classList.remove("show-error");
+      }
+
+      function showSuccessMessage(messages) {
+        improvedSuccess.classList.add("show-success");
+        improvedSuccess.querySelector("#error-text").textContent =
+          messages || "congrats!";
+
+        setTimeout(hideSuccessMessage, 5000);
+      }
+
+      backBtn.addEventListener("click", hideTable);
+      submitBtn.addEventListener("click" , postMarks)
+
+      hideTable();
+       </script>
+           <script>
+            const improvedError = document.getElementById("error-message");
+            const improvedSuccess = document.getElementById("success-message");
+            const closePopup = document.querySelectorAll(".close-btn");
+            const quizSection = document.querySelector(".quiz");
+            const submitForm = document.querySelector(".submit-form");
+            const verifyForm = document.querySelector(".verify");
+            const hiddenForm = document.querySelector(".vefiried");
+            const subject = document.getElementById("subject");
+            const lastStep = document.querySelector(".last-step");
+            const tCode = document.getElementById("code");
+            const classes = document.getElementById("class");
+            const stream = document.getElementById("stream");
+            const children = verifyForm.querySelectorAll(".body .subject");
+            const selectTopic = document.querySelector(".verify .topics");
+            const startButton = document.querySelector(".verify .button");
+            const submitFormBack = document.querySelector(".backing");
+            const submitFormSubmit = document.querySelector(".submiting");
+            const main = document.querySelector(".main");
+            const lastStepButton = document.querySelector(".last-submit-button button");
+            const lastStepDisplay = document.querySelector(".last-step .alah");
+            const colors = [
+              "#AEDFF7",
+              "#F4D19B",
+              "#CFF2E1",
+              "#B2EBF2",
+              "#D1F2A5",
+              "#B0C4DE",
+              "#DDECC9",
+              "#E6CFC1",
+              "#E4DEF3",
+              "#F9E7C3",
+              "#D0E6B3",
+              "#F8C8DC",
+              "#A7FOF9",
+            ];
+            let divCount = 0;
+            let currentDivIndex = 0;
+            submitForm.style.display = "none";
+            lastStep.style.display = "none";
+            hiddenForm.style.display = "none";
+            let getBack = "";
+            for (let c = 0; c < children.length; c++) {
+              children[c].style.background = `${colors[c]}`;
+            }
+      
+            function startPostQuiz() {
+              divCount++;
+              currentDivIndex = divCount - 1;
+              let questionsArray = [];
+              let answersArray = [];
+              verifyForm.style.display = "none";
+              const questionDivs = quizSection.querySelectorAll(".post-quiz-section");
+              questionDivs.forEach((questionDiv) => {
+                questionDiv.style.display = "none";
+              });
+              const newQuestionDiv = document.createElement("div");
+              newQuestionDiv.className = "post-quiz-section";
+              newQuestionDiv.style.display = "flex";
+              quizSection.style.minWidth = "100%";
+              newQuestionDiv.style.background = "#fff";
+              newQuestionDiv.innerHTML = `
+               <h1 class="heading">post question</h1>
+      
+                <div class="question">
+                    <h3>question ${divCount}</h3>
+                    <input class="required main-question" type="text" name="questions[]" id="question" placeholder="enter a question...">
+                </div>
+      
+                <div class="answers">
+                    <ul>
+                        <li>
+                            <span>a.</span>
+                            <input class="required " type="text" name="answerOne[]" placeholder="enter option a">
+                            <input class="code" type="hidden" name="quiz-code[]" placeholder="enter option a">
+                        </li>
+                        <li>
+                            <span>b.</span>
+                            <input class="required " type="text" name="answerTwo[]" placeholder="enter option b">
+                        </li>
+                        <li>
+                            <span>c.</span>
+                            <input class="required " type="text" name="answerThree[]" placeholder="enter option c">
+                        </li>
+                        <li>
+                            <span>d.</span>
+                            <input class="required correct-answer" type="text" name="answerFour[]" placeholder="enter option d / correct answer">
+                        </li>
+                    </ul>
+                </div>
+      
+                <div class="solution">
+                    <h3>solution</h3>
+                    <textarea class="required" name="solutions[]" id="solution" placeholder="provide an explanation for your answer..."></textarea>
+                </div>
+      
+                <div class="submit-btn">
+                  <div class="left">
+                    <button type="button" class="prev">previous</button>
+                    <button type="button" class="next">next</button>
+                  </div>
+                  <div class="rigth">
+                    <button type="button" class="submit">submit</button>
+                  </div>
+                </div>
+              `;
+      
+              quizSection.appendChild(newQuestionDiv);
+              //event listensers
+              const submit = quizSection.querySelectorAll(
+                ".post-quiz-section .submit"
+              );
+              const next = quizSection.querySelectorAll(".post-quiz-section .next");
+              const prev = quizSection.querySelectorAll(".post-quiz-section .prev");
+      
+              submit.forEach((button) =>
+                button.addEventListener("click", startSubmit)
+              );
+              next.forEach((button) => button.addEventListener("click", showNext));
+              prev.forEach((button) =>
+                button.addEventListener("click", showPrevious)
+              );
+      
+              // push all questions and answers in an array
+              function showSubmitForm(questions, count) {
+              generateQuizCode();
+              const header = submitForm.firstElementChild;
+              const body = submitForm.querySelector(".body ul");
+              quizSection.style.display = "none";
+              submitForm.style.display = "flex";
+              header.innerHTML = "";
+              body.innerHTML = "";
+              lastStepDisplay.textContent = `${count} questions`;
+      
+              header.innerHTML = `
+                <h2 class="heading">${selectTopic.querySelector("#topics").value}</h2>
+                <h3 class="tally">${count} questions</h3>
+                <h3 class="message">quiz setting is done</h3>
+              `;
+      
+              questions.forEach((question , q) => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <input type="hidden" id="submit-number" value="${q}">
+                    <span class="question">${
+                      question.querySelector(".main-question").value
+                    }</span>
+                    <span class="answer">${
+                      question.querySelector(".correct-answer").value
+                    }</span>        
+                `;
+                body.appendChild(li);
+              });
+              function redirectToQuestion(){
+                const liChildren = (body.children);
+                Array.from(liChildren).forEach(child => {
+                  child.addEventListener("click" , function (){
+                     const input = this.querySelector("#submit-number");
+                     const index = parseInt(input.value, 10);
+                      submitForm.style.display = "none";
+                      quizSection.style.display = "flex";
+                      verifyForm.style.display = "none";
+                      hiddenForm.style.display = "none";
+                      lastStep.style.display = "none";
+                     showPrevQuestion(index);
+                  })
+                })
+              }
+              redirectToQuestion()
+            }
+              function generateQuizCode(){
+                const random = Math.floor(Math.random() * 1000000);
+                document.getElementById("quiz-code").textContent = random;
+                const allInputs = quizSection.querySelectorAll(".post-quiz-section .code");
+                allInputs.forEach(input => {
+                  input.value = random;
+                })
+                console.log(document.getElementById("quiz-code").value)
+              } 
+              function startSubmit() {
+                let questionDivArray = [];
+                const currentQuestion =
+                  quizSection.querySelectorAll(".post-quiz-section")[currentDivIndex];
+                const allInputs = currentQuestion.querySelectorAll(".required");
+                let okay = true;
+      
+                allInputs.forEach((item) => item.classList.remove("errors"));
+                allInputs.forEach((input) => {
+                  if (input.value.trim() === "") {
+                    okay = false;
+                    input.classList.add("errors");
+                  } else {
+                    okay = true;
+                  }
+                });
+      
+                if (okay) {
+                  for (let z = 0; z < questionDivs.length; z++) {
+                    questionDivArray.push(questionDivs[z]);
+                  }
+                  questionDivArray.push(currentQuestion);
+                  showSubmitForm(questionDivArray, divCount);
+                } else {
+                  showErrorMessage("please fill out all input fields");
+                }
+      
+                console.log(questionDivArray);
+              }
+              function validateInputs() {
+                const currentQuestion =
+                  quizSection.querySelectorAll(".post-quiz-section")[currentDivIndex];
+                const allInputs = currentQuestion.querySelectorAll(".required");
+                let okay = true;
+      
+                allInputs.forEach((item) => item.classList.remove("errors"));
+                allInputs.forEach((input) => {
+                  if (input.value.trim() === "") {
+                    okay = false;
+                    input.classList.add("errors");
+                  } else {
+                    okay = true;
+                  }
+                });
+      
+                if (okay) {
+                  startPostQuiz();
+                } else {
+                  showErrorMessage("Please fill out all required fields before proceeding.");
+                }
+              }
+              function showNext() {
+                const questionDivs = quizSection.querySelectorAll(".post-quiz-section");
+                const nextIndex = currentDivIndex + 1;
+      
+                if (nextIndex < questionDivs.length) {
+                  showQuestion(nextIndex);
+                } else {
+                  validateInputs();
+                }
+              }
+              function showNextQuestion(index) {
+                const questionDivs = quizSection.querySelectorAll(".post-quiz-section");
+                if (index < questionDivs.length) {
+                  questionDivs.forEach((div, i) => {
+                    div.style.display = i === index ? "flex" : "none";
+                  });
+                  currentDivIndex = index;
+                }else{
+                  validateInputs();
+                }
+              }
+              function showPrevious() {
+                showPrevQuestion(currentDivIndex - 1);
+              }
+              function showPrevQuestion(index) {
+                const questionDivs =
+                  quizSection.querySelectorAll(".post-quiz-section");
+                if (index < 0 || index >= questionDivs.length) return;
+      
+                questionDivs.forEach((div, i) => {
+                  div.style.display = i === index ? "flex" : "none";
+                });
+                const thisQuestion = questionDivs[index]
+                currentDivIndex = index;
+              }
+              submitFormBack.addEventListener("click" , showPrevQuestion(currentDivIndex));
+            }
+      
+            function showTopic(response) {
+              if (response.message === "validated" && response.type === true) {
+                showSuccessMessage("access granted");
+                selectTopic.style.display = "flex";
+              } else if (response.message === "unvalid" && response.type === false) {
+                showErrorMessage("access denied");
+              }
+            }
+      
+            function verifyTeacher() {
+              const xhr = new XMLHttpRequest();
+              const formData = new FormData(hiddenForm);
+              xhr.open("POST", "validate.php", true);
+              xhr.onload = () => {
+                if (xhr.status == 200) {
+                  const response = JSON.parse(xhr.responseText);
+                  showTopic(response);
+                }
+              };
+              xhr.send(formData);
+            }
+      
+            function updateHiddenForm() {
+              classes.addEventListener("input", (e) => {
+                document.querySelector(".verify-class").value = e.target.value;
+                stream.addEventListener("input", (event) => {
+                  document.querySelector(".verify-stream").value = event.target.value;
+                });
+              });
+            }
+      
+            function changeSelectValue() {
+              selectTopic.querySelector("#topics").addEventListener("change", function () {
+                const lastTopic = document.getElementById("last-topics");
+                lastTopic.value = selectTopic.querySelector("#topics").value;
+              });
+            }
+      
+            function getClassStream() {
+              const classStream = document.querySelectorAll(".verify .requiredz");
+              let allFilled = true;
+              classStream.forEach((streamz) => streamz.classList.remove("errors"));
+              classStream.forEach((item) => {
+                if (item.value.trim() === "") {
+                  allFilled = false;
+                  item.classList.add("errors");
+                } else {
+                  allFilled = true;
+                }
+              });
+      
+              if (allFilled) {
+                verifyTeacher();
+              } else {
+                showErrorMessage("please select class & stream");
+              }
+            }
+      
+            function getSubject() {
+              Array.from(children).forEach((child) => {
+                child.addEventListener("click", function () {
+                  subject.value = child.textContent.trim();
+                  document.querySelector(".verify-subject").value =
+                    child.textContent.trim();
+                    getClassStream();
+                });
+              });
+            }
+      
+            function getTcode() {
+              const xhr = new XMLHttpRequest();
+              xhr.open("GET", "saved_user.php", true);
+              xhr.onload = () => {
+                if (xhr.status == 200) {
+                  const tcode = JSON.parse(xhr.responseText);
+                  tCode.value = tcode.code;
+                  document.querySelector(".verify-code").value = tcode.code;
+                }
+              };
+              xhr.send();
+            }
+      
+            function showLastStep() {
+              submitForm.style.display = "none";
+              quizSection.style.display = "none";
+              verifyForm.style.display = "none";
+              hiddenForm.style.display = "none";
+              lastStep.style.display = "flex";
+            }
+      
+            function showErrorMessage(message) {
+              improvedError.classList.add("show-error");
+              improvedError.querySelector("#error-text").textContent =
+                message || "an error just occurred";
+      
+              setTimeout(hideErrorMessage, 5000);
+            }
+      
+            function hideErrorMessage() {
+              improvedError.classList.remove("show-error");
+              improvedSuccess.classList.remove("show-error");
+            }
+      
+            function hideSuccessMessage() {
+              improvedSuccess.classList.remove("show-success");
+              improvedError.classList.remove("show-error");
+            }
+      
+            function showSuccessMessage(messages) {
+              improvedSuccess.classList.add("show-success");
+              improvedSuccess.querySelector("#error-text").textContent =
+                messages || "congrats!";
+      
+              setTimeout(hideSuccessMessage, 5000);
+            }
+      
+            function submitQuestions(){
+             // e.preventDefault();
+              const formData = new FormData(main);
+              const xhr = new XMLHttpRequest();
+              xhr.open('POSt' , 'postquiz.php' , true);
+              xhr.onload = () => {
+                if(xhr.status == 200){
+                  const response = JSON.parse(xhr.responseText);
+                  console.log(response)
+                  if(response.type == true){
+                    showSuccessMessage(response.message);
+                  }else if( response.type == false){
+                    showErrorMessage(response.message);
+                  }
+                }
+              }
+              xhr.send(formData); 
+            }
+      
+            function verifyLastStep(){
+              const checkbox = document.querySelector(".last-step #checkbox");
+      
+                if(checkbox.checked){
+                  submitQuestions();
+                }else{
+                  showErrorMessage("please check the checkbox");
+                }
+            
+            }
+      
+            selectTopic.addEventListener("change", function () {
+              startButton.style.display = "flex";
+            });
+      
+            startButton.addEventListener("click", startPostQuiz);
+      
+            submitFormSubmit.addEventListener("click" , showLastStep);
+      
+           // main.addEventListener("submit" , );
+      
+            lastStepButton.addEventListener("click" , verifyLastStep);
+      
+            console.log(main)
+      
+            getSubject();
+            getTcode();
+            updateHiddenForm();
+            changeSelectValue();
+          </script>
+</body>
+</html>
+
+
+
+
+const topicContainer = document.querySelector(".topic-container");
+const reattempContainer = document.querySelector(".reattempt");
+const quizContainer = document.querySelector(".main-quiz-container");
+const classSelect = document.getElementById("class");
+const subjectSelect = document.getElementById("subject-one");
+const improvedError = document.getElementById("error-message");
+const improvedSuccess = document.getElementById("success-message");
+const closePopup = document.querySelectorAll(".close-btn");
+const questionDiv = quizContainer.querySelector(".question");
+const answerDiv = quizContainer.querySelector(".answers");
+const solutionDiv = quizContainer.querySelector(".solution");
+const startButton = reattempContainer.querySelector(".start");
+const nextButton = quizContainer.querySelector(".next");
+const reaatemptButton = document.querySelector(".restart");
+const submitForm = document.querySelector(".submit-form");
+let score = 0;
+const date = new Date();
+const today = `${date.getDate()}/${
+  date.getMonth() + 1
+}/${date.getFullYear()}`;
+
+submitForm.querySelector(".attempt-date").value = today;
+submitForm.style.display = "none";
+
+classSelect.addEventListener("change", function () {
+  getTopics();
+  getQuestions();
+});
+
+subjectSelect.addEventListener("change", function () {
+  document.querySelector(".heading").textContent = this.value;
+  getTopics();
+  getQuestions();
+});
+
+// gets raw topics from database
+function getTopics() {
+  const formData = new FormData(topicContainer);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getTopics.php", true);
+  xhr.onload = () => {
+    if (xhr.status == 200) {
+      const response = JSON.parse(xhr.responseText);
+      displayTopics(response);
+    }
+  };
+  xhr.send(formData);
+}
+
+//gets raw questions from database
+function getQuestions() {
+  const formData = new FormData(topicContainer);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "questions.php", true);
+  xhr.onload = () => {
+    if (xhr.status == 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.length > 0) {
+        organiseQuestions(response);
+      } else {
+        showErrorMessage(`no quizes for selected subject`);
+      }
+    }
+  };
+  xhr.send(formData);
+}
+
+// this organises the array placing all questions with the same code together
+
+function organiseQuestions(questions) {
+  const grouped = {};
+
+  questions.forEach((item) => {
+    const code = item.quizCode;
+    if (!grouped[code]) {
+      grouped[code] = [];
+    }
+    grouped[code].push(item);
+  });
+
+  chooseQuiz(Object.values(grouped));
+}
+
+// this selects only one set of quizes from the quiz objects set
+//let thisQuestion;
+function chooseQuiz(sortedArray) {
+  const randomIndex = Math.floor(sortedArray.length * Math.random());
+  checkAttempts(sortedArray[randomIndex]);
+}
+
+let thisQuestion = [];
+function checkAttempts(quiz) {
+  document.getElementById(
+    "duration"
+  ).innerText = `duration: ${quiz[0].duration}`; // displays the currenrt quiz duration
+  thisQuestion = quiz; // stores the question globally
+  const randomIndex = Math.floor(quiz.length * Math.random());
+  quizNavigation(quiz);
+  handleDuration(quiz);
+  startQuiz(quiz);
+}
+
+//quiz function start here
+
+let usedQuestions = []; //  array to store the  done questions
+let questionCount = 1;
+
+function startQuiz(thisQuestions) {
+  const remainingQuestions = thisQuestions.filter(
+    (q) => !usedQuestions.includes(q.question)
+  );
+
+  if (remainingQuestions.length === 0) {
+    showResult(thisQuestion);
+    return;
+  }
+
+  if (remainingQuestions.length === 1) {
+    nextButton.textContent = "finish attempt";
+  }
+
+  nextButton.style.display = "none";
+
+  const randomIndex = Math.floor(
+    Math.random() * remainingQuestions.length
+  );
+  const currentQuestion = remainingQuestions[randomIndex];
+
+  usedQuestions.push(currentQuestion.question);
+
+  answerDiv.innerHTML = "";
+  solutionDiv.style.display = "none";
+
+  questionDiv.innerHTML = `<h3>${currentQuestion.question}</h3>`;
+
+  const answerArray = currentQuestion.answers;
+  const shuffledAnswers = answerArray.sort(() => Math.random() - 0.5);
+
+  shuffledAnswers.forEach((answer) => {
+    const button = document.createElement("button");
+    button.className = "btn";
+    button.innerText = answer;
+    answerDiv.appendChild(button);
+  });
+
+  solutionDiv.innerHTML = `<p>${currentQuestion.solution}</p>`;
+  const answerButtons = answerDiv.querySelectorAll(".btn");
+  markQuestions(answerButtons, currentQuestion);
+}
+
+function getRemarks(scores) {
+  let remarks;
+  if (scores > 0) {
+    if (scores <= 30) {
+      remarks = "poor";
+    } else if (scores <= 49 && scores > 31) {
+      remarks = "bellow average";
+    } else if (scores < -60 && scores > 50) {
+      remarks = "average";
+    } else if (scores <= 75 && scores > 51) {
+      remarks = "good";
+    } else if (scores <= 100 && scores > 76) {
+      remarks = "execellent";
+    } else {
+      remarks = "good";
+    }
+  } else {
+    remarks = "poor";
+  }
+  return remarks;
+}
+
+//shows result to user if quiz has ended
+function showResult(questions) {
+  postSubmitForm();
+  quizContainer.style.display = "none";
+  // document.querySelector(".finished").style.display = "none";
+  const newDiv = document.createElement("div");
+  newDiv.className = "finished";
+  newDiv.innerHTML = `
+     <h2>quiz completed</h2>
+      <ul>
+        <li><span>topic:</span> ${
+          document.querySelector(".topic-heading").textContent
+        }</li>
+        <li><span>score:</span> ${score}/${questions.length} (${
+    (score / questions.length) * 100
+  }%)</li>
+        <li><span>remarks:</span> ${getRemarks(
+          (score / questions.length) * 100
+        )}</li>
+        <li><span>date:</span> ${today}</li>
+        <li>quiz was done and results for ${
+          submitForm.querySelector(".admission").value
+        } were submitted succesfully</li>
+      </ul>
+      <div class="button">
+        <button type="button" class="back">back</button>
+        <button type="button" class="restart"><i class="fa-solid fa-history"></i> reattempt</button>
+      </div>
+  `;
+  const backButton = newDiv.querySelector(".back");
+  document.querySelector(".main").appendChild(newDiv);
+  backButton.addEventListener("click", function () {
+    location.reload();
+  });
+}
+
+// this marks the current question
+function markQuestions(buttons, question) {
+  submitForm.querySelector(".quiz-code").value = question.quizCode;
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      buttons.forEach((b) => (b.disabled = true));
+      nextButton.style.display = "inline-block";
+      if (question.correct === this.textContent) {
+        score++;
+        submitForm.querySelector(
+          ".score"
+        ).value = `${score}/${thisQuestion.length}`;
+        this.className = "correct";
+        solutionDiv.innerHTML = "";
+      } else {
+        this.className = "wrong";
+        solutionDiv.style.display = "flex";
+        submitForm.querySelector(
+          ".score"
+        ).value = `${score}/${thisQuestion.length}`;
+        buttons.forEach((b) => {
+          if (b.textContent === question.correct) {
+            b.className = "correct";
+          }
+        });
+      }
+    });
+  });
+}
+
+//function from gpt that shuffles memmbers of an object
+function shuffleAnswers(questions) {
+  return questions.map((q) => {
+    const answerArray = Object.values(q.answers); // this gets the answer object
+
+    answerArray.sort(() => Math.random() - 0.5); // this shuffles and sorts them
+
+    return {
+      // this return the shuffled array where it was exactly using spread operstor
+      ...q,
+      answers: answerArray,
+    };
+  });
+}
+
+//this function does the function of displaying topics to user
+function displayTopics(array) {
+  const ul = topicContainer.querySelector(".body ul");
+  ul.innerHTML = "";
+  array.forEach((topic) => {
+    const newLi = document.createElement("li");
+    newLi.innerHTML = `
+            <input type="hidden" class="topic_no" value="${topic.topic_number}">
+            <input type="hidden" class="topic_ti" value="${topic.topic_tittle}">
+           <h2 class="topic">topic ${topic.topic_number} : ${topic.topic_tittle}</h2>
+            <p> ${topic.topic_desc}</p>
+            <div class="btn">
+              <button type="button" class="attempt">attempt</button>
+            </div>
+  `;
+    ul.appendChild(newLi);
+  });
+  const attempt = ul.querySelectorAll(".attempt");
+
+  attempt.forEach((button) => {
+    button.addEventListener("click", function () {
+      topicContainer.style.display = "none";
+      reattempContainer.style.display = "flex";
+      quizContainer.style.display = "none";
+
+      const topicNumber =
+        this.parentElement.parentElement.querySelector(".topic_no").value;
+      const topicTittle =
+        this.parentElement.parentElement.querySelector(".topic_ti").value;
+
+      submitForm.querySelector(".topic-number").value = topicNumber;
+      displayReattempts(topicNumber, topicTittle);
+    });
+  });
+}
+
+//this function does the function of displaying reaatemps to user
+function displayReattempts(number, tittle) {
+  reattempContainer.querySelector(".container h2").textContent = tittle;
+  const tableBody = reattempContainer.querySelector(
+    ".reattempt-table table tbody"
+  );
+  tableBody.innerHTML = "";
+  const xhr = new XMLHttpRequest();
+  let admissions = "";
+  getAdmission((admission) => {
+    submitForm.querySelector(".admission").value = admission;
+    admissions = "admission=" + admission;
+    xhr.open("POST", "quizresult.php", true);
+    xhr.setRequestHeader(
+      "Content-type",
+      "application/x-www-form-urlencoded"
+    );
+    let attempting = 1;
+    xhr.onload = () => {
+      if (xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        if (response.length > 0) {
+          // if they are reattempts
+          response.forEach((res) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+                  <td>${res.attempt}</td>
+                  <td>${res.score}</td>
+                  <td>${res.date}</td>
+          `;
+            attempting++;
+            tableBody.appendChild(tableRow);
+          });
+          submitForm.querySelector(".attempt").value = attempting;
+        } else {
+          // if there are no reattempts
+          submitForm.querySelector(".attempt").value = 1;
+          const noresult = `
+             <table>
+              <thead>
+                <tr>
+                  <th>attempt</th>
+                  <th>score</th>
+                  <th>date</th>
+                </tr>
+              </thead>
+             </table>
+           <div class="noresult">
+              <img src="./subjects/noresultone.jpeg" alt="">
+              <h4>no attempts just yet</h4>
+            </div>
+           `;
+          reattempContainer.querySelector(".reattempt-table").innerHTML =
+            noresult;
+        }
+      }
+    };
+    xhr.send(admissions);
+  });
+}
+
+function getAdmission(callback) {
+  // gets admission number which is used in reattempt function
+  const xhr = new XMLHttpRequest();
+  xhr.open("Get", "login.json", true);
+  xhr.onload = () => {
+    if (xhr.status == 200) {
+      const response = JSON.parse(xhr.responseText);
+      callback(response[0].admission);
+    }
+  };
+  xhr.send();
+}
+let timer;
+let timeLeft = 0; 
+let updated = 0; 
+
+function showQuestions() {
+  reattempContainer.style.display = "none";
+  topicContainer.style.display = "none";
+  quizContainer.style.display = "flex";
+
+  timeLeft = updated * 60; 
+  updateTimer(); 
+  clearInterval(timer); 
+  timer = setInterval(updateTimer, 1000);
+}
+
+function handleDuration(duration) {
+  switch (duration[0].duration) {
+    case "off":
+      updated = 0;
+      break;
+    case "15min":
+      updated = 15;
+      break;
+    case "30min":
+      updated = 30;
+      break;
+    case "45min":
+      updated = 45;
+      break;
+    case "1hr":
+      updated = 60;
+      break;
+    case "1hr 3omin":
+      updated = 90;
+      break;
+    case "2hrs":
+      updated = 120;
+      break;
+    case "2hrs 3omin":
+      updated = 150;
+      break;
+    case "3hrs":
+      updated = 180;
+      break;
+    default:
+      updated = 0;
+  }
+  console.log("Duration set to:", updated, "minutes");
+}
+
+function updateTimer() {
+  const timeDisplay = document.getElementById("timeDisplay");
+  const progressCircle = document.querySelector(".progress");
+
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  progressCircle.style.strokeDasharray = `${circumference}`;
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  timeDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+
+  const offset = circumference * (1 - timeLeft / (updated * 60));
+  progressCircle.style.strokeDashoffset = `${offset}`;
+
+  if (timeLeft > 0) {
+    timeLeft--;
+  } else {
+    clearInterval(timer);
+    showResult(thisQuestion);
+  }
+}
+
+function quizNavigation(questions) {
+  const navigationBox = quizContainer.querySelector(".right .body");
+  navigationBox.innerHTML = "";
+  questions.forEach((length, i) => {
+    const span = document.createElement("span");
+    span.innerHTML = `${i + 1}`;
+    navigationBox.appendChild(span);
+  });
+}
+
+function postSubmitForm() {
+  const formData = new FormData(submitForm);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "postquizresult.php", true);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = xhr.responseText;
+      console.log(response);
+    }
+  };
+  xhr.send(formData);
+}
+
+function showErrorMessage(message) {
+  improvedError.classList.add("show-error");
+  improvedError.querySelector("#error-text").textContent =
+    message || "an error just occurred";
+
+  setTimeout(hideErrorMessage, 5000);
+}
+
+function hideErrorMessage() {
+  improvedError.classList.remove("show-error");
+  improvedSuccess.classList.remove("show-error");
+}
+
+function hideSuccessMessage() {
+  improvedSuccess.classList.remove("show-success");
+  improvedError.classList.remove("show-error");
+}
+
+function showSuccessMessage(messages) {
+  improvedSuccess.classList.add("show-success");
+  improvedSuccess.querySelector("#error-text").textContent =
+    messages || "congrats!";
+
+  setTimeout(hideSuccessMessage, 5000);
+}
+
+startButton.addEventListener("click", showQuestions);
+nextButton.addEventListener("click", function () {
+  startQuiz(thisQuestion);
+});
+
+
+
+
+function displayResult() {
+  resultContainer.innerHTML = "";
+  getStudentDetails((details) => {
+    getResults((data) => {
+      console.log("display function has been called")
+      const resultDiv = document.createElement("div");
+      resultDiv.className = "result-container";
+      const originalStream = details.stream;
+      switch (details.stream) {
+        case "111":
+          details.stream = "green";
+          break;
+        case "222":
+          details.stream = "blue";
+          break;
+        case "333":
+          details.stream = "red";
+          break;
+        case "444":
+          details.stream = "purple";
+          break;
+      }
+      switch (data.exam) {
+        case "11":
+          data.exam = "opener";
+          break;
+        case "22":
+          data.exam = "midterm";
+          break;
+        case "33":
+          data.exam = "endterm";
+          break;
+        default:
+          data.exam = "midterm";
+          break;
+      }
+      getRegisterNumbers((register) => {
+        getTeacherProfile((profile) => {
+          getClassNumbers((count) => {
+            resultDiv.innerHTML = `
+          <div class="head">
+            <div class="left">
+              <h1>report card</h1>
+              <h3>manuh group of schools</h3>
+            </div>
+            <div class="right">
+              <img src="./images/images (4).png" alt="" />
+            </div>
+          </div>
+    
+          <div class="personal-details">
+            <div class="left">
+                <div class="image-box">
+                    <img src="${details.profileImage}" alt="">
+                </div>
+            </div>
+            <div class="right">
+                <div class="name-section">
+                    <div class="box-one">
+                        <span>
+                            <div class="icon"><i class="fa fa-user"></i></div>
+                            <div class="text">
+                                <h4>name:</h4>
+                                <h3>${details.firstname} ${
+              details.middlename
+            } ${details.lastname}</h3>
+                            </div>
+                        </span>
+                        <span>
+                            <div class="icon"> <i class="fas fa-trophy text-warning"></i></i></div>
+                            <div class="text">
+                                <h4>overral position & stream position:</h4>
+                                <h3>${data.overallPosition} / ${
+              count["allcount"]
+            } & ${data.streamPosition} / ${count[originalStream]}</h3>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="box-one">
+                        <span>
+                            <div class="icon"><i class="fas fa-id-card"></i></div>
+                            <div class="text">
+                                <h4>admission:</h4>
+                                <h3>${details.admission}</h3>
+                            </div>
+                        </span>
+                        <span>
+                            <div class="icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="text">
+                                <h4>total marks & mean mark:</h4>
+                                <h3>${data.total} ${data.mean}</h3>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="box-one">
+                        <span>
+                            <div class="icon"><i class="fas fa-school"></i> </div>
+                            <div class="text">
+                                <h4>class details:</h4>
+                                <h3>form${details.class} ${details.stream}</h3>
+                            </div>
+                        </span>
+                        <span>
+                            <div class="icon"><i class="fas fa-star"></i></div>
+                            <div class="text">
+                                <h4>mean grade:</h4>
+                                <h3>${data.meanGrade}</h3>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="viewing">
+                    <h3>your viewing form${data.class} term${data.term} ${
+              data.exam
+            } exam</h3>
+                </div>
+            </div>
+          </div>
+    
+          <div class="result-table">
+            <table>
+                <tr>
+                  <th>subject</th>
+                  <th>Marks</th>
+                  <th>Grade</th>
+                  <th>Rank</th>
+                  <th>Remark</th>
+                </tr>
+                <tr>
+                  <td>english</td>
+                  <td>${data.english}</td>
+                  <td>${getGrade(data.english)}</td>
+                  <td>${data.english_position} out of ${
+              count[parseInt(originalStream)]
+            }</td>
+                  <td>${getRemarks(data.english)}</td>
+                </tr>
+                <tr>
+                  <td>kiswahili</td>
+                  <td>${data.kiswahili}</td>
+                  <td>${getGrade(data.kiswahili)}</td>
+                  <td>${data.kiswahili_position} out of ${
+              count[parseInt(originalStream)]
+            }</td>
+                  <td>${getRemarks(data.kiswahili)}</td>
+                </tr>
+                <tr>
+                  <td>mathematics</td>
+                  <td>${data.mathematics}</td>
+                  <td>${getGrade(data.mathematics)}</td>
+                  <td>${data.mathematics_position} out of ${
+              count[parseInt(originalStream)]
+            }</td>
+                  <td>${getRemarks(data.mathematics)}</td>
+                </tr>
+                <tr>
+                  <td>chemistry</td>
+                  <td>${checkIfDropped(details.chemistry, data.chemistry)}</td>
+                  <td>${getGrade(data.chemistry)}</td>
+                  <td>${data.chemistry_position} out of ${
+              count["chemistry"]
+            }</td>
+                  <td>${getRemarks(data.chemistry)}</td>
+                </tr>
+                <tr>
+                  <td>biology</td>
+                  <td>${checkIfDropped(details.biology, data.biology)}</td>
+                  <td>${getGrade(data.biology)}</td>
+                  <td>${data.biology_position} out of ${count["biology"]}</td>
+                  <td>${getRemarks(data.biology)}</td>
+                </tr>
+                <tr>
+                  <td>physics</td>
+                  <td>${checkIfDropped(details.physics, data.physics)}</td>
+                  <td>${getGrade(data.physics)}</td>
+                  <td>${data.physics_position} out of ${count["physics"]}</td>
+                  <td>${getRemarks(data.physics)}</td>
+                </tr>
+                <tr>
+                  <td>geography</td>
+                  <td>${checkIfDropped(details.geography, data.geography)}</td>
+                  <td>${getGrade(data.geography)}</td>
+                  <td>${data.geography_position} out of ${
+              count["geography"]
+            }</td>
+                  <td>${getRemarks(data.geography)}</td>
+                </tr>
+                <tr>
+                  <td>history</td>
+                  <td>${checkIfDropped(details.history, data.history)}</td>
+                  <td>${getGrade(data.history)}</td>
+                  <td>${data.history_position} out of ${count["history"]}</td>
+                  <td>${getRemarks(data.history)}</td>
+                </tr>
+                <tr>
+                  <td>cre</td>
+                  <td>${checkIfDropped(details.cre, data.cre)}</td>
+                  <td>${getGrade(data.cre)}</td>
+                  <td>${data.cre_position} out of ${count["cre"]}</td>
+                  <td>${getRemarks(data.cre)}</td>
+                </tr>
+                <tr>
+                  <td>business</td>
+                  <td>${checkIfDropped(details.business, data.business)}</td>
+                  <td>${getGrade(data.business)}</td>
+                  <td>${data.business_position} out of ${count["business"]}</td>
+                  <td>${getRemarks(data.business)}</td>
+                </tr>
+                <tr>
+                  <td>agriculture</td>
+                  <td>${checkIfDropped(
+                    details.agriculture,
+                    data.agriculture
+                  )}</td>
+                  <td>${getGrade(data.agriculture)}</td>
+                  <td>${data.agriculture_position} out of ${
+              count["agriculture"]
+            }</td>
+                  <td>${getRemarks(data.agriculture)}</td>
+                </tr>
+                 <tr>
+                  <td>computer</td>
+                  <td>${checkIfDropped(details.computer, data.computer)}</td>
+                  <td>${getGrade(data.computer)}</td>
+                  <td>${data.computer_position} out of ${count["computer"]}</td>
+                  <td>${getRemarks(data.computer)}</td>
+                </tr>
+                 <tr>
+                  <td>french</td>
+                  <td>${checkIfDropped(details.french, data.french)}</td>
+                  <td>${getGrade(data.french)}</td>
+                  <td>${data.french_position} out of ${count["french"]}</td>
+                  <td>${getRemarks(data.french)}</td>
+                </tr>
+            </table>
+          </div>
+    
+          <h2>grade & attendance</h2>
+          
+          <div class="grade-table">
+            <div class="left">
+                <table>
+                    <caption>grade scale</caption>
+                    <tr>
+                      <th>grade</th>
+                      <th>range</th>
+                    </tr>
+                    <tr>
+                      <td>a</td>
+                      <td>100 - 85</td>
+                    </tr>
+                    <tr>
+                      <td>a-</td>
+                      <td>84 - 80</td>
+                    </tr>
+                    <tr>
+                      <td>b+</td>
+                      <td>79 - 75</td>
+                    </tr>
+                    <tr>
+                      <td>b</td>
+                      <td>74 - 70</td>
+                    </tr>
+                    <tr>
+                      <td>b-</td>
+                      <td>69 - 65</td>
+                    </tr>
+                    <tr>
+                      <td>c+</td>
+                      <td>60 - 64</td>
+                    </tr>
+                    <tr>
+                      <td>c</td>
+                      <td>59 - 55</td>
+                    </tr>
+                    <tr>
+                      <td>c-</td>
+                      <td>54 - 50</td>
+                    </tr>
+                    <tr>
+                      <td>d+</td>
+                      <td>49 - 45</td>
+                    </tr>
+                    <tr>
+                      <td>d</td>
+                      <td>44 - 40</td>
+                    </tr>
+                    <tr>
+                      <td>d+</td>
+                      <td>39 - 35</td>
+                    </tr>
+                    <tr>
+                      <td>e</td>
+                      <td>34 - 0</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="right">
+                <div class="attendance-box">
+                    <div class="ahead">attendance</div>
+                    <div class="abody">
+                        <div class="box-one">
+                            <span>
+                                <div class="icon"><i class="fa fa-sun"></i></div>
+                                <div class="text">
+                                    <h4>n.o of school days:</h4>
+                                    <h3>120</h3>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="icon"><i class="fa fa-user-times"></i></div>
+                                <div class="text">
+                                    <h4>absent days:</h4>
+                                    <h3>${
+                                      register[details.admission].absent
+                                    }</h3>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="box-one">
+                            <span>
+                                <div class="icon"><i class="fa fa-user-check"></i></div>
+                                <div class="text">
+                                    <h4>present days:</h4>
+                                    <h3>${
+                                      register[details.admission].present
+                                    }</</h3>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="icon"><i class="fa fa-user-tie"></i></div>
+                                <div class="text">
+                                    <h4>permitted absence:</h4>
+                                    <h3>${
+                                      register[details.admission].permitted
+                                    }</</h3>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="teacher-remarks">
+                    <div class="thead">classteacher remarks</div>
+                    <div class="body">
+                        <div class="box">
+                            <div class="profile-image">
+                                <img src="${profile.profileImage}" alt="">
+                            </div>
+                            <div class="btext">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur consequatur, libero tempora alias, eligendi cumque commodi numquam facere rem beatae quisquam aperiam corrupti. Nihil quisquam laudantium, quam veniam dolorem omnis!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+    
+    `;
+          });
+        });
+      });
+      resultContainer.appendChild(resultDiv);
+    });
+  });
+}

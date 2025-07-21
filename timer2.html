@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+  #timetable-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .teacher-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #aaa;
+    padding: 6px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+</style>
+
+    </style>
+</head>
+<body>
+    <div id="timetable-container"></div>
+<script>
+function getTeachers() {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "teachertimetable.php", true);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      const teachers = generateTeacherTimetables(response);
+      displayAllTimetables(teachers);
+    }
+  };
+  xhr.send();
+}
+
+function isCoreSubject(subject) {
+  return ["mathematics", "chemistry", "physics", "biology"].includes(subject.toLowerCase());
+}
+
+function groupTeachers(rawTeachers) {
+  const grouped = {};
+
+  rawTeachers.forEach(t => {
+    const code = t.teacherCode;
+
+    if (!grouped[code]) {
+      grouped[code] = {
+        teacherCode: code,
+        teachings: [],
+        timetable: []
+      };
+    }
+
+    grouped[code].teachings.push(t.teaching);
+  });
+
+  return Object.values(grouped);
+}
+
+function getRandomPeriods(count, max = 10) {
+  const arr = [...Array(max).keys()].map(i => i + 1); // [1..10]
+  const selected = [];
+
+  while (selected.length < count && arr.length > 0) {
+    const i = Math.floor(Math.random() * arr.length);
+    selected.push(arr.splice(i, 1)[0]);
+  }
+
+  return selected;
+}
+
+function generateTeacherTimetables(rawTeachers) {
+  const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+  const teachers = groupTeachers(rawTeachers);
+
+  teachers.forEach(t => {
+    const weeklyLessons = [];
+
+    days.forEach(day => {
+      const periods = getRandomPeriods(10);
+      const lessonsToday = [];
+      const usedLessons = new Set();
+      let lessonCount = 0;
+
+      while (lessonCount < 5 && periods.length > 0) {
+        const period = periods.pop();
+        const teaching = t.teachings[Math.floor(Math.random() * t.teachings.length)];
+
+        const classMap = { "1": "form1", "2": "form2", "3": "form3", "4": "form4" };
+        const streamMap = { "111": "green", "222": "blue", "333": "red", "444": "purple" };
+        const clas = classMap[teaching.class] || teaching.class;
+        const stream = streamMap[teaching.stream] || teaching.stream;
+        const classCode = clas + stream;
+        const subject = teaching.subject;
+        const key = `${classCode}-${subject}`;
+
+        const isCore = isCoreSubject(subject);
+        const alreadyAssigned = usedLessons.has(key);
+
+        if (!alreadyAssigned || isCore) {
+          if (!isCore) usedLessons.add(key);
+          lessonsToday.push({ day, period, classCode, subject });
+          lessonCount++;
+        }
+      }
+
+      weeklyLessons.push(...lessonsToday);
+    });
+
+    // Ensure a minimum of 10 periods per week
+    while (weeklyLessons.length < 10) {
+      const teaching = t.teachings[Math.floor(Math.random() * t.teachings.length)];
+      const day = days[Math.floor(Math.random() * days.length)];
+      const period = Math.floor(Math.random() * 10) + 1;
+
+      const classMap = { "1": "form1", "2": "form2", "3": "form3", "4": "form4" };
+      const streamMap = { "111": "green", "222": "blue", "333": "red", "444": "purple" };
+      const clas = classMap[teaching.class] || teaching.class;
+      const stream = streamMap[teaching.stream] || teaching.stream;
+      const classCode = clas + stream;
+      const subject = teaching.subject;
+
+      weeklyLessons.push({ day, period, classCode, subject });
+    }
+
+    t.timetable = weeklyLessons;
+  });
+
+  return teachers;
+}
+
+function displayAllTimetables(teachers) {
+  const container = document.getElementById("timetable-container");
+  container.innerHTML = "";
+
+  teachers.forEach(t => {
+    const card = document.createElement("div");
+    card.classList.add("teacher-card");
+
+    const title = document.createElement("h3");
+    title.innerText = `Timetable for ${t.teacherCode}`;
+    card.appendChild(title);
+
+    const table = document.createElement("table");
+    const header = document.createElement("tr");
+    header.innerHTML = "<th>Day</th>" + Array.from({ length: 10 }, (_, i) => `<th>Period ${i + 1}</th>`).join("");
+    table.appendChild(header);
+
+    const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+    days.forEach(day => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${day}</td>`;
+
+      for (let p = 1; p <= 10; p++) {
+        const slot = t.timetable.find(l => l.day === day && l.period === p);
+        const cell = document.createElement("td");
+
+        if (slot) {
+          cell.innerHTML = `<strong>${slot.classCode}</strong><br>${slot.subject}`;
+        } else {
+          cell.innerHTML = "-";
+        }
+
+        row.appendChild(cell);
+      }
+
+      table.appendChild(row);
+    });
+
+    card.appendChild(table);
+    container.appendChild(card);
+  });
+}
+
+getTeachers();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <link rel="stylesheet" href="tquiz.css" />
+  </head>
+  <body class="grey">
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span><i class="fa fa-user-graduate"></i></span>
+              highschool</strong
+            >
+          </div>
+          <div class="body">
+            <a href="#"
+              ><i class="fa fa-home"></i>
+              <span class="writing">Dashboard</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-user"></i>
+              <span class="writing">profile</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-upload"></i>
+              <span class="writing">marks</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-book"></i>
+              <span class="writing">Result</span></a
+            >
+              <a href="#"
+              ><i class="fa fa-clock"></i>
+              <span class="writing">quiz</span></a
+            >
+            <a href="#"
+            ><i class="fa fa-pen"></i>
+            <span class="writing">notes</span></a
+             >
+             <a href="#"
+             ><i class="fa fa-chair"></i>
+             <span class="writing">assignment</span></a
+           >
+            <a href="#"
+              ><i class="fa fa-calendar"></i>
+              <span class="writing">event</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-table"></i>
+              <span class="writing">Timetable</span></a
+            >
+          </div>
+        </nav>
+      </aside>
+      <div class="main-main" style="background-color: #f8f9fb">
+        <div class="tittle">
+          <h1>
+            <i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i
+            ><i class="fa fa-ellipsis-v"></i> Event
+          </h1>
+          <div class="icons-profile">
+            <div class="search">
+              <i class="fa fa-search fa-beat open-search"></i>
+              <div class="search-dropdown hide">
+                <form class="search-input">
+                  <input
+                    class="required"
+                    type="text"
+                    name="search"
+                    id=""
+                    class="search"
+                    required
+                  />
+                  <button type="submit" class="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+
+                <div class="recents">
+                  <h3>recent search</h3>
+                  <ul>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="notification">
+              <i class="fa-regular fa-bell"></i>
+              <div class="notification-dropdown closed">
+                <ul>
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <i class="fa fa-cog fa-spin"></i>
+            <span class="profile-box">
+              <img src="./teachers/martin.jpg" alt="" />
+            </span>
+          </div>
+        </div>
+
+        <div class="main" style="background-color: #f8f9fb">
+          <div class="verify">
+            <div class="head">
+              <div class="left">
+                <h3>class:</h3>
+                <input type="hidden" name="subject" id="subject" />
+                <input type="hidden" name="tcode" id="code" />
+                <select name="class" id="class" class="requiredz">
+                  <option value="">--choose class--</option>
+                  <option value="1">Form1</option>
+                  <option value="2">Form2</option>
+                  <option value="3">Form3</option>
+                  <option value="4">Form4</option>
+                </select>
+              </div>
+              <div class="right">
+                <h3>stream:</h3>
+                <select name="stream[]" id="stream" class="requiredz">
+                  <option value="">--choose class--</option>
+                  <option value="111">green</option>
+                  <option value="222">blue</option>
+                  <option value="333">red</option>
+                  <option value="444">purple</option>
+                </select>
+              </div>
+            </div>
+            <div class="body">
+              <div class="subject"><strong>engish</strong></div>
+              <div class="subject"><strong>kiswahili</strong></div>
+              <div class="subject"><strong>mathematics</strong></div>
+              <div class="subject"><strong>chemistry</strong></div>
+              <div class="subject"><strong>biology</strong></div>
+              <div class="subject"><strong>physics</strong></div>
+              <div class="subject"><strong>geography</strong></div>
+              <div class="subject"><strong>history</strong></div>
+              <div class="subject"><strong>cre</strong></div>
+              <div class="subject"><strong>business</strong></div>
+              <div class="subject"><strong>agriculture</strong></div>
+              <div class="subject"><strong>computer</strong></div>
+            </div>
+            <div class="topics">
+              <h3>topics</h3>
+              <select name="" id="topics">
+                <option value="">--choose topic --</option>
+                <option value="introduction to chemistry">introduction to chemistry</option>
+                <option value="apparatus">apparatus</option>
+                <option value="water & hydrogen">water & hydroen</option>
+                <option value="air & combustion">air & combustion</option>
+              </select>
+            </div>
+            <div class="button">
+              <button type="button" class="start">start</button>
+            </div>
+          </div>
+          <form class="quiz">
+            <div class="body"></div>
+            <div class="submit-btn">
+              <div class="left">
+                <button type="button" id="prev">previous</button>
+                <button type="button" id="next">next</button>
+              </div>
+              <div class="rigth">
+                <button type="button" class="submit">submit</button>
+              </div>
+            </div>
+          </form>
+          <div class="submit-form">
+            <div class="head"></div>
+            <div class="body"><ul></ul></div>
+            <div class="submit">
+              <button type="button" class="backing">back</button>
+              <button type="button" class="submiting">finish</button>
+            </div>
+          </div>
+          <div class="last-step">
+            <h2>post quiz</h2>
+            <ul>
+              <li>
+                <h3>topic</h3>
+                <select name="topics" id="last-topics" class="required">
+                  <option value="">--choose topic --</option>
+                  <option value="introduction to chemistry">
+                    introduction to chemistry
+                  </option>
+                  <option value="apparatus">apparatus</option>
+                  <option value="water & hydrogen">water & hydroen</option>
+                  <option value="air & combustion">air & combustion</option>
+                </select>
+              </li>
+              <li>
+                <h3>duration</h3>
+                <select name="duration" id="duration" class="required">
+                  <option value="off">off</option>
+                  <option value="15min">15min</option>
+                  <option value="30min">30min</option>
+                  <option value="45min">45min</option>
+                  <option value="ihr">1hr</option>
+                  <option value="ihr 30min">1hr 30min</option>
+                  <option value="2hrs">2hrs</option>
+                  <option value="2hrs 30min">2hrs 30min</option>
+                  <option value="3hrs">3hrs</option>
+                </select>
+              </li>
+              <li>
+                <h3>quiz code</h3>
+                <span id="quiz-code"></span>
+              </li>
+              <li>
+                <h3 class="alah">20 questions</h3>
+                <span> <input type="checkbox" name="" id="checkbox" class="verify"/></span>
+              </li>
+            </ul>
+            <div class="last-submit-button">
+              <button type="button" class="submit">submit all</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+<script src="postquiz.js"></script>
+<script src="tittle.js"></script>
+</html>

@@ -1,0 +1,209 @@
+.marks-table {
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  overflow: auto;
+  color: #2d3e50;
+}
+
+.marks-table .centralise {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  width: 80%;
+  background-color: #ffffff;
+  gap: 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 1.5rem;
+  height: 100%;
+}
+
+.marks-table .centralise .table {
+  display: flex;
+  overflow: auto;
+  white-space: nowrap;
+  flex-direction: column;
+}
+
+.marks-table .centralise .noresult {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.marks-table .centralise .noresult img {
+  height: 20rem;
+  width: 20rem;
+}
+
+.marks-table table {
+  border-collapse: collapse;
+  max-width: 100%;
+  width: 100%;
+}
+
+.marks-table table caption {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.marks-table table thead th {
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  background-color: var(--light-navy);
+  color: #eee;
+}
+.marks-table table tbody tr:nth-child(even) {
+  background-color: var(--soft-white);
+  border-bottom: 1px dotted #2d3e50;
+}
+
+.marks-table table tbody tr:nth-child(odd) {
+  background-color: var(--light-gray);
+  border-bottom: 1px dotted #2d3e50;
+}
+
+.marks-table table tbody tr td {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 1.4rem;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.marks-table table tbody tr .hidden {
+  display: none;
+}
+
+.marks-table .select {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+}
+
+.marks-table .select span {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #2d3e50;
+}
+
+.marks-table .select span strong {
+  font-size: 1.5rem;
+}
+
+.marks-table .select select {
+  min-height: 4rem;
+  background-color: #f1f5f9;
+  border: 1px solid #d1d5db;
+  outline: none;
+  padding: 0 1rem;
+  flex: 1 1 0;
+  width: 100%;
+}
+
+.marks-table table tbody tr td:last-child {
+  display: flex;
+}
+
+.submit-btn {
+  width: 100%;
+  flex: 1 1 0;
+}
+
+.marks-table table tbody tr td input {
+  background: none;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  caret-color: navy;
+  outline: none;
+  border: none;
+}
+
+.marks-table table tbody tr td:nth-child(2) {
+  text-align: left;
+}
+
+.centralisez .submit-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.progress-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 99999;
+  color: #eee;
+
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.removes{
+    display: none;
+}
+
+.progress-container .spinner {
+  height: 10rem;
+  width: 10rem;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  border-top: 0.2rem solid #eee;
+  animation: spin 0.8s linear infinite;
+}
+
+.progress-container .box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.progress-container .box p {
+  text-transform: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 700px) {
+  .marks-table .centralise {
+    min-width: 90%;
+  }
+}
+
+@media (max-width: 600px) {
+  .marks-table .centralise {
+    min-width: 100%;
+    padding: 2rem 1rem;
+  }
+  .remove {
+    display: none;
+  }
+  .marks-table {
+    width: 100%;
+    display: flex;
+  }
+}

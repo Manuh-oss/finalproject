@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="notes.css" />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span><i class="fa fa-user-graduate"></i></span>
+              highschool</strong
+            >
+          </div>
+          <div class="body">
+            <a href="#"
+              ><i class="fa fa-home"></i>
+              <span class="writing">Dashboard</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-user-plus"></i>
+              <span class="writing">Enrol</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-users"></i>
+              <span class="writing">Profiles</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-clipboard"></i>
+              <span class="writing">Result</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-calendar"></i>
+              <span class="writing">event</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-table"></i>
+              <span class="writing">Timetable</span></a
+            >
+          </div>
+        </nav>
+      </aside>
+      <div class="main-main" style="background-color: #f8f9fb">
+        <div class="tittle">
+          <h1>
+            <i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i
+            ><i class="fa fa-ellipsis-v"></i> Event
+          </h1>
+          <div class="icons-profile">
+            <div class="search">
+              <i class="fa fa-search fa-beat open-search"></i>
+              <div class="search-dropdown hide">
+                <form class="search-input">
+                  <input
+                    type="text"
+                    name="search"
+                    id=""
+                    class="search"
+                    required
+                  />
+                  <button type="submit" class="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+
+                <div class="recents">
+                  <h3>recent search</h3>
+                  <ul>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="notification">
+              <i class="fa-regular fa-bell"></i>
+              <div class="notification-dropdown closed">
+                <ul>
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <i class="fa fa-cog fa-spin"></i>
+            <span class="profile-box">
+              <img src="./teachers/martin.jpg" alt="" />
+            </span>
+          </div>
+        </div>
+
+        <div class="main">
+          <div class="notes">
+            <div class="head">
+              <div class="select">
+                <span>
+                  <h3>subject:</h3>
+                  <select name="subject" id="subject-select"></select>
+                </span>
+                <span>
+                  <h3>class:</h3>
+                  <select name="class" id="class">
+                    <option value="">select class</option>
+                    <option value="1">form1</option>
+                    <option value="2">form2</option>
+                    <option value="3">form3</option>
+                    <option value="4">form4</option>
+                  </select>
+                </span>
+                <span>
+                  <h3>topic:</h3>
+                  <select name="topic" id="topic-select">
+                    <option value="">select topic</option>
+                  </select>
+                </span>
+              </div>
+              <h2>notes</h2>
+            </div>
+            <div class="body">
+              <div class="wrapper">
+                <div class="editor" id="editor"></div>
+                <div class="button">
+                  <button type="button" class="submit">submit</button>
+                </div>
+              </div>
+              <textarea name="notes-content" id="notes" style="display: none"></textarea>
+              <input type="hidden" id="teacher-code" name="code">
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script src="notes.js"></script>
+  <script src="tittle.js"></script>
+</html>

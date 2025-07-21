@@ -1,0 +1,500 @@
+.main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.main .centralise{
+    width: 70%;
+    height: fit-content;
+    display: flex;
+    background-color: #ffffff;
+    padding-bottom: 3rem;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.main .centralise .select-field{
+    display: flex;
+    gap: 2rem;
+}
+
+.main .centralise .select-field span{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 1.6rem;
+    flex: 1 1 0;
+    width: 100%;
+}
+
+.main .centralise .select-field span:last-child{
+    text-align: right;
+}
+
+.main .centralise .select-field span:nth-child(2){
+    text-align: center;
+}
+
+.main .centralise .select-field span select{
+    min-width: 100%;
+    height: 4rem;
+    min-height: 4rem;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    outline: none;
+    padding: 0 1rem;
+    flex: 1 1 0;
+}
+
+.main .centralise .main-body{
+    width: 100%;
+    height: 100%;
+}
+
+.main-body .no-result{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:1rem;
+}
+
+.main .centralise .result-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex:  1 1 0;
+    background-color: #f4f4f4;
+}
+
+.main .centralise .result-container .head{
+    width: 100%;
+    display: flex;
+    height: 9rem;
+    padding:0 1.5rem;
+    border-bottom: 1px solid navy;
+}
+
+.main .centralise .result-container .head .left{
+    height: 100%;
+    display: flex;
+    color: navy;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5em 0;
+    flex: 1 1 0;
+}
+
+.main .centralise .result-container .head .left h1{
+    font-size: 3rem;
+}
+
+.main .centralise .result-container .head .left h3{
+    font-size: 1.5rem;
+}
+
+.main .centralise .result-container .head .right{
+   margin-right: auto;
+   height: 9rem;
+   width: 9rem;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.main .centralise .result-container .head .right img{
+    width: 90%;
+    height: 90%;
+}
+
+/* main details section start here*/
+
+.main .centralise .result-container .personal-details{
+    height: 20rem;
+    padding: 0 1.5rem;
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+}
+
+.main .centralise .result-container .personal-details .left{
+    width: 20%;
+    height: 100%;
+}
+
+.main .centralise .result-container .personal-details .left .image-box{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.main .centralise .result-container .personal-details .left img{
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+.main .centralise .result-container .personal-details .right{
+    flex:  1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+.main .centralise .result-container .personal-details .right .name-section{
+    width: 100%;
+    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+.main .centralise .result-container .personal-details .right .name-section .box-one{
+    display: flex;
+    gap: 2rem;
+    height: 5rem;
+}
+
+.main .centralise .result-container .personal-details .right .name-section .box-one span{
+    flex: 1 1 0;
+    display: flex;
+    gap:  1rem;
+}
+
+.main .centralise .result-container .personal-details .right .name-section .box-one span .icon{
+    height: 100%;
+}
+
+.main .centralise .result-container .personal-details .right .name-section .box-one span .icon i{
+    height: 4rem;
+    width: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    background-color: var(--light-navy);
+    color: #eee;
+    border-radius: 50%;
+}
+
+.main .centralise .result-container .personal-details .right .name-section .box-one span .text{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.main .centralise .result-container .personal-details .right .name-section .box-one span .text h4{
+    font-size: 1.2rem;
+    color: var(--light-text);
+}
+
+.main .centralise .result-container .personal-details .right .viewing{
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+
+/* main details section end here*/
+/* result table section stsrt here*/
+
+.main .centralise .result-table{
+    display: flex;
+    width: 100%;
+    min-height: 30rem;
+    max-height: 30rem;
+    height: 30rem;
+    overflow: auto;
+}
+
+.main .centralise .result-table table{
+    flex: 1 1 0;
+    border-collapse: collapse;
+}
+
+.main .centralise .result-table table tr th{
+    background-color: var(--light-navy);
+    color: #eee;
+    padding: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.main .centralise .result-table table tr:nth-child(even){
+    background-color: #e7e7e7;
+}
+
+.main .centralise .result-table table tr:nth-child(odd){
+    background-color: #f4f4f4;
+}
+
+.main .centralise .result-table table tr td{
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.main .centralise .result-table table tr td:first-child,.main .centralise .result-table table tr td:last-child{
+    text-align: left;
+}
+
+/* result table section end here*/
+/*grade table section start here*/
+
+.main .centralise .grade-table{
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    min-height: 40rem;
+    max-height: 40rem;
+    height: 40rem;
+}
+
+.main .centralise .grade-table .left{
+    flex: 1 1 20rem;
+    border-collapse: collapse;
+    max-height: 40rem;
+    overflow: auto;
+    height: fit-content;
+    display: flex;
+}
+
+.centralise h2{
+    color: navy;
+    margin: 0 1rem;
+    font-size: 2rem;
+}
+
+.main .centralise .grade-table .left table{
+    flex: 1 1 0;
+    height: 100%;
+}
+
+.main .centralise .grade-table table caption{
+    margin-bottom: .8rem;
+    font-size: 1.5rem;
+    color: navy;
+}
+
+.main .centralise .grade-table .right{
+    flex: 1 1 30rem;
+    flex-direction: column;
+    display: flex;
+    gap: 2rem;
+    max-height: 40rem;
+    overflow: auto;
+}
+
+.main .centralise .grade-table table tr th{
+    background-color: var(--light-navy);
+    color: #eee;
+    padding: 1rem;
+    font-size: 1.3rem;
+}
+
+.main .centralise .grade-table table tr:nth-child(even){
+    background-color: #e7e7e7;
+    border-bottom: 1px solid navy;
+}
+
+.main .centralise .grade-table table tr:nth-child(odd){
+    background-color: #f4f4f4;
+    border-bottom: 1px solid navy;
+}
+
+.main .centralise .grade-table table tr td{
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.4rem;
+}
+/*grade table section end here*/
+/*attendace and remarks section end here*/
+
+.main .centralise .grade-table .right .attendance-box .ahead{
+    padding: 1.3rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    font-size: 1.4rem;
+    color: navy;
+    border-bottom: 1px solid navy;
+}
+
+.main .centralise .grade-table .right .attendance-box .abody{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding:1rem;
+}
+
+.main .centralise .grade-table .right .attendance-box .abody .box-one{
+    display: flex;
+    gap: 1rem;
+    height: 5rem;
+}
+
+.main .centralise .grade-table .right .attendance-box .abody span{
+    flex: 1 1 0;
+    display: flex;
+    gap:  1rem;
+}
+
+.main .centralise .grade-table .right .attendance-box .abody span i{
+    height: 3rem;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    background-color: var(--light-navy);
+    color: #eee;
+    border-radius: 50%;
+}
+
+.main .centralise .grade-table .right .attendance-box .abody span .text{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.main .centralise .grade-table .right .attendance-box .abody span .text h4{
+    font-size: 1.2rem;
+    color: var(--light-text);
+}
+
+.main .centralise .grade-table .right .teacher-remarks .thead{
+    padding: 1.3rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    font-size: 1.4rem;
+    color: navy;
+    border-bottom: 1px solid navy;
+}
+
+.main .centralise .grade-table .right .teacher-remarks .body{
+    display: flex;
+    padding: 1rem;
+}
+
+.main .centralise .grade-table .right .teacher-remarks .body .box{
+    display: flex;
+    gap: 1rem;
+}
+
+.main .centralise .grade-table .right .teacher-remarks .body .box .profile-image{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+}
+
+.main .centralise .grade-table .right .teacher-remarks .body .box .profile-image img{
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.main .centralise .grade-table .right .teacher-remarks .body .box .btext{
+   flex:  1 1 0;
+}
+
+.main .centralise .grade-table .right .teacher-remarks .body .box .btext p{
+    line-height: 2.5rem;
+    font-size: 1.3rem;
+}
+
+/*attendace and remarks section end here*/
+
+/* media queries*/
+
+@media (max-width:1025px) {
+    .main-main{
+        min-width: 100%;
+    }
+    .main .centralise{
+        width: 90%;
+        padding-bottom: 12rem;
+    }
+}
+
+@media (max-width:600px) {
+    .main .centralise{
+        min-width: 100%;
+    }
+    .main{
+        padding: 0 1rem;
+    }
+    .main .centralise .select-field{
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .main .centralise .select-field strong{
+        display: none;
+    }
+    .main .centralise .result-container .personal-details .left{
+        min-width: 30%;
+    }
+    .main .centralise .result-container .personal-details .right .name-section .box-one{
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+    }
+    .main .centralise .result-container .personal-details .right .name-section .box-one span:last-child{
+        margin-top: -1rem;
+    }
+    .main .centralise .result-container .personal-details .right .name-section{
+        overflow: auto;
+    }
+    .main .centralise .result-container .personal-details .right .viewing{
+        display: flex;
+        white-space: nowrap;
+        overflow: auto;
+    }
+    .main .centralise .result-container .personal-details .right{
+        overflow: auto;
+        white-space: nowrap;
+        padding: 1rem 0;
+    }
+    .main .centralise .grade-table .right .attendance-box{
+        max-height: 20rem;
+        overflow: auto;
+    }
+    .main .centralise .grade-table .right .attendance-box .body{
+        overflow: auto;
+        height: 100%;
+    }
+    .main .centralise .grade-table .right .attendance-box .abody .box-one{
+        display: flex;
+        flex-direction: column;
+    }
+    .main .centralise .grade-table .right .attendance-box .abody .box-one:last-child{
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width:450px){
+    .grade-table{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: fit-content;
+    }
+    .grade-table .attendance-box{
+        min-height: 20rem;
+    }
+    .result-table table tr td{
+        overflow: auto;
+        white-space: nowrap;
+        padding: 1.5rem 0;
+    }
+    .main .centralise .result-container .personal-details .right .name-section .box-one span .icon i{
+        height: 3rem;
+        width: 3rem;
+        font-size: 1rem;
+    }
+}

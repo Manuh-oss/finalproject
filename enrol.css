@@ -1,0 +1,530 @@
+.mains{
+    display: flex;
+    width: 100%;
+    padding: 0 2rem;
+    flex-direction: column;
+    height: 100%;
+}
+
+.error{
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    padding: 1rem;
+    background-color: #ED0028;
+    color: #eee;
+    font-size: 1.5rem;
+    animation: disapear 5s linear forwards;
+}
+
+.message{
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    padding: 1rem;
+    background-color: aquamarine;
+    color: black;
+    font-size: 1.5rem;
+    animation: disapear 5s linear forwards;
+}
+
+@keyframes disapear {
+    0%{
+        top: 0%;
+    }
+    50%{
+        top: 9rem;
+    }
+    100%{
+        top: -100%;
+    }
+}
+
+body{
+    background-color: #e7e7e7;
+}
+
+.main{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    padding:2rem ;
+    flex-grow: 1;
+    position: relative;
+}
+
+.mains .student-tittle{
+    height: 7rem;
+    padding:1.5rem 1rem;
+    border-bottom: 1px solid grey;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+}
+
+.main .details-two input,textarea,select{
+    outline: none;
+    border-radius: .5rem;
+    border: 1px solid gray;
+    padding: 0 .5rem;
+}
+.main .details-open input,textarea,select{
+    outline: none;
+    border-radius: .5rem;
+    border: 1px solid rgba(160, 155, 155, 0.747);
+    padding: 0 .5rem;
+}
+
+/* profile image styles start here */
+
+.profile-image-container{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 25%;
+}
+.profile-image-container .profile-image-box{
+    height: 20rem;
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.profile-image-container .profile-image-box .image{
+    height: 10rem;
+    width: 10rem;
+}
+.profile-image-container .profile-image-box .image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.profile-image-container .buttons{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+}
+.profile-image-container .buttons button{
+    background-color: #ED0028;
+    padding: .8rem 1rem;
+    border-radius: .5rem;
+    border: none;
+    outline: none;
+    color: #eee;
+}
+.profile-image-container .buttons label{
+    height: 3rem;
+    background-color: #0052A5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #eee;
+    padding: 1rem;
+    border-radius: .5rem;
+    font-size: 1.3rem;
+}
+/* profile image styles end here */
+
+/* details one styles start here */
+
+.main .details-open{
+    width: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.main .details-open .names{
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+.main .details-open .names .first-middle{
+    width: 100%;
+    display: flex;
+    gap: 2.5rem;
+    height: fit-content;
+}
+.main .details-open .names .first-middle:nth-child(1){
+    margin-bottom: 1.5rem;
+}
+.main .details-open .names .first-middle input{
+    flex: 1 1 0;
+    height:100%;
+    padding: .8rem ;
+    outline: none;
+    caret-color: navy;
+}
+.main .details-open .names .first-middle select{
+    width: 50%;
+    min-height: 3rem;
+}
+.main .details-open .names .first-middle span{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 4rem;
+}
+.main .details-open .names .first-middle span h3{
+    color: navy;
+    margin-bottom: .7rem;
+}
+.main .details-open .names .first-middle span h3 sup{
+    color: red;
+}
+/* details one styles end here */
+
+/* details one styles start here */
+
+.main .details-two{
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+}
+.main .details-two .left,.right{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    gap: 1.5rem;
+}
+.main .details-two .left .date-of-birth{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.main .details-two .left .date-of-birth input{
+    flex: 1 1 0;
+    height: 3rem;
+}
+.main .details-two .left .date-of-birth .inputs{
+    display: flex;
+    gap: 1.5rem;
+}
+.main .details-two .left .date-of-birth .inputs input[type = "text"]{
+    max-width: 14rem;
+    height: 3rem;
+}
+.main .details-two .left .date-of-birth h3{
+    margin-bottom: .7rem;
+    color: navy;
+}
+.main .details-two .left .date-of-birth h3 sup{
+    color: red;
+}
+/* date of birth styles end here */
+.main .details-two .left .admission .inputs{
+    display: flex;
+    gap: 1.5rem;
+}
+.main .details-two .left .admission input,select{
+   height: 3rem;
+   flex: 1 1 0;
+}
+.main .details-two  h3{
+    margin-bottom: .7rem;
+    color:navy;
+}
+.main .details-two  h3 sup{
+    color: red;
+}
+.main .details-two .class .inputs{
+    display: flex;
+    gap: 1.5rem;
+}
+.main .details-two .class  .inputs select{
+    flex: 1 1 0;
+}
+
+
+/* details one styles left end here */
+.main .details-two .right span{
+    width: 100%;
+}
+.main .details-two .right .email{
+    display: flex;
+    width: 80%;
+}
+.main .details-two .right input{
+  height: 3rem;
+  flex: 1 1 0;
+}
+.main .details-two .right textarea{
+    resize: none;
+    height: 10rem;
+    width: 20rem;
+}
+/* details one styles end here */
+
+/*submit buttons styles*/
+
+.submit-btn{
+    position: absolute;
+    bottom: 2rem;
+    display: flex;
+    width: 96%;
+    justify-content: flex-end;
+    height: 4rem;
+    gap: 1rem;
+}
+.submit-btn button[type="reset"]{
+    background-color: #ED0028;
+    color: #eee;
+    border: none;
+    cursor: pointer;
+    padding: 0 1.3rem;
+}
+
+.submit-btn button[type="button"]{
+    border: none;
+    color: #eee;
+    background-color: #458b00;
+    cursor: pointer;
+}
+
+.hide{
+   display: none;
+}
+.allah{
+    position: absolute;
+    z-index: 200;
+    top: 0;
+    left: 50%;
+    color: green;
+    animation: show 6s ease-in-out forwards;
+}
+
+.educational-background{
+    display: flex;
+    margin: 0 2rem;
+    flex-direction: column;
+    background-color: white;
+    height: fit-content;
+    min-height: 22rem;
+    margin-bottom: 5rem;
+}
+
+.educational-background .input-container{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.educational-background .input-container .div-one{
+    display: flex;
+    width: 100%;
+    gap: 3rem;
+    height: 3rem;
+}
+
+.educational-background .input-container .div-one span{
+    flex: 1 1 0;
+    padding:2rem;
+}
+
+.educational-background .input-container .div-one span h3{
+    color: navy;
+    margin-bottom: .7rem;
+}
+.educational-background .input-container .div-one span h3 sup{
+    color: red;
+}
+.educational-background .input-container .div-one span input{
+   width: 100%;
+   height: 3rem;
+   border: 1px solid gray;
+}
+
+.educational-background h2{
+    font-size: 2rem;
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid black;
+}
+
+@keyframes show {
+    0%{
+       top: 0%;
+    }
+    50%{
+        top: 9rem;
+    }
+    100%{
+        top: -100%;
+    }
+}
+
+@media (max-width:1025px) {
+    .mains{
+        min-width: 100%;
+        min-height: 100%;
+    }
+    .teachers{
+        max-height:60% ;
+        min-height: 70%;
+        padding: 0 2rem;
+        margin: 0;
+    }
+    .educational-background{
+        margin-top: -4rem;
+    }
+    .details-two{
+        overflow: auto;
+        padding-bottom: 2rem;
+    }
+    .main-main{
+        width: 100%;
+    }
+    .details-two{
+        flex-direction: column;
+    }
+    .profile-image-container{
+        width: 30%;
+    }
+    .main{
+        max-height: 80%;
+    }
+    .profile-image-container .buttons{
+        padding: 0;
+        justify-content: flex-start;
+        gap: .5rem;
+    }
+    .profile-image-container .buttons button{
+        padding: 0 .5rem;
+    }
+}
+
+@media (max-width:656px) {
+    .main{
+        flex-direction: column;
+        overflow: auto;
+    }
+    .details-open,.details-two{
+        min-width: 100%;
+    }
+    .details-two .left, .details-two .right{
+        min-width: 100%;
+    }
+    .submit-btn{
+        position: relative;
+        margin-top: 4rem;
+        left: 2rem;
+    }
+    .profile-image-container{
+        min-width: 60%;
+        height: fit-content;
+        max-height: 17rem;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width:450px) {
+    .first-middle{
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+    }
+    .first-middle input{
+        min-width: 100%;
+    }
+    .inputs{
+        flex-direction: column;
+    }
+    .inputs input{
+        min-height: 3rem;
+        min-width: 100%;
+    }
+    .inputs select{
+       min-height: 4rem;
+       min-width: 100%;
+    }
+    .email{
+        min-width: 100%;
+    }
+    .right textarea{
+        min-width: 100%;
+    }
+    .profile-image-container{
+        min-width: 60%;
+        height: fit-content;
+        max-height: 17rem;
+    }
+}
+
+@media (max-width:370px){
+    .first-middle{
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+    }
+    .first-middle input{
+        min-width: 100%;
+    }
+    .inputs{
+        flex-direction: column;
+    }
+    .inputs input{
+        min-height: 3rem;
+        min-width: 100%;
+    }
+    .inputs select{
+       min-height: 4rem;
+       min-width: 100%;
+    }
+    .email{
+        min-width: 100%;
+    }
+    .right textarea{
+        min-width: 100%;
+    }
+}
+
+@media (max-height:950px) {
+    .main{
+        margin-bottom: 3rem;
+    }
+}
+
+@media (max-height:799px){
+   .main{
+     padding-bottom: 2rem;
+     overflow: auto;
+   } 
+   .mains{
+    overflow: auto;
+   }
+   .main-main{
+    overflow: auto;
+   }
+   .submit-btn{
+    margin-bottom: 1rem;
+   }
+}
+
+@media (max-height:500px) {
+    .main{
+        overflow: auto;
+        padding-bottom: 3rem;
+    }
+    .mains{
+        overflow: auto;
+    }
+    .main-main{
+        overflow: auto;
+    }
+    .submit-btn{
+        margin-bottom: .5rem;
+    }
+    .submit-btn button{
+        padding: .3rem;
+        height: 3rem;
+    }
+    .details-two{
+        overflow: auto;
+    }
+}

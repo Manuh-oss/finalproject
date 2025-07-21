@@ -1,0 +1,6 @@
+{
+    "from": "teachersSubject",
+    "type": false,
+    "messsage": "error! form has not been submitted.",
+    "messageType": "info"
+}

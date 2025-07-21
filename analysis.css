@@ -1,0 +1,417 @@
+.main{
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem;
+    flex-direction: column;
+}
+
+.grey{
+    background-color: #eee;
+}
+
+.circles {
+    height: 15rem;
+    width: 15rem;
+    background-image: conic-gradient( transparent 50%,#28a745,#28a745,#28a745,#28a745);
+    border-radius: 50%;
+    padding: 1rem;
+}
+
+.circles:nth-child(2){
+    background-image: conic-gradient(transparent 50%, #14AAF5,#14AAF5, #14AAF5, #14AAF5);
+}
+
+.circles:nth-child(3){
+    background-image: conic-gradient(transparent 50%, #FF9933,#FF9933, #FF8833, #FF9933);
+}
+
+.circles:nth-child(4){
+    background-image: conic-gradient(transparent 50%, #B8255F,#B8255F,#B8255F,#B8255F);
+}
+
+.circles:last-child{
+    background-image: conic-gradient(transparent 50%, #DB4035,#DB4035,#DB4035,#DB4035);
+}
+
+.circles .inner-circle{
+    background-color: whitesmoke;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.circles .inner-circle h2{
+    font-size: 2rem;
+}
+
+.main .mains{
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.main h2{
+    font-size: 2rem;
+    color: #2d3e50;
+    margin: 1rem 0 .5rem;
+}
+
+/*analysis-box styles start here*/
+.analysis-box{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.analysis-box .box{
+    width: 75%;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: .7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+.analysis-box .box ul{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+}
+
+.analysis-box .box ul li{
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    height: 4rem;
+    align-items: center;
+}
+
+.analysis-box .box ul li .progress{
+    flex: 1 1 0;
+    background-color: #eee;
+    height: 2rem;
+    border-radius: 1rem;
+    width: 100%;
+}
+
+.analysis-box .box ul li .progress .juice{
+    height: 100%;
+    width: 0%; /* initial value, overridden by inline style */
+    transition: width 0.3s ease;
+    background-color: green; /* overridden by inline style */
+}
+
+.analysis-box .box p:not(.tally){
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+/*analysis-box styles end here*/
+/*statistics styles start here*/
+.statistics-box{
+    width: 100%;
+    display: flex;
+}
+
+.statistics-box .body{
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    gap: 2rem;
+    width: 100%;
+}
+
+.statistics-box .body button{
+    flex: 1 1 0;
+    height: 100%;
+}
+/*statistics styles end here*/
+
+/* main content styles start here */
+
+.main-content{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    justify-content: center;
+    display: flex;
+}
+
+.main-content .centralised{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.main .select{
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+}
+
+.main .select span{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1 1 0;
+}
+
+.main .select span select{
+    min-height: 4rem;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    outline: none;
+    padding: 0 1rem;
+}
+
+/*position representation styles start here*/
+
+.main .centralised .positions{
+    display: flex;
+    height: 37rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.main .centralised .position-box{
+    height: 100%;
+    width: 65%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.main .centralised .position-box .box{
+    position: relative;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem;
+    background:linear-gradient(-60deg , #28a745,#2cee5a);
+    border-bottom-right-radius: 1rem;
+}
+
+.main .centralised .position-box .box .right{
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.main .centralised .position-box h3, .main .centralised .position-box h4{
+    font-weight: 400;
+    line-height: 2.5rem;
+}
+
+.main .centralised .position-box .box:nth-child(2){
+    width: 85%;
+}
+
+.main .centralised .position-box .box:last-child{
+    width: 70%;
+}
+
+/*position representation styles end here*/
+
+.main .main-content .centralised .subject-champions{
+    width: 100%;
+}
+
+.main .main-content .centralised .top-ten{
+    width: 100%;
+}
+
+.main .main-content .centralised  table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.main .main-content .centralised  table tr th{
+    background-color: var(--light-navy);
+    color: #eee;
+    padding: 1.5rem;
+    font-size: 1.3rem;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.main .main-content .centralised table tr:nth-child(even){
+    background-color: #e7e7e7;
+}
+
+.main .main-content .centralised table tr:nth-child(odd){
+    background-color: #f4f4f4;
+}
+
+.main .main-content .centralised table tr td{
+    padding: 1.5rem;
+    font-size: 1.3rem;
+    text-align: center;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.main .main-content .centralised table tr td:nth-child(3){
+    min-width: 10rem;
+    text-align: left;
+    overflow: auto;
+    white-space: nowrap;
+}
+/* main content styles end here */
+/*statistics report styles*/
+.statistic-report{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #d1d5db;
+    padding: 2rem;
+    gap: 1.5rem;
+}
+
+.statistic-report .centralise{
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+.statistic-report .centralise .results{
+    flex: 1 1 0;
+}
+
+.statistic-report .centralise .students{
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+}
+
+.statistic-report .males,.statistic-report .females{
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+}
+
+.statistic-report table{
+    width: 75%;
+    border-collapse: collapse;
+    border-bottom: 1px solid #d1d5db;
+}
+
+.statistic-report table th{
+    border-bottom: 1px solid #d1d5db;
+    height: 3rem;
+    font-size: 1.5rem;
+}
+
+.statistic-report table td{
+    height: 3rem;
+    font-size: 1.5rem;
+}
+
+.statistic-report p{
+    width: 50%;
+    line-height: 3rem;
+    font-size: 1.5rem;
+}
+
+.statistic-report ol{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 50%;
+}
+
+.statistic-report .values{
+    color: #28a745;
+}
+
+.statistic-report ol li{
+    font-size: 1.3rem;
+    line-height: 2.5rem;
+}
+
+@media (max-width:1025px) {
+    .main-main{
+        min-width: 100%;
+    }
+}
+
+@media (max-width:800px){
+    .main-content .centralised{
+        width: 90%;
+    }
+    .main .centralised .position-box{
+        width: 85%;
+    }
+}
+
+@media (max-width:600px) {
+    .main{
+        padding: 0 1rem;
+    }
+    .main .select{
+        overflow: auto;
+        white-space: nowrap;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+    }
+    .main .select span select{
+       height: 3.5rem;
+    }
+    .main .select span h3{
+        display: none;
+    }
+    .main-content .centralised{
+        width: 100%;
+    }
+    .main .centralised .position-box{
+        width: 100%;
+    }
+    .analysis-box .box{
+        width: 100%;
+    }
+    .main .main-content .centralised .subject-champions{
+        overflow: auto;
+    }
+    .main .main-content .centralised .top-ten{
+        overflow: auto;
+    }
+    .main .centralised .position-box .box:nth-child(2){
+        width: 100%;
+    }
+    .main .centralised .position-box .box:last-child{
+        width: 100%;
+    }
+    .main .centralised .position-box .box{
+        font-size: 1.3rem;
+        border-radius: 0;
+    }
+}
+
+@media (max-width:390px){
+    .main .centralised .position-box .first img, .main .centralised .position-box .second img ,.main .centralised .position-box .third img{
+        height: 6rem;
+        width: 6rem;
+    }
+    .statistics-box .body{
+        overflow: auto;
+        white-space: nowrap;
+    }
+}

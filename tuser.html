@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <link rel="stylesheet" href="tuser.css" />
+  </head>
+  <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span>
+                <i class="fa fa-user-graduate"></i>
+              </span>
+              highschool
+            </strong>
+          </div>
+          <div class="body"></div>
+        </nav>
+      </aside>
+
+      <div class="dash-main">
+        <h1>dashboard</h1>
+
+        <div class="main">
+          <div class="welcome-message">
+            <div class="text">
+              <h2>welcome back mutua</h2>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Dolores natus temporibus unde, veniam cum sed dolorum quam
+                expedita voluptates architecto ab iste consequatur cumque
+                minima. Quis est repellendus hic quisquam.
+              </p>
+              <h3 class="today">9 july, 2025</h3>
+            </div>
+            <div class="image">
+              <img src="./subjects/profile.jpg" alt="" />
+            </div>
+          </div>
+          <!--calendar section start here-->
+          <div class="calendar">
+            <div class="head">
+              <i class="fa fa-angle-left"></i>
+              <h3 class="month">June</h3>
+              <i class="fa fa-angle-right"></i>
+            </div>
+            <div class="body">
+              <span
+                ><h3>mon</h3>
+                <h4>10</h4></span
+              >
+              <span
+                ><h3>mon</h3>
+                <h4>10</h4></span
+              >
+              <span
+                ><h3>mon</h3>
+                <h4>10</h4></span
+              >
+              <span
+                ><h3>mon</h3>
+                <h4>10</h4></span
+              >
+              <span
+                ><h3>mon</h3>
+                <h4>10</h4></span
+              >
+            </div>
+            <div class="event">
+              <h3>meeting day</h3>
+              <p>
+                today is the teacher parent meeting to happen at the dining hall
+              </p>
+            </div>
+          </div>
+          <!--calendar section end here-->
+          <!--notifiction section start here-->
+          <div class="notification">
+            <h3>
+              <i class="fa-regular fa-bell"></i><sup>*</sup> notifications
+            </h3>
+            <ul></ul>
+          </div>
+          <!--notifiction section end here-->
+          <!--accesories start here-->
+            <!--marks section-->
+             <div class="marks-completion">
+                <h3>Marks submition</h3>
+                <div class="svg">
+                  <svg class="mark-svg">
+                    <circle class="base" cx="50%" cy="50%" r="54"></circle> 
+                    <circle class="progress" cx="50%" cy="50%" r="54"></circle> 
+                  </svg>
+                  <h4 class="percentage">75%</h4>
+                </div>
+                <h5 class="exam-text">form4 green</h5>
+             </div>
+            <!--classes section-->
+            <div class="my-classes-box">
+                <div class="box">
+                  <div class="opacity">
+                    <h3><i class="fa fa-leaf"></i> biology</h3>
+                    <h4><i class="fa fa-clock"> 2:00 - 3:00</i></h4>
+                    <h5>form4 green</h5>
+                    <h5>25 students</h5>
+                  </div>  
+                </div>
+                 <div class="box">
+                  <div class="opacity">
+                    <h3><i class="fa fa-leaf"></i> biology</h3>
+                    <h4><i class="fa fa-clock"> 2:00 - 3:00</i></h4>
+                    <h5>form4 green</h5>
+                    <h5>25 students</h5>
+                  </div>  
+                </div>
+                   <div class="box">
+                  <div class="opacity">
+                    <h3><i class="fa fa-leaf"></i> biology</h3>
+                    <h4><i class="fa fa-clock"> 2:00 - 3:00</i></h4>
+                    <h5>form4 green</h5>
+                    <h5>25 students</h5>
+                  </div>  
+                </div>
+            </div>
+            <!--graph section-->
+            <div class="graph-section">
+                <div class="overflow">
+                   <canvas id="my-chart"></canvas>
+                </div>
+            </div>
+          
+          <!--accesories end here-->
+        </div>
+      </div>
+    </main>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="tittle.js"></script>
+      <script src="tuser.js"></script>
+  </body>
+</html>

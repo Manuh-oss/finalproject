@@ -1,0 +1,138 @@
+.main {
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main .centralise {
+  width: 100%;
+  padding: 2rem;
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main .centralise .select {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+}
+
+.main .centralise .select span {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.main .centralise .select span select {
+  height: 4rem;
+  background-color: #f1f5f9;
+  border: 1px solid #d1d5db;
+  outline: none;
+  padding: 0 1rem;
+}
+
+.main .centralise .body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main .centralise .body .table {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.main .centralise .body .table table {
+  width: 100%;
+  flex: 1 1 1;
+  border-collapse: collapse;
+}
+
+.main .centralise .body .submit-btn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.main .centralise .body .submit-btn button {
+  background-color: #28c76f;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  height: 3.5rem;
+  padding: 0 1.5rem;
+}
+
+.main .centralise .body .table table thead th {
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  background-color: var(--light-navy);
+  color: #eee;
+}
+.main .centralise .body .table table tbody tr:nth-child(even) {
+  background-color: var(--soft-white);
+  border-bottom: 1px dotted #2d3e50;
+}
+
+.main .centralise .body .table table tbody tr:nth-child(odd) {
+  background-color: var(--light-gray);
+  border-bottom: 1px dotted #2d3e50;
+}
+
+.main .centralise .body .table table tbody tr td {
+  height: 4rem;
+  text-align: center;
+  font-size: 1.4rem;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.main .centralise .body .table table tbody tr td span {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.main .centralise .body .table table tbody tr td input {
+  border: none;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  display: none;
+}
+
+@media (max-width: 1025px) {
+  .main-main {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .main .centralise .select {
+    overflow: auto;
+    white-space: nowrap;
+  }
+  .main .centralise .select span h3 {
+    display: none;
+  }
+  .main {
+    padding: 0 1rem;
+  }
+  .main .centralise {
+    padding: 2rem 1rem;
+  }
+  .remove {
+    display:none;
+  }
+}

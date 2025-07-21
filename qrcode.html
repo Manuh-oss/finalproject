@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="qrcode.css">
+</style>
+
+  </head>
+  <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span><i class="fa fa-user-graduate"></i></span>
+              highschool</strong
+            >
+          </div>
+          <div class="body"></div>
+        </nav>
+      </aside>
+      <div class="main-main" style="background-color: #f1f5f9;">
+        <div class="tittle">
+          <h1>
+            <i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i
+            ><i class="fa fa-ellipsis-v"></i> Event
+          </h1>
+          <div class="icons-profile">
+            <div class="search">
+              <i class="fa fa-search fa-beat open-search"></i>
+              <div class="search-dropdown hide">
+                <form class="search-input">
+                  <input
+                    type="text"
+                    name="search"
+                    id=""
+                    class="search"
+                    required
+                  />
+                  <button type="submit" class="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+
+                <div class="recents">
+                  <h3>recent search</h3>
+                  <ul>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="notification">
+              <i class="fa-regular fa-bell"></i>
+              <div class="notification-dropdown closed">
+                <ul>
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <i class="fa fa-cog fa-spin"></i>
+            <span class="profile-box">
+              <img src="./teachers/martin.jpg" alt="" />
+            </span>
+          </div>
+        </div>
+
+        <div class="main">
+          <div class="qr-container">
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
+    <script src="qrcode.js"></script>
+    <script src="tittle.js"></script>
+  </body>
+</html>

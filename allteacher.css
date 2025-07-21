@@ -1,0 +1,303 @@
+.centralise{
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    display: flex;
+    gap: 2rem;
+    height: 100%;
+}
+.main{
+    height: 100%;
+    width: 100%;
+    padding: 0 2rem;
+}
+
+.centralise .left{
+    height: 100%;
+    width: 30%;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    max-height: 98%;
+    position: relative;
+}
+
+.centralise .left .upper{
+    height: 60%;
+}
+
+.centralise .left .upper .background-image{
+    background-image: url(./teachers/images\ \(97\).jpeg);
+    height: 95%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.centralise .left .upper .profile-image{
+    height: 15rem;
+    width: 15rem;
+    background-color: #f4f4f4;
+    position: absolute;
+    border-radius: 50%;
+    padding: .5rem;
+    bottom: 0;
+    left: 50%;
+    translate: -50% 50%;
+}
+
+.centralise .left .upper .profile-image img{
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.centralise .lower{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40%;
+}
+
+.centralise .lower span{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.centralise .lower span h3{
+    font-size: 1.5rem;
+    color: #2d3e50;
+}
+
+.centralise .lower span h4{
+    font-size: 1.2rem;
+    color: var(--light-text);
+}
+
+.centralise .right{
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.centralise .right .lower {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.centralise .right .lower .head{
+    display: flex;
+    height: fit-content;
+    width: 100%;
+}
+
+.centralise .right .lower .head .navigations{
+    display: flex;
+    flex: 1 1 0;
+    margin-right: auto;
+    gap: 1rem;
+}
+
+.centralise .right .lower .head .navigations button{
+    background-color: #fff;
+    border: none;
+    color: #2d3e50;
+    cursor: pointer;
+}
+
+.centralise .right .lower .head .navigations button:first-child{
+    border-bottom: 2px solid navy;
+}
+
+.centralise .right .lower .head .sort{
+    position: relative;
+    padding: 0 1rem;
+    margin-left: auto;
+}
+
+.centralise .right .lower .head .sort button{
+    height: 4rem;
+    width: 12rem;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:0 1rem;
+}
+
+.centralise .right .lower .head .sort .dropdown{
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    transition: .6s linear;
+}
+
+.centralise .right .lower .body{
+    width: 100%;
+    flex: 1 1 0;
+    overflow: auto;
+}
+
+.centralise .right .lower .body ul{
+    width: 100%;
+    overflow: auto;
+    height: 100%;
+    padding: 0;
+    list-style: none;
+    padding: 0 1rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.centralise .right .lower .body ul li{
+    height: 10rem;
+    background-color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;    
+    justify-content: center;
+    border-left: 3px solid var(--red);
+    padding: 0 2rem;
+    border-radius: .5rem;
+}
+
+.centralise .right .lower .body ul li h3{
+    font-size: 2rem;
+    color: #2d3e50;
+}
+
+.centralise .right .lower .body ul li h5{
+    font-size: 1.5rem;
+    color: var(--light-text);
+}
+
+.no-result{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+@media (max-width:1025px) {
+    .main-main{
+        min-width: 100%;
+    }
+    .centralise{
+        display: flex;
+        flex-direction: column;
+    }
+    .centralise .left{
+        width: 100%;
+        height: 30%;
+    }
+    .centralise .left .upper{
+        height: 50%;
+    }
+    .centralise .left .upper .profile-image{
+        height: 10rem;
+        width: 10rem;
+        left: 2rem;
+        translate: 0 50%;
+        padding: .3rem;
+    }
+    .centralise .lower{
+        justify-content: flex-start;
+        align-items: flex-end;
+        padding:0 2rem;
+    }
+    .centralise .lower span{
+        align-items: flex-start;
+    }
+    .centralise .right .lower {
+        padding: 0;
+    }
+    .centralise .right .lower .head{
+        display: flex;
+        padding-left: 1rem;
+    }
+}
+
+@media (max-width:600px){
+    .main{
+        padding: 0 1rem;
+    }
+    .centralise .left{
+        min-height: 19rem;
+        position: relative;
+        height: 25rem;
+    }
+    .centralise .left .upper{
+        height: 100%;
+        position: relative;
+        width: 100%;
+        min-height: 100%;
+    }
+    .centralise .left .upper .background-image{
+        position: relative;
+        min-height: 100%;
+        min-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .centralise .left .upper .background-image .profile-image{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .centralise .left .lower{
+        position: absolute;
+        bottom: 3rem;
+        min-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0;
+        margin: 0;
+    }
+    .centralise .left .lower span{
+       display: flex;
+       flex-direction: column;
+       gap: 1rem; 
+       align-items: center;
+    }
+    .centralise .left .lower span h3{
+        color: #e7e7e7;
+    }
+    .centralise .right .lower .body ul{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .centralise .right .lower .body ul li{
+        height: 6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .centralise .right .lower .body ul li h3{
+        font-size: 1.4rem;
+    }
+    .centralise .right .lower .body ul li h5{
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-height:600px) {
+    .centralise .left{
+        height: 30rem;
+    }
+}

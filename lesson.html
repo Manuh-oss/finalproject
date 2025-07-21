@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <link rel="stylesheet" href="aside.css">
+    <style>
+        table{
+            width: 700px;
+            height: 500px;
+        }
+        tr:nth-child(even){
+            background-color: whitesmoke;
+        }
+        tr:nth-child(odd){
+            background-color: wheat;
+        }
+        td{
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+    </table>
+    <script>
+const tableTd = document.querySelectorAll("table tr td");
+
+tableTd.forEach(table => {
+    table.addEventListener("click" , function () {
+        if(this.classList.contains("opened")){
+          alert("you cannot add a double lesson here")
+        }else{
+            this.setAttribute("colspan" , 2);
+            this.nextElementSibling.style.display = "none";
+            this.classList.add("opened");
+        }
+    })
+})
+    </script>
+</body>
+</html>
+
+
+  <!-- <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/english.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>english</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/kiswahili.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>kiswaili</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/geography.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>mathematics</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/physics (2).jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>physics</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/chemistry.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>chemistry</h3>
+                        </div>
+                    </div>
+
+                    
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/biology.png" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>biology</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/mathematics.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>geography</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/englishtwo.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>history</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/cre.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>cre</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/computer.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>computer</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/noresultfive.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>business</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid-box grid">
+                        <div class="image">
+                            <img src="./subjects/noresultone.jpeg" alt="">
+                        </div>
+                        <div class="text">
+                            <h3>agriculture</h3>
+                        </div>
+                    </div>
+
+                -->
+
+                  <!--  <div class="teacher-box grid">
+                        <div class="upper">
+                            <div class="image">
+                                <img src="./teachers/martin.jpg" alt="">
+                            </div>
+                            <i class="fa fa-ellipsis-h"></i>
+                            <div class="name">
+                                <h3>paul mutua</h3>
+                                <h4>teacher</h4>
+                            </div>
+                        </div>
+                        <div class="middle">
+                            <span class="one">english</span>
+                            <span class="two">literature</span>
+                        </div>
+                        <div class="lower">
+                           <h4>teacing 3 clases</h4>
+                        </div>
+                    </div>
+
+                    <div class="teacher-box grid">
+                        <div class="upper">
+                            <div class="image">
+                                <img src="./teachers/martin.jpg" alt="">
+                            </div>
+                            <i class="fa fa-ellipsis-h"></i>
+                            <div class="name">
+                                <h3>paul mutua</h3>
+                                <h4>teacher</h4>
+                            </div>
+                        </div>
+                        <div class="middle">
+                            <span class="one">english</span>
+                            <span class="two">literature</span>
+                        </div>
+                        <div class="lower">
+                           <h4>teacing 3 clases</h4>
+                        </div>
+                    </div>
+                    <div class="teacher-box grid">
+                        <div class="upper">
+                            <div class="image">
+                                <img src="./teachers/martin.jpg" alt="">
+                            </div>
+                            <i class="fa fa-ellipsis-h"></i>
+                            <div class="name">
+                                <h3>paul mutua</h3>
+                                <h4>teacher</h4>
+                            </div>
+                        </div>
+                        <div class="middle">
+                            <span class="one">english</span>
+                            <span class="two">literature</span>
+                        </div>
+                        <div class="lower">
+                           <h4>teacing 3 clases</h4>
+                        </div>
+                    </div>
+                    <div class="teacher-box grid">
+                        <div class="upper">
+                            <div class="image">
+                                <img src="./teachers/martin.jpg" alt="">
+                            </div>
+                            <i class="fa fa-ellipsis-h"></i>
+                            <div class="name">
+                                <h3>paul mutua</h3>
+                                <h4>teacher</h4>
+                            </div>
+                        </div>
+                        <div class="middle">
+                            <span class="one">english</span>
+                            <span class="two">literature</span>
+                        </div>
+                        <div class="lower">
+                           <h4>teacing 3 clases</h4>
+                        </div>
+                    </div>-->

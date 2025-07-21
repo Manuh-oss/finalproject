@@ -1,0 +1,553 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fb;
+  overflow: auto;
+  inset: 0 0 0 0;
+}
+main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+  display: flex;
+}
+.grey {
+  background-color: #f8f9fb;
+}
+
+* {
+  box-sizing: border-box;
+  text-transform: capitalize;
+  text-decoration: none;
+  margin: 0;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+html {
+  font-size: 62.5%;
+}
+:root {
+  --whitesmoke: #e7e7e7;
+  --white: #eee;
+  --light-text: #888888;
+  --light-purple: #884dff;
+  --dark-navy: #151140;
+  --wheat: #ffeed9;
+  --eggshell: #f0ebdb;
+  --gray: #918c91;
+  --darker-navy: #141726;
+  --light-navy: #0052a5;
+  --red: #ed0028;
+  --soft-white: #f6f9fc;
+  --light-gray: #f0f2f5;
+  --light-blue: #eef4fb;
+  --submit-btn: #28c76f;
+  --orange: #ffa726;
+  --dark-text-two: #333;
+  --dark-text-one: #222;
+}
+
+aside {
+  width: 18%;
+  height: 100vh;
+  position: sticky;
+  background-color: var(--light-navy);
+  top: 0;
+}
+.navigation nav {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.navigation nav .head {
+  background-color: var(--light-navy);
+  padding: 1.5rem;
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.navigation nav .body {
+  height: 90%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation nav .body a {
+  width: 100%;
+  padding: 2.1rem 0.8rem;
+  font-size: 1.5rem;
+  color: white;
+  display: flex;
+  position: relative;
+}
+
+.navigation nav .body a .writing {
+  position: absolute;
+  left: 15%;
+  flex-grow: 1;
+}
+
+.navigation nav .body a:hover {
+  background-color: navy;
+}
+
+.main-main {
+  width: 82%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+  overflow: auto;
+  background-color: #fff;
+}
+
+.tittle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: whitesmoke;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.tittle h1 {
+  color: #0052a5;
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 400;
+  display: flex;
+  gap: 0.5rem;
+  height: 100%;
+  align-items: center;
+}
+.tittle h1 .icon {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 3rem;
+  width: 3rem;
+  font-size: 1rem;
+}
+.tittle h1 .icon span {
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+}
+.tittle .icons-profile {
+  flex-grow: 1 1 20rem;
+  display: flex;
+  gap: 1rem;
+  font-size: 1.5rem;
+}
+.tittle .icons-profile i {
+  height: 3rem;
+  width: 3rem;
+  background-color: var(--eggshell);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.tittle .icons-profile span {
+  height: 3rem;
+  width: 3rem;
+  background-color: #e7e7e7;
+  overflow: hidden;
+  cursor: pointer;
+}
+.tittle .icons-profile span img {
+  height: 100%;
+  width: 100%;
+}
+/* tittle styles end here*/
+/* tittle dropdown styles start here*/
+.tittle .search-dropdown {
+  width: 25rem;
+  height: 20rem;
+  background-color: whitesmoke;
+  position: absolute;
+  right: 100%;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.2),
+    -0.5rem -0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+  top: 100%;
+}
+
+.tittle .search-dropdown .search-input {
+  width: 100%;
+  height: 3rem;
+  margin: 1rem 0;
+  overflow: hidden;
+  position: relative;
+  border-radius: 1.5rem;
+  border: 1px solid navy;
+}
+.tittle .search-dropdown .search-input input {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  height: 100%;
+  padding: 0 1rem;
+  caret-color: navy;
+}
+.tittle .search-dropdown .search-input button {
+  background: none;
+  outline: none;
+  border: none;
+  position: absolute;
+  right: 0;
+  height: 100%;
+}
+.tittle .search-dropdown .search-input button i {
+  background: none;
+}
+.tittle .search-dropdown .recents {
+  height: 75%;
+  width: 100%;
+  overflow: hidden;
+}
+.tittle .search-dropdown .recents h3 {
+  font-weight: 400;
+  margin: 0 1rem;
+  color: navy;
+}
+.tittle .search-dropdown .recents ul {
+  height: 100%;
+  width: 90%;
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.tittle .search-dropdown .recents ul li {
+  width: 100%;
+  display: flex;
+  padding: 0 1rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+.tittle .search-dropdown .recents ul li .text {
+  flex-grow: 1;
+  background: none;
+  overflow: auto;
+  white-space: nowrap;
+}
+.tittle .search-dropdown .recents ul li .icon {
+  background: none;
+}
+.tittle .search-dropdown .recents ul li .icon i {
+  background: none;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  margin-right: auto;
+}
+.tittle .search {
+  position: relative;
+}
+/*notification styles start here*/
+.tittle .notification {
+  position: relative;
+}
+
+.tittle .notification .notification-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 24rem;
+  height: 15rem;
+  overflow: auto;
+  display: none;
+}
+
+.tittle .notification .notification-dropdown ul {
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  height: 100%;
+}
+.tittle .notification .notification-dropdown ul .collapsed {
+  display: flex;
+  gap: 1rem;
+  height: 5rem;
+  padding: 0 0.5rem;
+  background-color: #e7e7e7;
+  border-radius: 1.5rem;
+  margin: 0.5rem 0;
+  transition: 0.6s linear;
+}
+.tittle .notification .notification-dropdown ul li .text {
+  overflow: auto;
+  white-space: nowrap;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+}
+.tittle .notification .notification-dropdown ul li .icon {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.tittle .notification .notification-dropdown ul li .icon i {
+  background: none;
+  color: navy;
+}
+.tittle .notification .notification-dropdown ul .expanded {
+  background-color: #e7e7e7;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+.tittle .notification .notification-dropdown ul .expanded .head {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  height: 2rem;
+  font-size: 1.2rem;
+  width: 100%;
+}
+.tittle .notification .notification-dropdown ul .expanded .head i {
+  background: none;
+  color: navy;
+  font-size: 1.4rem;
+}
+.tittle .notification .notification-dropdown ul .expanded .head strong {
+  flex-grow: 1;
+}
+.tittle .notification .notification-dropdown ul .expanded .body {
+  position: relative;
+  height: fit-content;
+  min-height: 7rem;
+  overflow: hidden;
+}
+.tittle .notification .notification-dropdown ul .expanded .body button {
+  position: absolute;
+  bottom: 0.5rem;
+  background: none;
+  border: none;
+  text-transform: capitalize;
+  cursor: pointer;
+  color: navy;
+}
+.errors {
+  border: 1.5px solid red;
+  background-color: #ffe5e5;
+}
+
+.error-message {
+  position: fixed;
+  background: linear-gradient(45deg, #ff4e50, #f9d423);
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.5s ease-in-out;
+  max-width: 400px;
+  width: 100%;
+  z-index: 999;
+}
+
+/* Show error with animation */
+.show-error {
+  top: 30px;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Close button styling */
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 20px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.2);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+#apps {
+  color: navy;
+  font-size: 2rem;
+}
+
+/* Animation for error message */
+@keyframes slideIn {
+  0% {
+    top: -100px;
+    opacity: 0;
+  }
+  100% {
+    top: 30px;
+    opacity: 1;
+  }
+}
+
+.success-message {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, #28a745, #34d058);
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease-in-out;
+  max-width: 400px;
+  width: 100%;
+  z-index: 999;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.show-success {
+  top: 30px;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 1100px) {
+  .navigation nav .body a .writing {
+    left: 18%;
+    position: absolute;
+  }
+}
+
+@media (min-width: 1025px) {
+  header {
+    display: none;
+  }
+}
+
+@media (max-width: 1025px) {
+  header {
+    position: sticky;
+    width: 100%;
+    background-color: #0052a5;
+    height: 8rem;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    top: 0;
+  }
+  header .header-tittle {
+    flex-grow: 1;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: #eee;
+  }
+  header .open {
+    font-size: 2rem;
+    color: #eee;
+    cursor: pointer;
+  }
+  .navigation {
+    position: fixed;
+    width: 40vw;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease, width 0.4s ease, visibility 0.4s ease;
+    background-color:#0052a5da ;
+  }
+  .tittle {
+    min-width: 100vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .success-message,
+  .error-message {
+    width: 50%;
+    height: 3rem;
+    font-size: 1.2rem;
+    display: grid;
+    place-items: center;
+    padding: 0;
+  }
+  .success-message span,
+  .error-message span {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .close-btn {
+    display: none;
+  }
+  .navigation {
+    width: 0vw;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease, width 0.4s ease, visibility 0.4s ease;
+  }
+}
+
+@media print {
+  aside{
+    display: none;
+  }
+  .tittle{
+    display: none;
+  }
+  header{
+    display: none;
+  }
+  .main-main{
+    overflow: visible !important;
+    height: auto !important; /* <-- Add this */
+    max-height: none !important;
+    min-height: auto;
+  }
+  main{
+     overflow: visible !important;
+    height: auto !important; /* <-- Add this */
+    max-height: none !important;
+    min-height: auto;
+  }
+}

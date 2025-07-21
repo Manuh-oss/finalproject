@@ -1,0 +1,93 @@
+.main{
+    padding: 0 2rem;
+}
+
+.statistics-graphs{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 2rem;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    height: 100%;
+    padding-bottom: 2rem;
+    align-items: center;
+}
+
+.statistics-graphs .uppers{
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.statistics-graphs .uppers .overflow{
+    min-width: 60rem;
+    width: 100%;
+    flex: 1 1 0;
+}
+
+.statistics-graphs canvas{
+    flex: 1 1 0;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.statistics-graphs .class{
+    flex-grow: 1;
+    width: 85%;
+}
+
+.statistics-graphs .lower{
+    display: flex;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.statistics-graphs .lower .child{
+    flex: 1 1 0;
+    height: fit-content;
+    min-height: 25rem;
+    display: grid;
+    place-items: center;
+}
+
+#all-students{
+    max-height: 250rem;
+    max-width: 25rem;
+}
+
+@media (max-width:1025px) {
+    .main-main{
+        min-width: 100%;
+    }
+}
+
+@media (max-width:625px) {
+    .statistics-graphs .lower{
+        flex-direction: column;
+    } 
+    .statistics-graphs .uppers{
+        flex:1 ;
+        min-height: 30rem;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .statistics-graphs .lower{
+        flex: 1;
+    }
+    .statistics-graphs .class{
+        flex: 1;
+        min-height: 30rem;
+    }
+    .statistics-graphs .lower .child{
+        min-height: 0;
+        flex:  1;
+        width: 100%;
+    }
+    .statistics-graphs canvas{
+        max-height: 100%;
+        width: fit-content;
+    }
+}

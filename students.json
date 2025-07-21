@@ -1,0 +1,101 @@
+[
+    {
+        "id": "7",
+        "firstname": "jeremiah",
+        "middlename": "mbakire",
+        "lastname": "muia",
+        "profileImage": "profileImages\/martin.jpg",
+        "admission": "10815",
+        "class": "3",
+        "stream": "222",
+        "gender": "male"
+    },
+    {
+        "id": "8",
+        "firstname": "austin",
+        "middlename": "owade",
+        "lastname": "omondi",
+        "profileImage": "profileImages\/richard.jpg",
+        "admission": "6311",
+        "class": "3",
+        "stream": "111",
+        "gender": "male"
+    },
+    {
+        "id": "9",
+        "firstname": "kelvin",
+        "middlename": "mumo",
+        "lastname": "makau",
+        "profileImage": "profileImages\/dennis.jpg",
+        "admission": "5945",
+        "class": "4",
+        "stream": "111",
+        "gender": "male"
+    },
+    {
+        "id": "10",
+        "firstname": "victor",
+        "middlename": "wahome",
+        "lastname": "gichogi",
+        "profileImage": "profileImages\/martin.jpg",
+        "admission": "3665",
+        "class": "4",
+        "stream": "111",
+        "gender": "male"
+    },
+    {
+        "id": "11",
+        "firstname": "john",
+        "middlename": "mumo",
+        "lastname": "muia",
+        "profileImage": "profileImages\/martin.jpg",
+        "admission": "1234",
+        "class": "4",
+        "stream": "222",
+        "gender": "male"
+    },
+    {
+        "id": "12",
+        "firstname": "timothy",
+        "middlename": "mwangi",
+        "lastname": "nduati",
+        "profileImage": "profileImages\/dennis.jpg",
+        "admission": "5889",
+        "class": "2",
+        "stream": "333",
+        "gender": "male"
+    },
+    {
+        "id": "13",
+        "firstname": "faith",
+        "middlename": "wacici",
+        "lastname": "mureithi",
+        "profileImage": "profileImages\/mumbi.jpg",
+        "admission": "6320",
+        "class": "1",
+        "stream": "111",
+        "gender": "female"
+    },
+    {
+        "id": "14",
+        "firstname": "levin",
+        "middlename": "kiprono",
+        "lastname": "koech",
+        "profileImage": "profileImages\/richard.jpg",
+        "admission": "5404",
+        "class": "1",
+        "stream": "222",
+        "gender": "male"
+    },
+    {
+        "id": "15",
+        "firstname": "christian",
+        "middlename": "wambua",
+        "lastname": "muthama",
+        "profileImage": "profileImages\/martin.jpg",
+        "admission": "5788",
+        "class": "4",
+        "stream": "111",
+        "gender": "male"
+    }
+]

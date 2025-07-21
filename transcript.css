@@ -1,0 +1,92 @@
+.main{
+    width: 100%;
+    height: 100%;
+    gap: 2rem;
+    padding:0 2rem;
+}
+
+.container{
+    width: 100%;
+    min-width: 60rem;
+    flex-grow: 1;
+}
+
+.centralise{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: #fff;
+    min-height: 100%;
+    border: 1px solid #d1d5db;
+    padding: 2rem;
+    border-radius: 1rem;
+    min-height: fit-content;
+}
+
+.container .canvas{
+    width: 100%;
+    height: 100%;
+}
+
+.select{
+    width: 100%;
+    justify-content: space-between;
+    color: #2d3e50;
+    font-size: 1.5rem;
+    display: flex;
+}
+
+.select select{
+    height: 4rem;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    outline: none;
+    padding: 0 1rem;
+}
+
+.select h2{
+    font-weight: 400;
+}
+
+.main canvas{
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (max-width:1025px){
+    .main-main{
+        min-width: 100%;
+    }
+}
+
+@media (max-width:600px) {
+    .main{
+        padding: 0 1rem;
+    }
+    .centralise{
+        padding: 2rem 1rem;
+    }
+    .container{
+        min-width: 100%;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .select{
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    .select h2{
+        flex: 1 1 0;
+        overflow: auto;
+        white-space: nowrap;
+        font-size: 1.6rem;
+        font-weight: 500;
+    }
+    .container .canvas{
+        min-width: 60rem;
+    }
+}

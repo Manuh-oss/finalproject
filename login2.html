@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css">
+    <link rel="stylesheet" href="login2.css">
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css">
+</head>
+<body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>  
+<main>
+  <div class="logo">
+    <img src="images/images (4).png" />
+  </div>
+
+  <div class="login-box-container">
+    <div class="box" id="student">
+        <h1>Student's login</h1>
+      <span>
+        <input type="text" placeholder="enter your username" id="s-username">
+        <i class="fa fa-user"></i>
+      </span>  
+      <span>
+        <input type="password" placeholder="password" id="s-password">
+        <i class="fa fa-lock"></i>
+      </span> 
+      <div class="redirections">
+        <button type="button" class="student">student login</button>
+        <button type="button" class="teacher">teacher login</button>
+      </div>
+      <div class="login-btn">
+        <button type="button" class="login">login</button>
+        <a href="#">forgot password</a>
+      </div>
+    </div>
+    <div class="box" id="teacher">
+        <h1>Teacher's login</h1>
+      <span>
+        <input type="text" placeholder="enter your username" id="t-username">
+        <i class="fa fa-envelope"></i>
+      </span>  
+      <span>
+        <input type="password" placeholder="password" id="t-password">
+        <i class="fa fa-key"></i>
+      </span> 
+      <div class="redirections">
+        <button type="button" class="student">student login</button>
+        <button type="button" class="teacher">teacher login</button>
+      </div>
+      <div class="login-btn">
+        <button type="button" class="login">login</button>
+        <a href="#">forgot password</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bubbles">
+      <img src="./images/party.png" />
+      <img src="./images/bubble.png" />
+      <img src="./images/party.png" />
+      <img src="./images/party.png" />
+      <img src="./images/bubble.png" />
+      <img src="./images/party.png" />
+      <img src="./images/bubble.png" />
+  </div>
+
+</main> 
+<script src="login.js"></script>    
+</body>
+</html>

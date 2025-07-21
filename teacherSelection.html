@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="selection.css" />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+  </head>
+  <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span><i class="fa fa-user-graduate"></i></span>
+              highschool</strong
+            >
+          </div>
+          <div class="body">
+            <a href="#"
+              ><i class="fa fa-home"></i>
+              <span class="writing">Dashboard</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-user"></i>
+              <span class="writing">profile</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-upload"></i>
+              <span class="writing">marks</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-book"></i> <span class="writing">Result</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-clock"></i> <span class="writing">quiz</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-pen"></i> <span class="writing">notes</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-chair"></i>
+              <span class="writing">assignment</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-calendar"></i>
+              <span class="writing">event</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-table"></i>
+              <span class="writing">Timetable</span></a
+            >
+          </div>
+        </nav>
+      </aside>
+      <div class="main-main" style="background-color: #f8f9fb">
+        <div class="tittle">
+          <h1>
+            <i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i
+            ><i class="fa fa-ellipsis-v"></i> Event
+          </h1>
+          <div class="icons-profile">
+            <div class="search">
+              <i class="fa fa-search fa-beat open-search"></i>
+              <div class="search-dropdown hide">
+                <form class="search-input">
+                  <input
+                    type="text"
+                    name="search"
+                    id=""
+                    class="search"
+                    required
+                  />
+                  <button type="submit" class="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+
+                <div class="recents">
+                  <h3>recent search</h3>
+                  <ul>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="notification">
+              <i class="fa-regular fa-bell"></i>
+              <div class="notification-dropdown closed">
+                <ul>
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <i class="fa fa-cog fa-spin"></i>
+            <span class="profile-box">
+              <img src="./teachers/martin.jpg" alt="" />
+            </span>
+          </div>
+        </div>
+        <form class="main">
+          <div class="centralise">
+            <div class="select">
+              <span>
+                <strong>class:</strong>
+                <select name="class" id="class" class="required">
+                  <option value="">--choose class--</option>
+                  <option value="1">Form1</option>
+                  <option value="2">Form2</option>
+                  <option value="3">Form3</option>
+                  <option value="4">Form4</option>
+                </select>
+              </span>
+              <span>
+                <strong>stream:</strong>
+                <select name="stream" id="stream" class="required">
+                  <option value="">--choose class--</option>
+                  <option value="111">green</option>
+                  <option value="222">blue</option>
+                  <option value="333">red</option>
+                  <option value="433">purple</option>
+                </select>
+              </span>
+            </div>
+
+            <div class="grid-container container">
+              <div class="subject-grid">
+                <div class="text">english</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">kiswahili</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">mathematics</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">chemistry</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">biology</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">physics</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">geography</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">history</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">cre</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">computer</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">agriculture</div>
+              </div>
+
+              <div class="subject-grid">
+                <div class="text">french</div>
+              </div>
+            </div>
+
+            <div class="selection-table table">
+              <table>
+                <caption>
+                  student selection sheet
+                </caption>
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" name="" id="checkAll" />
+                    </th>
+                    <th>A.D.N</th>
+                    <th>Name</th>
+                    <th class="remove">class</th>
+                    <th class="remove">stream</th>
+                    <th class="remove">gender</th>
+                    <th class="remove">teacher</th>
+                    <th>status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <input type="hidden" name="subject" id="subject" />
+            </div>
+
+            <div class="submit-btn">
+              <button type="button" class="back">back</button>
+              <button type="button" class="submit-bt">submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+    <script>
+      const parent = document.querySelector(".grid-container");
+      const children = parent.children;
+      const subjectGrid = parent.querySelectorAll(".subject-grid");
+      const delay = 0.2;
+      const classSelect = document.getElementById("class");
+      const streamSelect = document.getElementById("stream");
+      const form = document.querySelector(".main");
+      const subjectContainers = document.querySelectorAll(".subject-all");
+      const tableContainers = document.querySelectorAll(".table");
+      const improvedError = document.getElementById("error-message");
+      const improvedSuccess = document.getElementById("success-message");
+      const closePopup = document.querySelectorAll(".close-btn");
+      const backBtn = document.querySelector(".back");
+      const array = [];
+      const submitBtn = document.querySelector(".submit-bt");
+
+      const colors = [
+        "#AEDFF7",
+        "#F4D19B",
+        "#CFF2E1",
+        "#B2EBF2",
+        "#D1F2A5",
+        "#B0C4DE",
+        "#DDECC9",
+        "#E6CFC1",
+        "#E4DEF3",
+        "#F9E7C3",
+        "#D0E6B3",
+        "#F8C8DC",
+        "#A7FOF9",
+      ];
+
+      //this sets a tranition delay to every child
+      for (let x = 0; x < children.length; x++) {
+        children[x].style.transitionDelay = `${delay * x}` + "s";
+        children[x].style.backgroundColor = colors[x];
+        children[x].style.border = "none";
+        children[x].textContent =
+          children[x].querySelector(".text").textContent;
+      }
+
+      window.addEventListener("load", function () {
+        subjectGrid.forEach((element) => {
+          element.style.opacity = "1";
+          element.style.transform = "scale(1)";
+        });
+      });
+
+      const checkAllCheckbox = document.getElementById("checkAll");
+      const itemCheckboxes = document.querySelectorAll(".itemCheckbox");
+
+      function updateMainCheckBox() {
+        checkAllCheckbox.checked = Array.from(itemCheckboxes).every(
+          (box) => box.checked
+        );
+      }
+
+      function postSelectionForm() {
+        console.log("am called");
+        const formData = new FormData(form);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "selection.php", true);
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            if (response.type === true) {
+              showSuccessMessage("student subject selection was successfull");
+            } else if (response.type === false) {
+              showErrorMessage("an error just occured");
+              console.log(response.message);
+            }
+          }
+        };
+        xhr.send(formData);
+      }
+
+      function getStudents(userClassSelect, userStreamSelect, check) {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "students.php", true);
+
+        let checkBox = "";
+        let arrays = [];
+
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            const response = JSON.parse(xhr.responseText);
+
+            document.querySelector(".selection-table table tbody").innerHTML =
+              "";
+
+            const sortClass = response.filter(
+              (newclass) => newclass.class == userClassSelect
+            );
+            const sortStream = sortClass.filter(
+              (newstream) => newstream.stream == userStreamSelect
+            );
+
+            for (let z = 0; z < sortStream.length; z++) {
+              switch (sortStream[z].class) {
+                case "1":
+                  sortStream[z].class = "form1";
+                  break;
+                case "2":
+                  sortStream[z].class = "form2";
+                  break;
+                case "3":
+                  sortStream[z].class = "form3";
+                  break;
+                case "4":
+                  sortStream[z].class = "form4";
+                  break;
+              }
+              switch (sortStream[z].stream) {
+                case "111":
+                  sortStream[z].stream = "green";
+                  break;
+                case "222":
+                  sortStream[z].stream = "blue";
+                  break;
+                case "333":
+                  sortStream[z].stream = "red";
+                  break;
+                case "444":
+                  sortStream[z].stream = "purple";
+                  break;
+              }
+
+              const tableRow = document.createElement("tr");
+
+              tableRow.innerHTML = `
+               <td>
+                  <input type="checkbox" name="" class="itemCheckbox" onclick="updateMainCheckBox()">
+                </td>
+                <td>${sortStream[z].admission}</td>
+                <td>${sortStream[z].firstname} ${sortStream[z].middlename} ${sortStream[z].lastname}</td>
+                <td class="remove">${sortStream[z].class} </td>
+                <td class="remove">${sortStream[z].stream}</td>
+                <td class="remove">${sortStream[z].gender}</td>
+                <td class="remove">mr paul</td>
+                <td>selected</td>
+                <td class="hidden"><input type="text" name="selections[]" id="" class="selects"></td>
+                <td class="hidden"><input type="text" name="admissions[]" id="" class=""value="${sortStream[z].admission}"></td>
+                <td class="hidden"><input type="text" name="ids[]" id="" class="" value="${sortStream[z].id}""></td>
+            `;
+              checkBox =
+                tableRow.firstElementChild.querySelector(".itemCheckbox");
+              document
+                .querySelector(".selection-table table tbody")
+                .appendChild(tableRow);
+              arrays.push(checkBox);
+            }
+          }
+
+          const allInputs = document.querySelectorAll(".selects");
+          arrays.forEach((item) => {
+            const display = item.parentElement.parentElement.children[7];
+            if (check) {
+              allInputs.forEach((input) => {
+                input.value = "selected";
+                display.style.color = "green";
+                display.innerHTML = `<i class="fa fa-check"></i> selected`;
+              });
+            } else {
+              allInputs.forEach((input) => {
+                input.value = "not-selected";
+                display.style.color = "red";
+                display.innerHTML = `<i class="fa fa-times"></i> dropped`;
+              });
+            }
+          });
+
+          checkAllCheckbox.checked = arrays.every((box) => box.checked);
+
+          arrays.forEach((check) => {
+            check.addEventListener("change", function () {
+              let ischecked = this.checked;
+              const display = this.parentElement.parentElement.children[7];
+              const input =
+                this.parentElement.parentElement.querySelector(".selects");
+
+              if (ischecked) {
+                display.style.color = "green";
+                display.innerHTML = `<i class="fa fa-check"></i> selected`;
+                input.value = "selected";
+              } else {
+                display.style.color = "red";
+                display.innerHTML = `<i class="fa fa-times"></i> dropped`;
+                input.value = "not-selected";
+              }
+            });
+          });
+        };
+
+        xhr.send();
+      }
+
+      function checkUserInput() {
+        classSelect.addEventListener("input", function (e) {
+          const userCselect = e.target.value;
+
+          streamSelect.addEventListener("input", function (e) {
+            const userSselect = e.target.value;
+            console.log(subject);
+            let allChecked = false;
+            getStudents(userCselect, userSselect, allChecked, subject);
+          });
+        });
+      }
+
+      function checkInputFilled(user, text) {
+        const selectInputs = document.querySelectorAll(".required");
+        selectInputs.forEach((item) => item.classList.remove("errors"));
+        selectInputs.forEach((selectInput) => {
+          let allIsfilled = false;
+          if (selectInput.value.trim() === "") {
+            allIsfilled = false;
+            selectInput.classList.add("errors");
+          } else {
+            allIsfilled = true;
+          }
+          if (allIsfilled) {
+            getLessonExample(user, text);
+          } else {
+            showErrorMessage("please select all input fields");
+          }
+        });
+      }
+
+      function getLessonExample(username, subject) {
+        const lessonXhr = new XMLHttpRequest();
+        lessonXhr.open("POST", "lesson.php", true);
+        checkUserInput(subject);
+        lessonXhr.onload = () => {
+          if (lessonXhr.status == 200) {
+            const lessonResponse = JSON.parse(lessonXhr.responseText);
+            const myLessons = lessonResponse.filter(
+              (l) => l.teacherCode === username
+            );
+            const found = myLessons.find(
+              (t) =>
+                t.class === classSelect.value &&
+                t.subject === subject &&
+                t.stream === streamSelect.value
+            );
+            if (found) {
+              hideSubjects();
+              checkUserInput();
+              showSuccessMessage("access granted");
+            } else {
+              showErrorMessage("access denied");
+            }
+          }
+        };
+
+        lessonXhr.send();
+      }
+
+      function getUsername(user) {
+        Array.from(children).forEach((child) => {
+          child.addEventListener("click", function () {
+            const text = this.textContent.trim();
+            checkInputFilled(user, text);
+            document.getElementById("subject").value = text;
+          });
+        });
+      }
+
+      function hideSubjects() {
+        parent.style.display = "none";
+        document.querySelector(".select").style.display = "none";
+        document.querySelector(".selection-table").style.display = "flex";
+        document.querySelector(".submit-btn").style.display = "flex";
+      }
+
+      function hideTable() {
+        parent.style.display = "grid";
+        document.querySelector(".select").style.display = "flex";
+        document.querySelector(".selection-table").style.display = "none";
+        document.querySelector(".submit-btn").style.display = "none";
+      }
+
+      function getTCode() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "saved_user.php", true);
+        xhr.onload = () => {
+          if (xhr.status == 200) {
+            const tcode = JSON.parse(xhr.responseText);
+            getUsername(tcode.code);
+          }
+        };
+        xhr.send();
+      }
+
+      function showErrorMessage(message) {
+        improvedError.classList.add("show-error");
+        improvedError.querySelector("#error-text").textContent =
+          message || "an error just occurred";
+
+        setTimeout(hideErrorMessage, 5000);
+      }
+
+      function hideErrorMessage() {
+        improvedError.classList.remove("show-error");
+        improvedSuccess.classList.remove("show-error");
+      }
+
+      function hideSuccessMessage() {
+        improvedSuccess.classList.remove("show-success");
+        improvedError.classList.remove("show-error");
+      }
+
+      function showSuccessMessage(messages) {
+        improvedSuccess.classList.add("show-success");
+        improvedSuccess.querySelector("#error-text").textContent =
+          messages || "congrats!";
+
+        setTimeout(hideSuccessMessage, 5000);
+      }
+
+      backBtn.addEventListener("click", () => {
+        hideTable();
+        window.location.reload();
+      });
+
+      submitBtn.addEventListener("click", postSelectionForm);
+      hideTable();
+      checkUserInput();
+      getTCode();
+    </script>
+  </body>
+</html>

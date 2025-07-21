@@ -1,0 +1,92 @@
+[
+    {
+        "teacherCode": "T\/HM\/9908",
+        "subject": "cre",
+        "class": "3",
+        "stream": "222"
+    },
+    {
+        "teacherCode": "T\/HM\/9908",
+        "subject": "cre",
+        "class": "1",
+        "stream": "222"
+    },
+    {
+        "teacherCode": "T\/HM\/0002",
+        "subject": "kiswahili",
+        "class": "3",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/0002",
+        "subject": "kiswahili",
+        "class": "2",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/0001",
+        "subject": "history",
+        "class": "4",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/0001",
+        "subject": "cre",
+        "class": "4",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/0001",
+        "subject": "biology",
+        "class": "4",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/0001",
+        "subject": "biology",
+        "class": "3",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/MD\/1982",
+        "subject": "mathematics",
+        "class": "3",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/MD\/1982",
+        "subject": "chemistry",
+        "class": "3",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/7729",
+        "subject": "geography",
+        "class": "3",
+        "stream": "111"
+    },
+    {
+        "teacherCode": "T\/HM\/9908",
+        "subject": "cre",
+        "class": "4",
+        "stream": "333"
+    },
+    {
+        "teacherCode": "T\/HM\/9908",
+        "subject": "cre",
+        "class": "3",
+        "stream": "433"
+    },
+    {
+        "teacherCode": "T\/HM\/0002",
+        "subject": "kiswahili",
+        "class": "3",
+        "stream": "433"
+    },
+    {
+        "teacherCode": "T\/HM\/0002",
+        "subject": "cre",
+        "class": "3",
+        "stream": "111"
+    }
+]

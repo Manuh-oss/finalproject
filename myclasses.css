@@ -1,0 +1,394 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+  align-items: center;
+  color: #2d3e50;
+  height: 100%;
+}
+
+.main .centralise {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #d1d5db;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-grow: 1;
+}
+
+.main .centralise .head {
+  width: 100%;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+
+.main .centralise .head button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+  height: 4rem;
+  font-size: 1.5rem;
+}
+
+.main .centralise .head .myclasses {
+  border-bottom: 2px solid navy;
+  color: navy;
+}
+
+.top-students {
+  transition: height 0.5s linear;
+}
+
+.main .centralise .body {
+  flex-grow: 1;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.main .centralise .table {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-width: 60rem;
+}
+
+.main .centralise .body .table table {
+  flex: 1 1 0;
+  border-collapse: collapse;
+  border: 1px solid #d1d5db;
+}
+
+.main .centralise .body .table table th {
+  height: 4rem;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #d1d5db;
+  background-color: var(--light-gray);
+}
+
+.main .centralise .body .table table td {
+  height: 4rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main .centralise .view {
+  color: #3b82f6;
+  border: none;
+  background: none;
+  text-decoration: underline;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  height: 3.5rem;
+  padding: 0 1.5rem;
+}
+
+.main .centralise table tbody tr:nth-child(even) {
+  background-color: var(--light-gray);
+  border-bottom: 1px dotted #2d3e50;
+}
+
+.main .centralise table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+  border-bottom: 1px dotted #2d3e50;
+}
+
+/*view class styles start here*/
+.main .view-class {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.main .select {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+}
+
+.main .select span {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #2d3e50;
+}
+
+.main .select span strong {
+  font-size: 1.5rem;
+}
+
+.main .select select {
+  min-height: 4rem;
+  background-color: #f1f5f9;
+  border: 1px solid #d1d5db;
+  outline: none;
+  padding: 0 1rem;
+  flex: 1 1 0;
+  width: 100%;
+}
+
+.analysis-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.analysis-box .box {
+  width: 75%;
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+.analysis-box .box ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0;
+}
+
+.analysis-box .box ul li {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  height: 4rem;
+  align-items: center;
+}
+
+.analysis-box .box ul li .progress {
+  flex: 1 1 0;
+  background-color: #eee;
+  height: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+}
+
+.analysis-box .box ul li .progress .juice {
+  height: 100%;
+  width: 0%; /* initial value, overridden by inline style */
+  transition: width 0.3s ease;
+  background-color: green; /* overridden by inline style */
+}
+
+.analysis-box .box p:not(.tally) {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.view-class .top-students {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.view-class .top-students .overflow {
+  width: 100%;
+  overflow: auto;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+}
+
+.view-class .top-students .table {
+  width: 80%;
+  display: flex;
+  min-width: 60rem;
+  justify-content: flex-start;
+}
+.view-class .top-students .table table {
+  flex: 1 1 0;
+  border-collapse: collapse;
+}
+.view-class .top-students .table table th {
+  background-color: var(--light-navy);
+  color: #eee;
+  padding: 1.5rem;
+  font-size: 1.3rem;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.main .view-class .top-students .table table tr:nth-child(even) {
+  background-color: #e7e7e7;
+}
+
+.main .view-class .top-students .table table tr:nth-child(odd) {
+  background-color: #f4f4f4;
+}
+
+.main .view-class .top-students .table table tr td {
+  padding: 1.5rem;
+  font-size: 1.3rem;
+  text-align: center;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.main .view-class .top-students .table table tr td:nth-child(3) {
+  min-width: 10rem;
+  text-align: left;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.main .view-class .top-students .button {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.main .view-class .top-students .button button {
+  height: 4rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+}
+
+.view-class .statistic {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.view-class .statistic .buttons {
+  display: flex;
+  gap: 2rem;
+  width: 80%;
+  justify-content: space-between;
+}
+
+.view-class .statistic .buttons button {
+  flex: 1 1 0;
+  height: 4rem;
+  border: 1px solid #d1d5db;
+}
+
+.graphs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.graphs-section canvas {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.graphs-section .other-teachers {
+  flex-grow: 1;
+  display: grid;
+  place-items: center;
+}
+
+.graphs-section .gender {
+  display: flex;
+  flex-grow: 1;
+  gap: 2rem;
+}
+
+.graphs-section .gender .child {
+  flex: 1 1 0;
+  display: grid;
+  place-items: center;
+}
+
+.overflows {
+  min-width: 60rem;
+  display: flex;
+  justify-content: center;
+}
+
+#total-students {
+  max-height: 25rem;
+  max-width: 25rem;
+}
+
+.buttonz {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonz button {
+  background-color: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  height: 3.5rem;
+  padding: 0 1.5rem;
+}
+/*view class styles end her*/
+
+@media (max-width: 1025px) {
+  .main-main {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 850px) {
+  .main .view-class .top-students .button {
+    width: 90%;
+  }
+  .view-class .top-students .table {
+    width: 90%;
+  }
+}
+
+@media (max-width: 700px) {
+  .analysis-box .box {
+    width: 95%;
+  }
+  .view-class .top-students .overflow {
+    justify-content: flex-start;
+  }
+  .main .view-class .top-students .button {
+    width: 100%;
+  }
+  .graphs-section .other-teachers {
+    overflow: auto;
+    white-space: nowrap;
+    min-height: fit-content;
+  }
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 0 1rem;
+  }
+  .main .centralise {
+    padding: 2rem 1rem;
+  }
+  .analysis-box .box {
+    width: 100%;
+  }
+  .graphs-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .graphs-section .gender {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .graphs-section .gender {
+    min-height: fit-content;
+  }
+}
