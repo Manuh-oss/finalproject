@@ -81,6 +81,22 @@ main .logo img {
     font-size: 7rem;
     font-family: sans-serif;
     color: #f0f0f0;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: width 3s linear infinite;
+    animation-delay: 1s;
+}
+
+@keyframes width {
+    0%{
+        width: 0%;
+    }
+    50%{
+        width: 50%;
+    }
+    100%{
+        width: 100%;
+    }
 }
 
 .login-container .box .left p{
@@ -113,6 +129,7 @@ main .logo img {
     align-items: center;
     gap: 2.5rem;
     width: 30rem;
+    overflow: hidden;
 }
 
 .login-box .fa-user{
@@ -147,8 +164,13 @@ main .logo img {
     height: 100%;
     border-radius: 2rem;
     width: 100%;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     color: rgba(255, 255, 255, .9);
+}
+
+.login-box span input::placeholder{
+    color: rgba(255, 255, 255, .9);
+    text-transform: capitalize;
 }
 
 .login-box button{
@@ -160,4 +182,11 @@ main .logo img {
     width: 8rem;
     border-radius: 1.5rem;
     color: #fff;
+}
+
+.login-box .login{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
 }
