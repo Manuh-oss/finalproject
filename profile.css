@@ -462,6 +462,9 @@ table .status{
         display: grid;
         grid-template-columns: repeat(1 , 1fr);
     }
+    .main .profile-container .down .links .box{
+        align-items: center;
+    }
     .main .change{
         max-height: fit-content;
         margin: 0 2rem 2rem;
@@ -496,6 +499,9 @@ table .status{
     .centralise h2{
         font-size: 1.5rem;
         font-weight: 500;
+    }
+    .main .profile-container .down .links span{
+        justify-content: center;
     }
 }
 

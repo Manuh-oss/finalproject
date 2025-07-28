@@ -4,27 +4,69 @@
   <title>Rainbow Font Awesome Icon</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .rainbow-icon {
-      font-size: 100px;
-      background: linear-gradient(
-        45deg,
-        red,
-        orange,
-        yellow,
-        green,
-        blue,
-        indigo,
-        violet
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;
-    }
+.gradient-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  background-color: white; /* White gaps show */
+}
+
+.child {
+  flex: 1;
+  height: 100px;
+  background-image: linear-gradient(90deg, #ff6a00, #ee0979);
+  background-size: 500% 100%; /* Spread across 5 children */
+  background-repeat: no-repeat;
+  border-radius: 8px;
+}
+
+.child:nth-child(1) { background-position: 0% 0; }
+.child:nth-child(2) { background-position: 25% 0; }
+.child:nth-child(3) { background-position: 50% 0; }
+.child:nth-child(4) { background-position: 75% 0; }
+.child:nth-child(5) { background-position: 100% 0; }
+
+
+
+
+
+
   </style>
 </head>
 <body>
+<div id="drag" style="width:100px;height:100px;background:lightblue;position:absolute;cursor:grab;">
+  Drag Me
+</div>
 
-  <i class="fas fa-star rainbow-icon"></i>
+
+<script>
+  const box = document.getElementById('drag');
+
+let offsetX, offsetY, isDragging = false;
+
+box.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  offsetX = e.clientX - box.offsetLeft;
+  offsetY = e.clientY - box.offsetTop;
+  box.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    box.style.left = `${e.clientX - offsetX}px`;
+    box.style.top = `${e.clientY - offsetY}px`;
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  box.style.cursor = 'grab';
+});
+
+</script>
+
+
 
 </body>
 </html>

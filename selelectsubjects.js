@@ -129,10 +129,7 @@ function displayTeachers(array) {
       array.forEach((teacher, i) => {
         const newDiv = document.createElement("div");
 
-        const profileImage =
-          teacher.profileImage === ""
-            ? "./teachers/profileimage.png"
-            : teacher.profileImage;
+        const profileImage = teacher.profileImage || "./teachers/profileimage.png";
         const myLessons = lessons.filter(
           (l) => l.teacherCode === teacher.teacherCode
         );

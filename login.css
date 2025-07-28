@@ -57,7 +57,6 @@ main .logo img {
 .login-container .box .left {
   flex: 1 1 0;
   padding: 3rem;
-  border-right: 2px solid rgba(255, 255, 255, 0.5);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -67,6 +66,7 @@ main .logo img {
   flex-grow: 1;
   min-height: 10rem;
   position: relative;
+  max-height: 15rem;
 }
 
 .login-container .box .left .line {
@@ -120,6 +120,8 @@ main .logo img {
   flex: 1 1 0;
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  border-left: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .right .login-box {
@@ -129,7 +131,10 @@ main .logo img {
   align-items: center;
   gap: 2.5rem;
   width: 30rem;
-  overflow: hidden;
+  position: relative;
+  transform: scale(0.5) translateX(160%);
+  opacity: 0;
+  transition: transform 1s linear,opacity 1s linear;
 }
 
 .login-box .fa-user {
@@ -166,6 +171,7 @@ main .logo img {
   width: 100%;
   padding: 0 1.5rem;
   color: rgba(255, 255, 255, 0.9);
+  text-transform: none;
 }
 
 .login-box span input::placeholder {
@@ -189,24 +195,85 @@ main .logo img {
   flex-direction: column;
   gap: 2rem;
   width: 100%;
-  transform: translateX(100%) scale(0.8);
-  opacity: 0;
-  transition: transform 1s linear, opacity 1s linear;
 }
 
 .verify {
-  width: 100%;
+  width: 30rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  font-size: 1.5rem;
+  gap: 2rem;
   align-items: center;
-  transform: translateX(100%) scale(0.8);
+  padding: 2rem 0;
+  transform: scale(0.8) translateX(160%);
   opacity: 0;
-  transition: transform 1s linear, opacity 1s linear;
+  transition: transform 1s linear,opacity 1s linear;
 }
 
-.active {
+.verify .fa-envelope{
+  height: 9rem;
+  width: 9rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 2rem;
+}
+
+.verify .text{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-family: sans-serif;
+  color: gainsboro;
+  font-size: 1.5rem;
+  text-transform: none;
+}
+
+.verify .inputs{
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  height: 4rem;
+}
+
+.verify .inputs input{
+  width: 4rem;
+  outline: none;
+  text-align: center;
+  background: none;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+.verify .inputs input:focus{
+  border: 1px solid #fff;
+}
+
+.mail{
+  font-size: 1.2rem;
+  text-transform: none;
+}
+
+.verify .btn{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.verify .btn button{
+  height: 3rem;
+  background: none;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 1.5rem;
+}
+
+.active{
   opacity: 1;
   transform: translateX(0) scale(1);
 }

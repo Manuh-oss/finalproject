@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="aside.css" />
+    <link rel="stylesheet" href="setup.css" />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+  </head>
+  <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <header class="mobile-tablet">
+      <div class="header-tittle">
+        <i class="fa fa-school"></i>
+        <h2>highschool</h2>
+      </div>
+      <div class="open">
+        <span><i class="fa fa-bars"></i></span>
+      </div>
+    </header>
+    <main>
+      <aside class="navigation">
+        <nav class="navigation-container">
+          <div class="head">
+            <strong>
+              <span><i class="fa fa-user-graduate"></i></span>
+              highschool</strong
+            >
+          </div>
+          <div class="body">
+            <a href="#"
+              ><i class="fa fa-home"></i>
+              <span class="writing">Dashboard</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-user"></i>
+              <span class="writing">profile</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-upload"></i>
+              <span class="writing">marks</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-book"></i> <span class="writing">Result</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-clock"></i> <span class="writing">quiz</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-pen"></i> <span class="writing">notes</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-chair"></i>
+              <span class="writing">assignment</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-calendar"></i>
+              <span class="writing">event</span></a
+            >
+            <a href="#"
+              ><i class="fa fa-table"></i>
+              <span class="writing">Timetable</span></a
+            >
+          </div>
+        </nav>
+      </aside>
+
+      <div class="main-main" style="background-color: #f8f9fb">
+        <div class="tittle">
+          <h1>
+            <i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i
+            ><i class="fa fa-ellipsis-v"></i> upload marks
+          </h1>
+          <div class="icons-profile">
+            <div class="search">
+              <i class="fa fa-search fa-beat open-search"></i>
+              <div class="search-dropdown hide">
+                <form class="search-input">
+                  <input
+                    type="text"
+                    name="search"
+                    id=""
+                    class="search"
+                    required
+                  />
+                  <button type="submit" class="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+
+                <div class="recents">
+                  <h3>recent search</h3>
+                  <ul>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                    <li>
+                      <span class="text">mAT 121 course</span
+                      ><span class="icon"
+                        ><i class="fa-regular fa-trash-alt"></i
+                      ></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="notification">
+              <i class="fa-regular fa-bell"></i>
+              <div class="notification-dropdown closed">
+                <ul>
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+
+                  <li class="collapsed">
+                    <div class="icon">
+                      <i class="fas fa-bell fa-shake"></i>
+                    </div>
+                    <div class="text">examination results are ready</div>
+                    <div class="icon">
+                      <i class="fas fa-angle-down caret"></i>
+                    </div>
+                  </li>
+                  <li style="display: none" class="expanded">
+                    <div class="head">
+                      <i class="fas fa-bell fa-shake"></i>
+                      <strong>educative</strong>
+                      <i class="fas fa-angle-up upwards"></i>
+                    </div>
+                    <div class="body">
+                      <p>midterm exams results have just been posted!!</p>
+                      <button type="button">mark as read</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <i class="fa fa-cog fa-spin"></i>
+            <span class="profile-box">
+              <img src="./teachers/martin.jpg" alt="" />
+            </span>
+          </div>
+        </div>
+
+        <div class="main">
+          <div class="centralise">
+            <div class="school" style="display: none;">
+                <div class="badge">
+                    <img src="images/images (4).png" />
+                </div>
+                <span></span>
+                <div class="text">
+                    <h1>manuh group of schools</h1>
+                    <h2>p.o box 191-90119 m city</h2>
+                    <h3>schoolexampleone@gmail.com</h3>
+                </div>
+            </div>
+            <div class="term-student-upgrade" style="display: none;">
+              <div class="term box">
+                <div class="upper">
+                  <i class="fa fa-clock"></i>
+                </div>
+                <div class="lower">
+                  <h3>term 3</h3>
+                   <p>The current term started on July 8 and is scheduled to end on October 4. If these dates are incorrect or have changed, would you like to update them now?
+                  </p>
+
+                </div>
+              </div>
+              <div class="upgrade box">
+                <div class="upper">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <div class="lower">
+                  <h3>students upgrade</h3>
+                  <p>This student upgrade section promotes all students to the next class. Changes happen instantly in the background with no visible confirmation.
+                    </p>
+                </div>
+              </div>
+            </div>
+            <div class="people-count" style="display: none;">
+              <div class="box">
+                <h3 class="student-count">500</h3>
+                <h4>students</h4>
+              </div>
+              <div class="box">
+                <h3 class="teacher-count">500</h3>
+                <h4>teachers</h4>
+              </div>
+              <div class="box">
+                <h3 class="parent-count">500</h4>
+                <h4>parents</h4>
+              </div>
+            </div>
+            <div class="links" style="display: none;">
+              <div class="box">
+                <div class="head">
+                  <i class="fa fa-book-open"></i>
+                  <h3>subjects</h3>
+                </div>
+               <div class="body">
+                    <i class="fa fa-1"></i>
+                    <i class="fa fa-3"></i>
+                </div>
+              </div>
+              <div class="box">
+                <div class="head">
+                  <i class="fa fa-chalkboard"></i>
+                  <h3>clases</h3>
+                </div>
+                <div class="body">
+                    <i class="fa fa-4"></i>
+                </div>
+              </div>
+              <div class="box">
+                <div class="head">
+                  <i class="fa fa-chalkboard-teacher"></i>
+                  <h3>streams</h3>
+                </div>
+                <div class="body">
+                    <i class="fa fa-4"></i>
+                </div>
+              </div>
+              <div class="box">
+              <div class="head">
+                  <i class="fa fa-building"></i>
+                  <h3>h.O.D</h3>
+                </div>
+              <div class="body">
+                <i class="fa-regular fa-user"></i>
+              </div>  
+              </div>
+              <div class="box">
+               <div class="head">
+                  <i class="fa fa-puzzle-piece"></i>
+                  <h3>layout</h3>
+                </div>
+                <div class="body">
+                  <i class="fa fa-display"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="subject-container" style="display: none;">
+              <h1>all available subjects</h1>
+              <div class="category">
+                <h2>languages / compulosory</h2>
+                <div class="body">
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-calculator"></i>
+                    <h3>mathematics</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-book"></i>
+                    <h3>english</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-language"></i>
+                    <h3>kiswahili</h3>
+                  </span>
+                  <span class="subject">
+                    <i class="fa fa-add"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="category">
+                <h2>sciences</h2>
+                <div class="body">
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-flask"></i>
+                    <h3>chemistry</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-leaf"></i>
+                    <h3>biology</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-atom"></i>
+                    <h3>physics</h3>
+                  </span>
+                  <span class="subject">
+                    <i class="fa fa-add"></i>
+                  </span>
+                </div>
+              </div>
+               <div class="category">
+                <h2>humanities</h2>
+                <div class="body">
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-globe"></i>
+                    <h3>geography</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-landmark"></i>
+                    <h3>history</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-bible"></i>
+                    <h3>cre</h3>
+                  </span>
+                  <span class="subject">
+                    <i class="fa fa-add"></i>
+                  </span>
+                </div>
+              </div>
+               <div class="category">
+                <h2>technicals</h2>
+                <div class="body">
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-tractor"></i>
+                    <h3>agriculture</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <h3>business</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-desktop"></i>
+                    <h3>computer</h3>
+                  </span>
+                  <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa-solid fa-franc-sign"></i>
+                    <h3>french</h3>
+                  </span>
+                   <span>
+                    <i class="fa fa-pen"></i>
+                    <i class="fa fa-kitchen-set"></i>
+                    <h3>home science</h3>
+                  </span>
+                  <span class="subject">
+                    <i class="fa fa-add"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="class-container" style="display: none;">
+              <div class="head">
+                <h1>my clases</h1>
+                <div class="mode">
+                  <i class="fa fa-toggle-off"></i>
+                  <span>
+                    <h6>8-4-4</h6>
+                    <h6>2‑6‑3‑3‑3</h6>
+                  </span>
+                </div>
+              </div>
+              <div class="clases-div"></div>
+            </div>
+
+            <div class="stream-container" style="display: none;">
+              <h1>my streams</h1>
+              <div class="stream-category">
+                <h2>pre primary</h2>
+                <div class="body">
+                  <span>
+                    <div class="head">
+                      <i class="fa fa-chalkboard"></i>
+                      <h3>playgropu</h3>
+                    </div>
+                    <div class="streams">
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>green</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>blue</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>red</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>purple</h4>
+                      </span>
+                    </div>
+                  </span>
+                   <span>
+                    <div class="head">
+                      <i class="fa fa-chalkboard"></i>
+                      <h3>playgropu</h3>
+                    </div>
+                    <div class="streams">
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>green</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>blue</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>red</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>purple</h4>
+                      </span>
+                    </div>
+                  </span>
+                   <span>
+                    <div class="head">
+                      <i class="fa fa-chalkboard"></i>
+                      <h3>playgropu</h3>
+                    </div>
+                    <div class="streams">
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>green</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>blue</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>red</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>purple</h4>
+                      </span>
+                    </div>
+                  </span>
+                   <span>
+                    <div class="head">
+                      <i class="fa fa-chalkboard"></i>
+                      <h3>playgropu</h3>
+                    </div>
+                    <div class="streams">
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>green</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>blue</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>red</h4>
+                      </span>
+                      <span class="stream">
+                        <i class="fa fa-pen"></i>
+                        <h4>purple</h4>
+                      </span>
+                      <span class="subject">
+                        <i class="fa fa-add"></i>
+                      </span>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="department-container">
+              <div class="image-container">
+                <div class="progress">
+                  <span class="value"><i class="fa fa-1"></i></span>
+                  <span class="line"></span>
+                  <span class="value"><i class="fa fa-2"></i></span>
+                  <span class="line"></span>
+                  <span class="value"><i class="fa fa-3"></i></span>
+                  <span class="line"></span>
+                  <span class="finished"><i class="fa fa-check"></i></span>
+                </div>
+                <div class="box">
+                  <div class="icon">
+                    <i class="fas fa-circle-user"></i>
+                  </div>
+                  <div class="text">
+                    <h3>Choose Staff Members with Administrative Responsibilities</h3>
+                  </div>
+                  <div class="box-btn">
+                    <button type="button" class="continue">continue <i class="fas fa-rocket"></i></button>
+                  </div>
+                </div>
+                <div class="teachers" style="display: none;">
+                  <div class="next-button">
+                    <button type="button" class="next">next <i class="fas fa-share"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-section" >
+              <button type="button" class="back">back</button>
+            </div>
+
+          </div>  
+          <div class="submit-progress">
+            <div class="box">
+              <div class="circle-progress"></div>
+              <h3>saving changes, please wait...</h3>
+            </div>
+          </div>        
+        </div>
+
+      </div>
+
+    </main>
+    <script src="tittle.js"></script>
+    <script src="setup.js"></script>
+  </body>
+</html>

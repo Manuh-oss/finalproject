@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="login.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="aside.css">
+  <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css">
 </head>
 <body>
+    <div class="error-message" id="error-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
+    <div class="success-message" id="success-message">
+      <button type="button" class="close-btn" id="close">&times;</button>
+      <span id="error-text">oops the teacher already exist</span>
+    </div>
   <main>
   <div class="logo">
     <img src="images/images (4).png" />
@@ -25,9 +34,9 @@
         </div>
       </div>
       <div class="right">
-        <div class="login-box">
+        <div class="login-box active">
            <i class="fa-regular fa-user"></i>
-           <div class="login active">
+           <div class="login">
             <span>
               <input type="email" id="email" placeholder="username">
               <i class="fa-regular fa-envelope"></i>
@@ -37,15 +46,28 @@
               <i class="fa fa-lock"></i>
             </span>
            </div>
-           <div class="verify">
-            <h4>Enter the 6-digit code sent to your email</h4>
-            <span>
-              <input type="text" id="" class="otp">
-            </span>
-           </div>
            <div class="login-btn">
             <button type="button" class="login-bt">login</button>
            </div>
+        </div>
+        <div class="verify">
+          <i class="fa-regular fa-envelope"></i>
+          <div class="text">
+            <h2>verify your email</h2>
+            <p>please enter the otp code we sent to:</p>
+            <p class="mail">emmanuelmwendwa213@gmail.com</p>
+          </div>
+          <div class="inputs">
+            <input type="text" maxlength="1" class="input">
+            <input type="text" maxlength="1" class="input">
+            <input type="text" maxlength="1" class="input">
+            <input type="text" maxlength="1" class="input">
+            <input type="text" maxlength="1" class="input">
+            <input type="text" maxlength="1" class="input">
+          </div>
+          <div class="btn">
+            <button type="button" class="verify-otp">verify</button>
+          </div>
         </div>
       </div>
     </div>
