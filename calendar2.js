@@ -100,9 +100,13 @@ function getUser(callback){
   const xhr = new XMLHttpRequest();
   xhr.open("GET","saved_user.php",true);
   xhr.onload = () => {
-    if(xhr.status == 200){
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
+    try{
+       if(xhr.status == 200){
+       const response = JSON.parse(xhr.responseText);
+       callback(response);
+      }
+    }catch(error){
+      console.log("login error", error)
     }
   }
   xhr.send();
@@ -189,30 +193,35 @@ function createCalendar() {
 }
 
 function getLessons(callback){
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "lesson.php" , true);
   xhr.onload = () => {
     try{
       if(xhr.status === 200){
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     }catch(error){
       console.log("Lesson Error" , error);
     }
   }
   xhr.send();
+  })
 }
 
 //function get events from dtabase
 function getEvents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "events.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       if (response.length > 0) {
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       } else {
         const noresult = currentEvent.querySelector(".today-events");
         const show = document.querySelectorAll(".show");
@@ -232,6 +241,7 @@ function getEvents(callback) {
     }
   };
   xhr.send();
+  })
 }
 
 //function add colors to the events
@@ -441,10 +451,12 @@ getUser((user) => {
   const description = document.getElementById("description").value;
   formData.append("event-description", description);
   formData.append("user", user.code);
+  formData.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "eventsubmittion.php", true);
   xhr.onload = () => {
-    if (xhr.status === 200) {
+    try{
+      if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       if (response.message === "success") {
         showSuccessMessage("event added succesfully");
@@ -460,6 +472,11 @@ getUser((user) => {
           hideModal();
         }
       }
+    }
+    }catch(error){
+      console.log("submission error" , error);
+    }finally{
+      console.log(xhr.responseText)
     }
   };
   xhr.send(formData);
@@ -615,8 +632,6 @@ function changeSelectWithUserLogin(){
           destinationSelect.appendChild(option);
         })
       })      
-    }else if(user.from === "admin"){
-
     }
   })
 }

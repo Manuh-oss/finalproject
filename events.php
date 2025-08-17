@@ -14,6 +14,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "destination" => $row['event_destination'],
                 "from" => $row['event_from'],
                 "user" => $row['user'],
+                "schoolId" => $row['school_id'],
                 "to" => $row['event_to']
               ];
             }

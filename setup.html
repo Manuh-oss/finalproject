@@ -190,7 +190,7 @@
 
         <div class="main">
           <div class="centralise">
-            <div class="school" style="display: none;">
+            <div class="school">
                 <div class="badge">
                     <img src="images/images (4).png" />
                 </div>
@@ -201,7 +201,7 @@
                     <h3>schoolexampleone@gmail.com</h3>
                 </div>
             </div>
-            <div class="term-student-upgrade" style="display: none;">
+            <div class="term-student-upgrade">
               <div class="term box">
                 <div class="upper">
                   <i class="fa fa-clock"></i>
@@ -224,7 +224,7 @@
                 </div>
               </div>
             </div>
-            <div class="people-count" style="display: none;">
+            <div class="people-count">
               <div class="box">
                 <h3 class="student-count">500</h3>
                 <h4>students</h4>
@@ -238,7 +238,7 @@
                 <h4>parents</h4>
               </div>
             </div>
-            <div class="links" style="display: none;">
+            <div class="links">
               <div class="box">
                 <div class="head">
                   <i class="fa fa-book-open"></i>
@@ -515,16 +515,14 @@
               </div>
             </div>
 
-            <div class="department-container">
+            <div class="department-container" style="display: none;">
               <div class="image-container">
                 <div class="progress">
                   <span class="value"><i class="fa fa-1"></i></span>
                   <span class="line"></span>
                   <span class="value"><i class="fa fa-2"></i></span>
                   <span class="line"></span>
-                  <span class="value"><i class="fa fa-3"></i></span>
-                  <span class="line"></span>
-                  <span class="finished"><i class="fa fa-check"></i></span>
+                  <span class="value"><i class="fa fa-check"></i></span>
                 </div>
                 <div class="box">
                   <div class="icon">
@@ -541,6 +539,154 @@
                   <div class="next-button">
                     <button type="button" class="next">next <i class="fas fa-share"></i></button>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="layout-container" style="display: none;">
+               <div class="layout-box">
+                <div class="left">
+                  <h2>customise main page</h2>
+                  <ul>
+                    <li><p>change slideshow images</p></li>
+                    <li><p>change slideshow texts</p></li>
+                    <li><p>add slideshow images</p></li>
+                  </ul>
+                </div>
+               </div>
+               <div class="layout-box">
+                 <div class="left">
+                  <h2>Assign Admin Duties</h2>
+                  <ul>
+                    <li><p>choose what admins do</p></li>
+                    <li><p>choose what H.O.Ds do</p></li>
+                    <li><p>add custom rank</p></li>
+                  </ul>
+                </div>
+               </div>
+               <div class="layout-box">
+                 <div class="left">
+                  <h2>Change site layout</h2>
+                  <ul>
+                    <li><p>change sidenav,header and main page background</p></li>
+                    <li><p>change text color</p></li>
+                    <li><p>fully customise your site</p></li>
+                  </ul>
+                </div>
+               </div>
+            </div>
+
+            <div class="main-page-editing" style="display: none;">
+              <h2>slideshow</h2>
+              <div class="slideshow-container">
+                <div class="left">
+                  <div class="head">
+                    <label for="new-slide" id="new-slide-label"><i class="fa fa-image"></i>new slider</label>
+                    <div class="btn" style="display: none;">
+                      <button type="button" class="remove">remove</button>
+                      <button type="button" class="apply">apply</button>
+                    </div>
+                    <input type="file" style="display: none;" id="new-slide">
+                  </div>
+                  <div class="body">
+                    <div class="image">
+                      <label for="change"><i class="fas fa-right-left"></i></label>
+                      <input type="file" style="display: none;" id="change">
+                    </div>
+                    <div class="lower">
+                      <input type="text" class="tittle" placeholder="slider title">
+                      <textarea class="desc"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="right">
+                  <h3>current slideshow</h3>
+                  <div class="slide-show-box">
+                    <div class="text">
+                      <h3>enjoy free transport</h3>
+                      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius dolores neque animi maxime consequatur</p>
+                    </div>
+                  </div>
+                  <div class="dots">
+                      <h3>image 1</h3>
+                      <div class="dots-section">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <h2>school information</h2>
+              <div class="school-name">
+                 <div class="box">
+                  <h2>motto</h2>
+                  <textarea id="motto"></textarea>
+                 </div>
+                 <div class="box">
+                  <h2>mission</h2>
+                  <textarea id="mission"></textarea>
+                 </div>
+                 <div class="box">
+                  <h2>vision</h2>
+                  <textarea id="vision"></textarea>
+                 </div>
+              </div>
+              <div class="apply-btn">
+                <button type="button" class="applyz">apply</button>
+              </div>
+              <h2>school heads</h2>
+              <div class="school-head">
+                  <div class="left">
+                     <i class="fa fa-handshake"></i>
+                     <h3>add patners/founders</h3>
+                  </div>
+                  <div class="right">
+                    <div class="inputs">
+                      <h2>add school head</h2>
+                      <label for="profile" class="image">
+                         <img src="./teachers/profileimage.png" class="image-file">
+                      </label>
+                      <div class="btn">
+                        <button type="button" class="add-head"><label for="add-image">add</label></button>
+                        <button type="button" class="delete-head">delete</button>
+                        <input type="file" style="display: none;" id="add-image">
+                      </div>
+                      <input type="file" style="display: none;" id="profile">
+                      <span>
+                        <input type="text" placeholder="name" id="name">
+                        <input type="text" placeholder="rank" id="rank">
+                      </span>
+                      <textarea id="information"></textarea>
+                      <div class="apply-btn">
+                         <button type="button" class="apply">apply</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <h2>social media links</h2>
+              <div class="social-media-div">
+                <div class="left">
+                 <span>
+                   <i class="fa-brands fa-twitter"></i>
+                   <input type="text" class="twitter">
+                 </span>
+                 <span>
+                   <i class="fa-brands fa-facebook"></i>
+                   <input type="text" class="facebook">
+                 </span>
+                 <span>
+                   <i class="fa-brands fa-instagram"></i>
+                   <input type="text" class="instagram">
+                 </span>
+                 <div class="apply-btn">
+                    <button type="button" class="applyi">apply</button>
+                 </div>
+                </div>
+                <div class="right">
+                  <i class="fa fa-heart fa-beat"></i>
+                  <h3>like</h3>
                 </div>
               </div>
             </div>

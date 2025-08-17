@@ -78,7 +78,7 @@ aside {
 }
 
 .navigation nav .body {
-  height: 90%;
+  height: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -491,7 +491,7 @@ aside {
   overflow: hidden;
 }
 
-.submit-progress .box .fa-thumbs-up {
+.submit-progress .box .big {
   font-size: 9rem;
   color: #fff;
 }

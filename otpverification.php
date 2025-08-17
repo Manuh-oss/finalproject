@@ -13,8 +13,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     echo json_encode([
       "message" => "wrong otp",
       "type" => false,
-      "userOtp" => $userOtp,
-      "otp" => $otp
     ]);
    }
 }

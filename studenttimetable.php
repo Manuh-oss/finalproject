@@ -4,8 +4,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $class = $conn->real_escape_string($_POST['student-class']);
     $stream = $conn->real_escape_string($_POST['student-stream']);
+    $id = $conn->real_escape_string($_POST['id']);
     
-    $sql = "SELECT * FROM `school_timetable` WHERE `class` = '$class' AND `stream` = '$stream'";
+    $sql = "SELECT * FROM `school_timetable` WHERE `class` = '$class' AND `stream` = '$stream'AND`school_id`='$id'";
         
     $result = $conn->query($sql);
     $feedback = [];

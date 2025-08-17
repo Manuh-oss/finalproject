@@ -34,23 +34,27 @@ function getStudents(callback) {
 
 //function to getMarks
 function getStudentMarks(callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("term", "");
   data.append("exam", "");
   data.append("class", "");
+  data.append("id", "");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool =response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("result error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 //function to get user
@@ -58,9 +62,13 @@ function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
-    if (xhr.status == 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
+    try{
+       if (xhr.status == 200) {
+       const response = JSON.parse(xhr.responseText);
+       callback(response);
+     }
+    }catch(error){
+      console.log("login error",error)
     }
   };
   xhr.send();

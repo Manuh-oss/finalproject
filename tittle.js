@@ -77,6 +77,22 @@ function getUser(callback) {
   xhr.send();
 }
 
+function getSetup(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getsetup.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        callback(response);
+      }
+    } catch (error) {
+      console.log("setup error", error);
+    }
+  };
+  xhr.send();
+}
+
 
 //function to open navigation
 const icon = openNav.querySelector(".fa-bars");
@@ -239,14 +255,160 @@ const studentSidenav = `
           </div>
 `;
 
+const adminNav =  `
+<div class="body">
+ <a href="#">
+   <i class="fa fa-home"></i>
+   <span class="writing">Dashboard</span>
+ </a>
+  <a href="setup.html">
+   <i class="fa-solid fa-gear"></i>
+   <span class="writing">setup</span>
+  </a>
+  <a href="enrol.html">
+   <i class="fa fa-user-plus"></i>
+   <span class="writing">enrol student</span>
+ </a>
+  <a href="tenarol.html">
+   <i class="fa fa-user-plus"></i>
+   <span class="writing">enrol teacher</span>
+ </a>
+ <a href="students.html">
+   <i class="fa fa-users"></i>
+   <span class="writing">all users</span>
+ </a>
+  <a href="admincalendar.html">
+    <i class="fa fa-calendar"></i>
+    <span class="writing">event</span>
+  </a>
+ <a href="selectsubjects.html">
+   <i class="fa fa-layer-group"></i>
+   <span class="writing">subject teachers</span>
+ </a>
+<a href="exam.html">
+   <i class="fa fa-clock"></i>
+   <span class="writing">exam</span>
+ </a>
+ <a href="rollcall.html">
+  <i class="fa fa-clipboard"></i>
+  <span class="writing">rollcall</span>
+ </a>
+<a href="qrcode.html">
+  <i class="fas fa-qrcode"></i>
+  <span class="writing">class codes</span>
+ </a>
+ <a href="timetable.html">
+   <i class="fa fa-table-columns"></i>
+   <span class="writing">timetable</span>
+ </a>
+ <a href="analysis.html">
+   <i class="fa fa-line-chart"></i>
+   <span class="writing">analysis</span>
+ </a>
+</div>           
+`;
+
 function updateSideNav(){
   getUser((user) => {
     if(user.from === "teacher"){
       body.innerHTML = teacherSidenav;
     }else if(user.from === "student"){
       body.innerHTML = studentSidenav;
+    }else if(user.from === "admin"){
+      body.innerHTML = adminNav;
     }
   })
 }
 
 updateSideNav();
+
+//select fields aupdate
+
+let databaseClases;
+let databaseStream;
+getUser((user) => {
+getSetup((schoolSetups) => {
+  const thisSchool = schoolSetups.find(s => s.schoolId === user.schoolId);
+
+  if(thisSchool){
+    const clases = getClases(thisSchool.clases);
+    const subjects = getSubjects(thisSchool.subjects);
+    const streams = getStreams(thisSchool.streams)
+    databaseClases = clases;
+    databaseStream = streams;
+    const allClassSelects = document.querySelectorAll("#class");
+    const allStreamSelects = document.querySelectorAll("#stream");
+    if(allClassSelects.length > 0){
+      allClassSelects.forEach(classSelect => {
+        classSelect.innerHTML = "";
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "--select class--";
+        classSelect.appendChild(defaultOption);
+
+        clases.forEach(clas => {
+          const option = document.createElement("option");
+          option.value = clas;
+          option.textContent = clas;
+          classSelect.appendChild(option);
+        })
+
+        classSelect.addEventListener("change" , () => {
+          const classStreams = streams[classSelect.value];
+          allStreamSelects.forEach(select => {
+            select.innerHTML = ""
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "--select stream--";
+            select.appendChild(defaultOption);
+
+             classStreams.forEach(stream => {
+              const option = document.createElement("option");
+              option.value = stream;
+              option.textContent = stream;
+              select.appendChild(option);
+            })
+            
+          })
+        })
+
+     })
+    }
+
+
+  }
+
+})
+})
+function getClases(rawClases){
+  const rawclasesArray = rawClases.split("-");
+  const classArray = rawclasesArray.map(s => {
+    const [classes] = s.split("/");
+    return classes
+  })
+  return classArray;
+}
+
+function getSubjects(rawSubjects){
+  const rawstreamArray = rawSubjects.split("-");
+  const streamArray = rawstreamArray.map(s => {
+    const [classes] = s.split("/");
+    return classes
+  })
+  return streamArray;
+}
+
+function getStreams(rawStreams) {
+  let result = {};
+  const rawstreamArray = rawStreams.split("-");
+
+  rawstreamArray.forEach(stream => {
+    const parts = stream.split(":");
+    if (parts.length === 2) {
+      const [clas, streams] = parts;
+      result[clas] = streams.split("/");
+    }
+  });
+
+  return result;
+}

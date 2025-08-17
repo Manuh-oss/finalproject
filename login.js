@@ -70,7 +70,44 @@ function loginStudent() {
   xhr.send(loginCredentials);
 }
 
+function loginTeacher(){
+  const loginCredentials = new FormData();
+  const username = document.getElementById("t-username");
+  const passowrd = document.getElementById("t-password");
+  loginCredentials.append("user", "");
+  loginCredentials.append("pass", "");
+  loginCredentials.append("username", username.value);
+  loginCredentials.append("password", passowrd.value);
+
+  const verified = verifyInputs(passowrd, username);
+  if (!verified) showErrorMessage("fill in all required fields");
+  if (!verified) return;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "slogin.php", true);
+  studentLoginBtn.textContent = "verifying...";
+  xhr.onload = () => {
+    try {
+      if (xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        studentLoginBtn.textContent = "login";
+        if (response.type) {
+          window.location.href = "tuser.html";
+        } else {
+          showErrorMessage("invalid credentials");
+        }
+      }
+    } catch (error) {
+      console.log("teacher login error", error);
+    } finally {
+      console.log(xhr.responseText);
+    }
+  };
+  xhr.send(loginCredentials);
+}
+
 studentLoginBtn.addEventListener("click", loginStudent);
+teacherLogin.addEventListener("click" , loginTeacher)
 
 function verifyInputs(pass, user) {
   let verified = true;

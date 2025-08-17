@@ -2,7 +2,8 @@
 include("connection.php");
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $teacherCode = $conn->real_escape_string($_POST['teacherCode']);
-    $sql = "SELECT teachers_timetable.teacher_code, .teachers_timetable.day, .teachers_timetable.lesson_one, .teachers_timetable.lesson_two, .teachers_timetable.lesson_three, .teachers_timetable.lesson_four, .teachers_timetable.lesson_five, .teachers_timetable.lesson_six, .teachers_timetable.lesson_seven, .teachers_timetable.lesson_eight, .teachers_timetable.lesson_nine, .teachers_timetable.lesson_ten, teachers.firstname, teachers.middlename , teachers.file_path FROM teachers_timetable JOIN teachers ON teachers_timetable.teacher_code = teachers.teachers_code  WHERE teachers.teachers_code = '$teacherCode'";
+    $id = $conn->real_escape_string($_POST['id']);
+    $sql = "SELECT teachers_timetable.teacher_code, .teachers_timetable.day, .teachers_timetable.lesson_one, .teachers_timetable.lesson_two, .teachers_timetable.lesson_three, .teachers_timetable.lesson_four, .teachers_timetable.lesson_five, .teachers_timetable.lesson_six, .teachers_timetable.lesson_seven, .teachers_timetable.lesson_eight, .teachers_timetable.lesson_nine, .teachers_timetable.lesson_ten, teachers.firstname, teachers.middlename , teachers.file_path FROM teachers_timetable JOIN teachers ON teachers_timetable.teacher_code = teachers.teachers_code  WHERE teachers.teachers_code = '$teacherCode'AND teachers_timetable.school_id='$id'";
     
     $result = $conn->query($sql);
     $feedback = [];

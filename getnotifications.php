@@ -10,6 +10,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             "destination" => $row['destination'],
             "from" => $row['frum'],
             "type" => $row['type'],
+            "schoolId" => $row['school_id'],
             "desc" => $row['description']
          ];
        } 

@@ -13,6 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             "fileName" => $row['file_name'],
             "path" => $row['file_path'],
             "type" => $row['type'],
+            "schoolId" => $row['school_id'],
             "code" => $row['code']
           ];
         }

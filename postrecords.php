@@ -7,16 +7,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $incident = $conn->real_escape_string($_POST['incident']);
     $action = $conn->real_escape_string($_POST['action']);
     $reportee = $conn->real_escape_string($_POST['user']);
+    $id = $conn->real_escape_string($_POST['id']);
     $feedback = [];
 
-    $sqlCheck = "SELECT * FROM `discplinerecord` WHERE `date` = '$date' AND `admission` = '$admission' AND `incident` = '$incident' ";
+    $sqlCheck = "SELECT * FROM `discplinerecord` WHERE `date` = '$date' AND `admission` = '$admission' AND `incident` = '$incident' AND`school_id`='$id'";
     $result = $conn->query($sqlCheck);
     if($result){
         $countIncidents = mysqli_num_rows($result);
          if($countIncidents > 0){
          echo json_encode($countIncidents);
          }else{
-            $sqlInsert = "INSERT INTO `discplinerecord`( `admission`, `date`, `incident`, `location`, `reportee`, `action`) VALUES ('$admission','$date','$incident','$location','$reportee','$action')";
+            $sqlInsert = "INSERT INTO `discplinerecord`( `admission`, `date`, `incident`, `location`, `reportee`, `action`,`school_id`) VALUES ('$admission','$date','$incident','$location','$reportee','$action','$id')";
             if($conn->query($sqlInsert) === TRUE){
                $feedback = [
                 "message" => "success",

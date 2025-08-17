@@ -35,9 +35,13 @@ function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
+    try{
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       callback(response);
+    }
+    }catch(error){
+      console.log("login error",error)
     }
   };
   xhr.send();
@@ -45,9 +49,11 @@ function getUser(callback) {
 
 //function to getQuestions
 function getQuizQuestions(callback) {
+  getUser((user) => {
   const param = new FormData();
   param.append("class", classSelect.value);
   param.append("subject", subjectSelect.value);
+  param.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "questions.php", true);
   xhr.onload = () => {
@@ -57,6 +63,7 @@ function getQuizQuestions(callback) {
     }
   };
   xhr.send(param);
+  })
 }
 
 //function to organise questions
@@ -108,6 +115,7 @@ function selectCorrectTopic(organised, topic) {
 
 //function to getTopics
 function getTopics(callback, clas, subject) {
+  getUser((user) => {
   const param = new FormData();
   param.append("class", clas);
   param.append("subject", subject);
@@ -117,13 +125,15 @@ function getTopics(callback, clas, subject) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Topic error", error);
     }
   };
   xhr.send(param);
+  })
 }
 
 //function todiplay topics
@@ -183,8 +193,10 @@ function displayTopics(clas, subject) {
 
 //function to fetch reattempts from database
 function getQuizReattempts(callback, admission) {
+  getUser((user) => {
   const param = new FormData();
   param.append("admission", admission);
+  param.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "quizresult.php", true);
   xhr.onload = () => {
@@ -194,6 +206,7 @@ function getQuizReattempts(callback, admission) {
     }
   };
   xhr.send(param);
+  })
 }
 
 //function to display reattempts
@@ -503,6 +516,7 @@ function postQuizResults(quizCode, score, date) {
       quizResultForm.append("admission", user.code);
       quizResultForm.append("topic", thisTopicTittle);
       quizResultForm.append("attempt", attempt);
+      quizResultForm.append("id", user.schoolId);
 
       const postXhr = new XMLHttpRequest();
       postXhr.open("POST", "postquizresult.php", true);

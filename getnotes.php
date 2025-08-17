@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "subject" => $row['subject'],
                 "topic" => $row['topic'],
                 "notes" => $row['paragraph'],
+                "schoolId" => $row['school_id'],
                 "teacherCode" => $row['teacherCode']
             ];
         };

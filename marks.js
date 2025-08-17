@@ -24,7 +24,7 @@ let marks;
 let totalsArray;
 let meansArray;
 
-const streams = ["111","222","333","444"];
+const streams = ["111", "222", "333", "444"];
 
 const subjects = [
   "english",
@@ -74,7 +74,7 @@ const comparingData = [
   "business",
   "mean",
 ];
-	
+
 //this sets a tranition delay to every child
 for (let x = 0; x < children.length; x++) {
   children[x].style.transitionDelay = `${delay * x}` + "s";
@@ -98,6 +98,7 @@ function getUser(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
+        callback(response);
       }
     } catch (error) {
       console.log("login error", error);
@@ -107,22 +108,31 @@ function getUser(callback) {
 }
 
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
+    try{
+     if (xhr.status === 200) {
+       const response = JSON.parse(xhr.responseText);
+       const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+       callback(thisSchool);
+      }
+    }catch(error){
+      console.log("student error",error);
     }
   };
   xhr.send();
+  })
 }
 
 function getResults(callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("class", "");
   data.append("term", "");
   data.append("exam", "");
+  data.append("id", "");
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);
@@ -130,22 +140,26 @@ function getResults(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("result error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 //function to validate the user subject choosen
 function validateTeacher(clas, subject, stream, code, callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("class", clas);
   data.append("subject", subject);
   data.append("stream", stream);
   data.append("tcode", code);
+  data.append("id" , user.schoolId)
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "validate.php", true);
@@ -156,6 +170,7 @@ function validateTeacher(clas, subject, stream, code, callback) {
     }
   };
   xhr.send(data);
+  })
 }
 
 function verifySelects() {
@@ -247,8 +262,8 @@ function displayStudent() {
               tr.innerHTML = `
                  <td>${studentDetails.admission}</td>
                  <td>${name}</td>
-                 <td class="remove">form${studentDetails.class}</td>
-                 <td class="remove">${convertStream(studentDetails.stream)}</td>
+                 <td class="remove">${studentDetails.class}</td>
+                 <td class="remove">${(studentDetails.stream)}</td>
                  <td class="remove">${studentDetails.gender}</td>
                  <td><input type='text' value='${
                    result[subject]
@@ -282,6 +297,7 @@ function displayStudent() {
 }
 
 function uploadMarks() {
+  getUser((user) => {
   const data = new FormData();
 
   if (marks.length > 0 && admissions.length > 0) {
@@ -295,13 +311,15 @@ function uploadMarks() {
     data.append("stream", streamSelect.value);
     data.append("term", termSelect.value);
     data.append("exam", examSelect.value);
+    data.append("id", user.schoolId);
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "upload.php", true);
 
     progressContainer.classList.remove("removes");
     progressContainer.classList.add("active");
-    progressContainer.querySelector("p").textContent = "Uploading marks, please wait...";
+    progressContainer.querySelector("p").textContent =
+      "Uploading marks, please wait...";
 
     xhr.onload = () => {
       try {
@@ -313,14 +331,15 @@ function uploadMarks() {
         }
       } catch (error) {
         console.log("Upload error", error);
-      }finally{
-        console.log(xhr.responseText)
+      } finally {
+        console.log(xhr.responseText);
       }
     };
     xhr.send(data);
   } else {
     console.log("marks and admission empty");
   }
+  })
 }
 
 function assignMeans() {
@@ -328,15 +347,23 @@ function assignMeans() {
     getStudents((students) => {
       progressContainer.classList.remove("remove");
       progressContainer.classList.add("active");
-      progressContainer.querySelector("p").textContent = "Updating means, please wait...";
+      progressContainer.querySelector("p").textContent =
+        "Updating means, please wait...";
 
       setTimeout(() => {
         results.forEach((result) => {
-          const studentDetails = students.find((s) => s.admission === result.admission);
+          const studentDetails = students.find(
+            (s) => s.admission === result.admission
+          );
           if (!studentDetails) return;
-          const subjectTaken = subjects.filter((s) => studentDetails[s] !== "not-selected");
+          const subjectTaken = subjects.filter(
+            (s) => studentDetails[s] !== "not-selected"
+          );
           if (subjectTaken.length === 0) return;
-          const totals = subjectTaken.reduce((a, b) => a + Number(result[b]), 0);
+          const totals = subjectTaken.reduce(
+            (a, b) => a + Number(result[b]),
+            0
+          );
           const mean = totals / subjectTaken.length;
 
           const data = {
@@ -359,8 +386,8 @@ function assignMeans() {
   });
 }
 
-
 function postMeanForm(data) {
+  getUser((user) => {
   const meanData = new FormData();
   meanData.append("class", data.class);
   meanData.append("stream", data.stream);
@@ -370,6 +397,7 @@ function postMeanForm(data) {
   meanData.append("mean", data.mean);
   meanData.append("total", data.total);
   meanData.append("grade", data.grade);
+  meanData.append("id", user.schoolId);
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "totals.php", true);
@@ -383,6 +411,7 @@ function postMeanForm(data) {
     }
   };
   xhr.send(meanData);
+  })
 }
 
 let classPositions = [];
@@ -393,28 +422,38 @@ function assignPositions() {
       // ✅ Show "Assigning positions"
       progressContainer.classList.remove("remove");
       progressContainer.classList.add("active");
-      progressContainer.querySelector("p").textContent = "Assigning positions, please wait...";
+      progressContainer.querySelector("p").textContent =
+        "Assigning positions, please wait...";
 
       setTimeout(() => {
-        for (let x = 1; x < 5; x++) {
-          const thisClassValue = results.filter(res => 
-            res.class === x.toString() && 
-            res.exam === examSelect.value && 
-            res.term === termSelect.value
+        const classArray = databaseClases;
+        for (let x = 1; x < classArray.length; x++) {
+          const thisClassValue = results.filter(
+            (res) =>
+              res.class === classArray[x].toString() &&
+              res.exam === examSelect.value &&
+              res.term === termSelect.value
           );
 
           for (let r = 0; r < comparingData.length; r++) {
             let subject = comparingData[r];
-            thisClassValue.sort((a, b) => Number(b[subject]) - Number(a[subject]));
+            thisClassValue.sort(
+              (a, b) => Number(b[subject]) - Number(a[subject])
+            );
             let currentPosition = 1;
             let currentRank = 1;
             let previousMean = null;
 
             for (let i = 0; i < thisClassValue.length; i++) {
-              const studentDetails = students.find(student => student.admission === thisClassValue[i].admission);
+              const studentDetails = students.find(
+                (student) => student.admission === thisClassValue[i].admission
+              );
               if (!studentDetails) continue;
 
-              if (studentDetails[subject] !== "not-selected" || subject === "mean") {
+              if (
+                studentDetails[subject] !== "not-selected" ||
+                subject === "mean"
+              ) {
                 const student = Number(thisClassValue[i][subject]);
                 if (student) {
                   if (previousMean !== null && student !== previousMean) {
@@ -440,14 +479,14 @@ function assignPositions() {
 
         progressContainer.classList.add("remove");
         progressContainer.classList.remove("active");
-        showSuccessMessage("marks updated sucessfully  ")
+        showSuccessMessage("marks updated sucessfully  ");
       }, 2000);
     });
   });
 }
 
-
-function postStudentPositions(data){
+function postStudentPositions(data) {
+  getUser((user) => {
   const positionData = new FormData();
   positionData.append("class", data.class);
   positionData.append("stream", data.stream);
@@ -456,6 +495,7 @@ function postStudentPositions(data){
   positionData.append("admission", data.admission);
   positionData.append("subject", data.subject);
   positionData.append("position", data.position);
+  positionData.append("id", user.schoolId);
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "totals.php", true);
@@ -469,7 +509,7 @@ function postStudentPositions(data){
     }
   };
   xhr.send(positionData);
-  
+  })
 }
 
 //function to hise subject container
@@ -528,15 +568,15 @@ function getGrades(marks) {
   return grade;
 }
 
-function shoProgressContainer(type,message){
-  if(type){
-    progressContainer.classList.add("active")
+function shoProgressContainer(type, message) {
+  if (type) {
+    progressContainer.classList.add("active");
     const p = progressContainer.querySelector("p");
     p.textContent = message || "loading...";
     console.log("showing");
-  }else{
+  } else {
     progressContainer.classList.remove("active");
-    console.log("not showing")
+    console.log("not showing");
   }
 }
 
@@ -587,7 +627,7 @@ termSelect.addEventListener("change", displayStudent);
 examSelect.addEventListener("change", displayStudent);
 
 submitBtn.addEventListener("click", uploadMarks);
-backBtn.addEventListener("click" , (e) => {
+backBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   window.location.reload();
-})
+});

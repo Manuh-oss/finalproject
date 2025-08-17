@@ -22,23 +22,44 @@ const streams = ["111", "333", "222", "444"];
 const classes = ["1", "2", "3", "4"];
 
 //function section start here
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    try{
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      callback(response);
+    }
+    }catch(error){
+      console.log("login error",error)
+    }
+  };
+  xhr.send();
+}
+
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Student Error", error);
     }
   };
   xhr.send();
+  })
 }
 
+
 function getMarks(callback) {
+  getUser((user) => {
   const form = new FormData();
   form.append("class", "");
   form.append("term", "");
@@ -49,13 +70,15 @@ function getMarks(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Resultt Error", error);
     }
   };
   xhr.send(form);
+  })
 }
 
 const data = JSON.parse(localStorage.getItem("data"))

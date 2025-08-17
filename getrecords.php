@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                "date" => $row['date'],
                "action" => $row['action'],
                "teacher" => $row['reportee'],
+               "schoolId" => $row['school_id'],
                "location" => $row['location']
             ];
         }

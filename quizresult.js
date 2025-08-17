@@ -12,6 +12,7 @@ const improvedSuccess = document.getElementById("success-message");
 let topicValue;
 
 function getMyQuizes(callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("class", "");
   data.append("subject", "");
@@ -22,16 +23,19 @@ function getMyQuizes(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool); 
       }
     } catch (error) {
       console.log("Quix error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 function getQuizResult(callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("admission", "");
 
@@ -41,29 +45,34 @@ function getQuizResult(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool); 
       }
     } catch (error) {
       console.log("Quix error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool); 
       }
     } catch (error) {
       console.log("Student error", error);
     }
   };
   xhr.send();
+  })
 }
 
 function getUser(callback) {
@@ -79,6 +88,7 @@ function getUser(callback) {
 }
 
 function getTopics(clas, subject, callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("class", clas);
   data.append("subject", subject);
@@ -88,14 +98,16 @@ function getTopics(clas, subject, callback) {
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
-        const reponse = JSON.parse(xhr.responseText);
-        callback(reponse);
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool); 
       }
     } catch (error) {
       console.log("Topic error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 function displayQuizBoxes() {
@@ -487,12 +499,14 @@ function getStudentMarks(results,greatest){
 
 //thsi posts the cahnges on the quiz
 function postAssignmant(param, quizData, callback) {
+  getUser((user) => {
   const code = quizData[0].quizCode;
   const topic = topicValue || quizData[0].topic;
   const data = new FormData();
   data.append("type", param);
   data.append("code[]", code);
   data.append("topic", topic);
+  data.append("topic", user.schoolId);
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "postquizchanges.php", true);
@@ -507,6 +521,7 @@ function postAssignmant(param, quizData, callback) {
     }
   };
   xhr.send(data);
+  })
 }
 
 function convertStream(rawStream){

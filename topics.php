@@ -6,6 +6,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $topicHeading = $_POST['topic-tittle'];
     $topicDesc = $_POST['topic-description'];
     $class = $conn->real_escape_string($_POST['class']);
+    $id = $conn->real_escape_string($_POST['id']);
     $subject = $conn->real_escape_string($_POST['subject']);
 
     $feedback = [];
@@ -15,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $topicNo = $conn->real_escape_string($topicNumbers[$index]);
         $topicDe = $conn->real_escape_string($topicDesc[$index]);
 
-        $sqlCheck = "SELECT * FROM `topics` WHERE `Topic_heading` = '$topicTittle'";
+        $sqlCheck = "SELECT * FROM `topics` WHERE `Topic_heading` = '$topicTittle'AND`school_id`='$id'";
         $result = $conn->query($sqlCheck);
         $countTopic = mysqli_num_rows($result);
 
@@ -34,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 ];
             }
         }else{
-          $sql = "INSERT INTO `topics`( `Topic_number`, `Topic_heading`, `Topic_brief`, `subject`, `class`) VALUES ('$topicNo','$topicTittle','$topicDe','$subject','$class')";
+          $sql = "INSERT INTO `topics`( `Topic_number`, `Topic_heading`, `Topic_brief`, `subject`, `class`,`school_id`) VALUES ('$topicNo','$topicTittle','$topicDe','$subject','$class','$id')";
 
                 if($conn->query($sql) === TRUE){
                     $feedback = [

@@ -6,9 +6,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $from = $conn->real_escape_string($_POST['from']);
     $description = $conn->real_escape_string($_POST['description']);
     $type = $conn->real_escape_string($_POST['type']);
+    $id = $conn->real_escape_string($_POST['id']);
     $feedback = "";
 
-    $sqlCheck = "SELECT * FROM `notifications` WHERE `message` = '$messsage' AND `destination` = '$destination' AND `frum` = '$from'";
+    $sqlCheck = "SELECT * FROM `notifications` WHERE `message` = '$messsage' AND `destination` = '$destination' AND `frum` = '$from'AND`school_id`='$id'";
     $result = $conn->query($sqlCheck);
     if($result){
      $countNotification = mysqli_num_rows($result);
@@ -28,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           ];
         }
      }else{
-        $sqlInsert = "INSERT INTO `notifications`( `destination`, `message`, `frum`, `description`,`type`) VALUES ('$destination','$messsage','$from','$description','$type')";
+        $sqlInsert = "INSERT INTO `notifications`( `destination`, `message`, `frum`, `description`,`type`,`school_id`) VALUES ('$destination','$messsage','$from','$description','$type','$id')";
 
         if($conn->query($sqlInsert) === true){
           $feedback = [

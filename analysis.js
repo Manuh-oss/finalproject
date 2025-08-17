@@ -24,16 +24,31 @@ const improvedSuccess = document.getElementById("success-message");
 
 //function section start here
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Student Error", error);
+    }
+  };
+  xhr.send();
+  })
+}
+
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    if (xhr.status == 200) {
+      const tcode = JSON.parse(xhr.responseText);
+      callback(tcode);
     }
   };
   xhr.send();
@@ -41,23 +56,29 @@ function getStudents(callback) {
 
 //function to getThere marks
 function getMarks(callback) {
+  getUser((user) => {
   const form = new FormData();
   form.append("class", classSelect.value);
   form.append("term", termSelect.value);
   form.append("exam", examSelect.value);
+  form.append("id", "");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Resultt Error", error);
+    }finally{
+      console.log(xhr.responseText)
     }
   };
   xhr.send(form);
+  })
 }
 
 //function to count grades

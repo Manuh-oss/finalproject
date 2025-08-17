@@ -15,6 +15,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $days = ["monday" , "tuesday" , "wednesday" , "thursday" ,"friday","saturday","sunday"];
   $class = $conn->real_escape_string($_POST['student-class']);
   $stream = $conn->real_escape_string($_POST['student-stream']);
+  $id= $conn->real_escape_string($_POST['id']);
 
   $feedback = [];
 
@@ -31,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $tenthLesson = $conn->real_escape_string($tenthLessons[$index]);
     $day = $days[$index];
 
-    $sqlCheck = "SELECT * FROM `school_timetable` WHERE `class` = '$class' AND `stream` = '$stream' AND `day` = '$day'";
+    $sqlCheck = "SELECT * FROM `school_timetable` WHERE `class` = '$class' AND `stream` = '$stream' AND `day` = '$day'AND`school_id`='$id'";
     $result = $conn->query($sqlCheck);
     $countTimetable = mysqli_num_rows($result);
 
@@ -51,7 +52,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
               ]; 
           }
     }else{
-      $sqlInsert = "INSERT INTO `school_timetable`(`day`, `lesson_one`, `lesson_two`, `lesson_three`, `lesson_four`, `lesson_five`, `lesson_six`, `lesson_seven`, `lesson_eight`, `lesson_nine`, `lesson_ten`, `class`, `stream`) VALUES ('$day','$firstLesson','$secondLesson','$thirdLesson','$forthLesson','$fifthLesson','$sixthLesson','$seventhLesson','$eigthLesson','$ninthLesson','$tenthLesson','$class','$stream')";
+      $sqlInsert = "INSERT INTO `school_timetable`(`day`, `lesson_one`, `lesson_two`, `lesson_three`, `lesson_four`, `lesson_five`, `lesson_six`, `lesson_seven`, `lesson_eight`, `lesson_nine`, `lesson_ten`, `class`, `stream`,`school_id`) VALUES ('$day','$firstLesson','$secondLesson','$thirdLesson','$forthLesson','$fifthLesson','$sixthLesson','$seventhLesson','$eigthLesson','$ninthLesson','$tenthLesson','$class','$stream','$id')";
 
       if($conn->query($sqlInsert)=== TRUE){
           $feedback [] = [

@@ -39,6 +39,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
       "department" => $row['department'],
       "classTeacher" => $row['classteacher_class'] . "-" . $row['classteacher_stream'],
       "endDate" => $row['endDate'],
+      "schoolId" => $row['school_id'],
       "aboutMe" => $row['aboutMe']
     ];
    }

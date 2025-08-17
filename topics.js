@@ -74,8 +74,9 @@ subjectDivs.forEach((subjectDiv) => {
 
 //function verify teacher
 function verifyTeacher() {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
-  const param = "tcode=" + teacherCode + "&subject=" + subject;
+  const param = "tcode=" + teacherCode + "&subject=" + subject + "&id=" + user.schoolId;
   xhr.open("POST", "validate2.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onload = () => {
@@ -90,6 +91,7 @@ function verifyTeacher() {
     }
   };
   xhr.send(param);
+ })
 }
 
 //functioncher code from login.json
@@ -102,6 +104,23 @@ function getTeacherCode() {
       teacherCode = response.code;
     }
   };
+  xhr.send();
+}
+
+
+function getUser(callback){
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET' , 'saved_user.php' , true);
+  xhr.onload = () => {
+    try{
+     if(xhr.status == 200){
+      const response = JSON.parse(xhr.responseText);
+      callback(response);
+     }
+    }catch(error){
+      console.log("Login error" , error);
+    }
+  }
   xhr.send();
 }
 
@@ -261,7 +280,9 @@ function redirectTopics(index){
 
 //this poats the results to the database
 function postTopics() {
+  getUser((user) => {
   const formData = new FormData(mainForm);
+  formData.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "topics.php", true);
   xhr.onload = () => {
@@ -283,15 +304,18 @@ function postTopics() {
     }
   };
   xhr.send(formData);
+  })
 }
 
 function postFeedback(message,destination,from,description,type){
+  getUser((user) => {
   const data = new FormData();
   data.append("message" , message);
   data.append("destination" , destination);
   data.append("from" , from);
   data.append("description" , description);
   data.append("type" , type);
+  data.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open('POST','postfeedback.php',true);
   xhr.onload = () => {
@@ -306,6 +330,7 @@ function postFeedback(message,destination,from,description,type){
     }
   }
   xhr.send(data);
+  })
 }
 
 function showErrorMessage(message) {

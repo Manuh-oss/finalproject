@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $grade     = $conn->real_escape_string($_POST['grade']     ?? '');
     $subject   = $conn->real_escape_string($_POST['subject']   ?? '');
     $position  = $conn->real_escape_string($_POST['position']  ?? '');
+    $id  = $conn->real_escape_string($_POST['id']  ?? '');
 
     // Detect mean mode
     if (
@@ -19,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['grade'] !== '' &&
         $_POST['mean'] !== ''
     ) {
-     $sqlUpdate = "UPDATE `studentdetails` SET `mean` = '$mean',`grade`='$grade',`Total`='$total',`Totals` = '$total' WHERE `admission` = '$admission' AND `class` = '$class' AND `exam` = '$exam' AND `term` = '$term'";
+     $sqlUpdate = "UPDATE `studentdetails` SET `mean` = '$mean',`grade`='$grade',`Total`='$total',`Totals` = '$total' WHERE `admission` = '$admission' AND `class` = '$class' AND `exam` = '$exam' AND `term` = '$term'AND`school_id`='$id'";
           if($conn->query($sqlUpdate) === TRUE){
             $feedback = [
               "message" => "success",
@@ -42,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['subject'] !== '' &&
         $_POST['position'] !== ''
     ) {
-        $sqlUpdate = "UPDATE `studentdetails` SET `{$subject}_position` = '$position' WHERE `admission` = '$admission' AND `class` = '$class' AND `exam` = '$exam' AND `term` = '$term'";
+        $sqlUpdate = "UPDATE `studentdetails` SET `{$subject}_position` = '$position' WHERE `admission` = '$admission' AND `class` = '$class' AND `exam` = '$exam' AND `term` = '$term'AND`school_id`='$id'";
 
         if($conn->query($sqlUpdate) === TRUE){
           $feedback = [

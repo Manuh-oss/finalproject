@@ -71,7 +71,6 @@ function validateAdmin(){
                   otpBox.style.transform = "translateX(0) scale(1)";
                   otpBox.style.opacity = "1";
                   verifyOtps();
-
                 }else{
                   showErrorMessage("wrong credentials");
                   button.textContent = "login"
@@ -79,6 +78,8 @@ function validateAdmin(){
             }
             }catch(error){
                 console.log("login error",error);
+            }finally{
+              console.log(xhr.responseText)
             }
         }
         xhr.send(credentials);

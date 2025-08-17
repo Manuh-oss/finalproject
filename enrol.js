@@ -15,20 +15,35 @@ const submitForm = document.querySelector(".submit-button-box .submit");
 const classSelect = document.getElementById("class");
 const streamSelect = document.getElementById("stream");
 
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    if (xhr.status == 200) {
+      const response = JSON.parse(xhr.responseText);
+      callback(response);
+    }
+  };
+  xhr.send();
+}
+
 function getStudents(callback){
+  getUser((user) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST" , 'students.php', true);
     xhr.onload = () => {
         try{
           if(xhr.status == 200){
             const response = JSON.parse(xhr.responseText);
-            callback(response);
+            const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+            callback(thisSchool);
           }
         }catch(error){
           console.log("Student Error:" , error);
         }
     }
     xhr.send();
+  })
 }
 
 function getTheGreatestAdmission(){
@@ -79,9 +94,11 @@ function profileImageUpload(){
 }
 
 function postEnrollFOrm(){
-    const verified = verifyInputs();
+  getUser((user) => {
+      const verified = verifyInputs();
      if(verified){
         const formData = new FormData(form);
+        formData.append("id" , user.schoolId);
         const xhr = new XMLHttpRequest();
         xhr.open('POST','enrol.php',true);
         xhr.onload = () => {
@@ -105,7 +122,8 @@ function postEnrollFOrm(){
         xhr.send(formData);
      } else{
        showErrorMessage("⚠️ Please fill in all required fields.")
-     }   
+     } 
+  })  
 }
 
 //errro handling functions

@@ -488,7 +488,7 @@
   position: absolute;
   top: 0;
   left: 1rem;
-  width: 30%;
+  width: 20%;
   height: 6rem;
   display: flex;
   align-items: center;
@@ -684,6 +684,22 @@
   }
 }
 
+@keyframes delete {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5) rotate(180deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+
 .image-container .box {
   height: 60%;
   width: 40%;
@@ -793,6 +809,415 @@
   width: 75%;
 }
 
+.layout-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+  overflow: auto;
+}
+
+.layout-container .layout-box{
+  display: flex;
+  background-color: #e7e7e7;
+  padding: 0 1.5rem;
+  flex-grow: 1;
+}
+
+.layout-box .left{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  flex: 1 1 0;
+}
+
+.layout-box .left ul{
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.layout-box .left h2{
+  color: #00033d;
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.layout-box p{
+  font-size: 1.2rem;
+}
+
+/*silide show styles start here*/
+.main-page-editing{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.slideshow-container{
+  display: flex;
+  gap: 2rem;
+  height: 40rem;
+}
+
+.slideshow-container .left{
+  width: 30rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.slideshow-container .left .head{
+  height: 3rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.slideshow-container .left .head label{
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  flex: 1 1 0;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.4rem;
+  background-color: var(--light-navy);
+  color: #eee;
+}
+
+.slideshow-container .left .body{
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.slideshow-container .left .body .image {
+  height: 23rem;
+  width: 100%;
+  background-image: url(slideshow/schoolbus.jpg);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.slideshow-container .left .body .image label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: opacity 0.5s linear, transform 0.5s linear;
+  color: #eee;
+  font-size: 1.5rem;
+}
+
+.slideshow-container .left .body .image:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.slideshow-container .left .body .image:hover label {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+
+.slideshow-container .left .body .lower{
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  max-height: 12.5rem;
+}
+
+.slideshow-container .left .body .lower input{
+  height: 4rem;
+  width: 100%;
+  outline: none;
+  border: 1px solid #d1d5db;
+  box-shadow: none;
+}
+
+.slideshow-container .left .body .lower textarea{
+  flex-grow: 1;
+  resize: none;
+  outline: none;
+  border: 1px solid #d1d5db;
+  width: 100%;
+  padding:1rem;
+}
+
+.slideshow-container .right{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1 1 0;
+  overflow: hidden;
+}
+
+.slideshow-container .right .slide-show-box{
+  height: 30rem;
+  width: 100%;
+  position: relative;
+  background-image: url(slideshow/schoolbus.jpg);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity .6s linear, transform .6s linear;
+}
+
+.slideshow-container .right .text{
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  width: 20rem;
+  color: #fff;
+  transform: translateY(100%) scale(0.5);
+  opacity: 0;
+  transition: opacity .6s linear, transform .6s linear;
+  transition-delay: .6s;
+}
+
+.slideshow-container .dots{
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  position: relative;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  padding: 0 1.5rem;
+}
+
+.slideshow-container .dots .dots-section{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+  display: flex;
+  gap: 1rem;
+}
+
+.slideshow-container .dots .dots-section span{
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+}
+
+.slideshow-container .dots .dots-section span.active{
+  background-color: #000;
+  border: 1px solid #d1d5db;
+}
+
+.slideshow-container .left .btn{
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+}
+
+.slideshow-container .left .btn button:first-child{
+  background-color: var(--red);
+  color: #fff;
+  border: none;
+  outline: none;
+  flex: 1 1 0;
+}
+
+.slideshow-container .left .btn button:last-child{
+  background-color: #0033ff;
+  color: #fff;
+  border: none;
+  outline: none;
+  flex: 1 1 0;
+}
+/*silide show styles end here*/
+/*school name information*/
+.school-name{
+  display: grid;
+  grid-template-columns: repeat(auto-fit , minmax(20rem , 1fr));
+  gap: 1.5rem;
+  position: relative;
+}
+
+.school-name .box{
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 5px 5px 3px rgba(0, 0,0, .1),
+    -5px 5px 10px rgba(0, 0,0, .1);
+  border-radius: 1rem;
+}
+
+.school-name .box textarea{
+  flex-grow: 1;
+  resize: none;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: .5rem;
+}
+/*school names styles end here*/
+
+/*school head styles starts here*/
+.school-head{
+  display: flex;
+  gap: 2rem;
+  height: 35rem;
+}
+
+.school-head .left{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 0;
+  position: relative;
+}
+
+.school-head .left i{
+  font-size: 9rem;
+}
+
+.school-head .right{
+  display: flex;
+  flex: 1 1 0;
+  height: 100%;
+}
+
+.school-head .right .inputs{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+} 
+
+.school-head .right .inputs .image{
+  height: 10rem;
+  width: 10rem;
+}
+
+.school-head .right .inputs .btn{
+  width: 10rem;
+  display: flex;
+  gap: .5rem;
+}
+
+.school-head .right .inputs .btn button{
+  flex: 1 1 0;
+  border: none;
+  background: none;
+  outline: none;
+  color: #eee;
+  height: 3rem;
+}
+
+.school-head .right .inputs .btn button:first-child{
+  background-color: #0033ff;
+}
+
+.school-head .right .inputs .btn .delete-head{
+  background-color: var(--red);
+}
+.school-head .right .inputs .image img{
+  height: 100%;
+  width: 100%;
+  transition: opacity .6s linear,transform .6s linear;
+}
+
+.school-head .right .inputs span{
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.school-head .right .inputs span input{
+  height: 4rem;
+  flex:1 1 0;
+  padding: 0 1rem;
+  min-height: 4rem;
+}
+
+.school-head .right .inputs textarea{
+  flex-grow: 1;
+  resize: none;
+  padding: 1rem;
+  min-height: 8rem;
+}
+/*school head styles end here*/
+
+/*social media links start here*/
+.social-media-div{
+  display: flex;
+  width: 100%;
+  height: 25rem;
+  position: relative;
+}
+
+.social-media-div .right{
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-media-div .right i{
+  font-size: 8rem;
+  color: var(--orange);
+}
+
+.social-media-div .left{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1 1 0;
+  position: relative;
+}
+
+.social-media-div .left span{
+  flex-grow: 1;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.social-media-div .left span input{
+  height: 75%;
+  flex: 1 1 0;
+  min-height: 4rem;
+}
+
+.apply-btn{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.apply-btn button{
+  height: 4rem;
+  background: #0033ff;
+  color: #eee;
+  border: none;
+  padding: 0 1.5rem;
+  outline: none;
+}
+
 @media (max-width: 1025px) {
   .main-main {
     min-width: 100%;
@@ -851,6 +1276,29 @@
     width: 100%;
     height: 60%;
   }
+  .slideshow-container{
+    display: flex;
+    flex-direction: column-reverse;
+    height: fit-content;
+    max-height: none;
+  }
+  .slideshow-container .left{
+    width: 100%;
+  }
+  .slideshow-container .right{
+    width: 100%;
+    flex: 0 0 0;
+    height: fit-content;
+    overflow: visible;
+  }
+  .slideshow-container .dots{
+    height: 8rem;
+  }
+  .social-media-div,.school-head{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+  }
 }
 
 @media (max-width: 550px) {
@@ -860,6 +1308,13 @@
   .main .school .badge {
     min-height: 7rem;
     min-width: 7rem;
+  }
+  .school-head .right .inputs span{
+    display: flex;
+    flex-direction: column;
+  }
+  .apply-btn button{
+    height: 3rem;
   }
 }
 

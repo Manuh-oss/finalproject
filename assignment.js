@@ -1,5 +1,5 @@
 const assignentSection = document.querySelector(".assignment-body");
-const subjectSelect = document.querySelector(".select #subject");
+const subjectSelect = document.querySelector(".select #subject-one");
 const classSelect = document.querySelector(".select #class");
 const myAssignBtn = document.querySelector(".head .mine");
 const otherAssignBtn = document.querySelector(".head .other");
@@ -19,9 +19,13 @@ function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
-    if (xhr.status == 200) {
+    try{
+     if (xhr.status == 200) {
       const tcode = JSON.parse(xhr.responseText);
       callback(tcode);
+    }
+    }catch(error){
+     console.log("login error" , error);
     }
   };
   xhr.send();
@@ -29,19 +33,22 @@ function getUser(callback) {
 
 //function to get the assignments
 function getAssignments(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getassign.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("ERROR=>", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to getSubject teachers
@@ -54,7 +61,9 @@ function getSubjectTeacher(callback) {
         if (xhr.status === 200) {
           const response = JSON.parse(xhr.responseText);
           const match = response.filter(
-            (s) => s.class === user.class && s.stream === s.stream
+            (s) => s.class === user.class
+             && s.stream === s.stream
+             && s.schoolId === user.schoolId
           );
           callback(match);
         }

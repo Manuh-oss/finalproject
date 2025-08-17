@@ -21,7 +21,7 @@ function getAdmissionNumber(){
     const admissionNumber = urlData.get("admission");
     admission = admissionNumber;
     classSelect.value = urlData.get("class");
-    streamSelect.value = urlData.get("stream");
+    streamSelect.value = urlData.get("stream");b
 }
 
 function verifyInputs() {
@@ -30,8 +30,7 @@ function verifyInputs() {
   let allIsFilled = true;
   requiredInputs.forEach((input) => {
     if (input.value === "") {
-      allIsFilled = false;
-      input.classList.add("errors");
+      allIsFilled = false;  
     }
   });
 
@@ -63,13 +62,31 @@ function profileImageUpload() {
   }
 }
 
+function getUser(callback){
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET' , 'saved_user.php' , true);
+  xhr.onload = () => {
+    try{
+     if(xhr.status == 200){
+      const response = JSON.parse(xhr.responseText);
+      callback(response);
+     }
+    }catch(error){
+      console.log("Login error" , error);
+    }
+  }
+  xhr.send();
+}
+
 function postEnrollFOrm(){
+  getUser((user) => {
     const verified = verifyInputs();
      if(verified){
         const formData = new FormData(form);
         const xhr = new XMLHttpRequest();
         xhr.open('POST','parent.php',true);
         formData.append("admission" , admission);
+        formData.append("id" , user.schoolId);
         xhr.onload = () => {
           try{
              if(xhr.status === 200){
@@ -92,6 +109,7 @@ function postEnrollFOrm(){
      } else{
        showErrorMessage("⚠️ Please fill in all required fields.")
      }   
+     })
 }
 
 

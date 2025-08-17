@@ -13,7 +13,12 @@
     $row = $result->fetch_assoc();
 
     if($count > 0){
-      $_SESSION['email'] = $username;
+      $_SESSION['admission'] = $row['teachers_code'];
+      $_SESSION['school_id'] = $row['school_id'];
+      $_SESSION['class'] = $row['identification'];
+      $_SESSION['stream'] = "";
+      $_SESSION['from'] = "admin";
+      $_SESSION['email'] = $row['email'];
       $_SESSION['name'] = $row['firstname'];
       header("location:phpmail.php");
     }else{

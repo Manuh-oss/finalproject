@@ -62,6 +62,58 @@ function getSetup(callback) {
   xhr.send();
 }
 
+function getSliders(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getSlidesho.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        callback(response);
+      }
+    } catch (error) {
+      console.log("slideshow error", error);
+    }
+  };
+  xhr.send();
+}
+
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    try{
+       if (xhr.status === 200) {
+         const response = JSON.parse(xhr.responseText);
+         callback(response)
+       }
+    }catch(error){
+       console.log("login error" , error);
+    }
+  };
+  xhr.send();
+}
+
+const schoolInfoBox = document.querySelector(".school");
+const badge = schoolInfoBox.querySelector(".badge img");
+const schoolName = schoolInfoBox.querySelector(".text h1")
+const schoolAdres = schoolInfoBox.querySelector(".text h2")
+
+function updateSchoolname(){
+  getSetup((schoolSetups) => {
+     getUser((user) => {
+      const thisSchool = schoolSetups.find(s => s.schoolId === user.schoolId);
+      if(thisSchool){
+        badge.setAttribute('src' , thisSchool.badge);
+        schoolName.textContent = thisSchool.schoolName
+        schoolAdres.textContent = thisSchool.adress
+      }
+     })
+  })
+}
+
+updateSchoolname()
+
 const subjects = [
   "english",
   "kiswahili",
@@ -119,6 +171,10 @@ const subjectIcons = {
   art: "fa-paint-brush",
 };
 
+const streamsValues = [
+  "green","red","blue","purple"
+]
+
 const studentCount = document.querySelector(".student-count");
 const teacherCount = document.querySelector(".teacher-count");
 const parentCount = document.querySelector(".parent-count");
@@ -139,15 +195,24 @@ const btn = document.querySelector(".btn-section");
 //after the dom has finished loading then diplay the counts
 document.addEventListener("DOMContentLoaded", () => {
   getStudents((students) => {
-    studentCount.textContent = students.length;
+    getUser((user) => {
+       const allStudents = students.filter(s => s.schoolId === user.schoolId)
+       studentCount.textContent = allStudents.length;
+    })
   });
 
-  getTeachers((teachers) => {
-    teacherCount.textContent = teachers.length;
+  getParents((teachers) => {
+    getUser((user) => {
+       const allteachers = teachers.filter(s => s.schoolId === user.schoolId)
+       teacherCount.textContent = allteachers.length;
+    })
   });
 
-  getParents((parents) => {
-    parentCount.textContent = parents.length;
+  getTeachers((parents) => {
+    getUser((user) => {
+       const allparents = parents.filter(s => s.schoolId === user.schoolId)
+       parentCount.textContent = allparents.length;
+    })
   });
 
   setTimeout(() => {
@@ -178,6 +243,10 @@ const mode = classContainer.querySelector(".fa-toggle-off");
 const progress = document.querySelector(".submit-progress");
 const teacherCont = departmentContainer.querySelector(".teachers");
 const progressSpans = document.querySelector(".progress");
+const numberSpans = Array.from(progressSpans.children).filter((span) =>
+  span.classList.contains("value")
+);
+const continueBtn = departmentContainer.querySelector(".box-btn button");
 
 function assignType(type) {
   switch (type) {
@@ -313,7 +382,7 @@ function editSubject(span) {
   });
 }
 
-function updateSubjects() {
+function updateSubjects(layout = null) {
   const getUniqueTexts = (spans) => {
     const values = spans.map((m) => m.dataset.text.trim().toLowerCase());
     return [...new Set(values)];
@@ -322,14 +391,16 @@ function updateSubjects() {
   const subjectArray = getUniqueTexts(subjectSpans).join("-");
   const classArray = getUniqueTexts(classSpans).join("-");
   const streamArray = getUniqueTexts(streamSpans).join("-");
-  postChanges(subjectArray, classArray, streamArray);
+
+  postChanges(subjectArray, classArray, streamArray,layout);
 }
 
 //function to diaply already loaded subjects from the database
 
 function loadSubmitedSubjects() {
-  getSetup((schoolSetups) => {
-    const thisSchool = schoolSetups.find((s) => s.schoolId === "1");
+  getUser((user) => {
+     getSetup((schoolSetups) => {
+    const thisSchool = schoolSetups.find((s) => s.schoolId === user.schoolId);
     if (thisSchool) {
       subjectContainer.innerHTML = "";
       const savedSubjects = thisSchool.subjects;
@@ -409,6 +480,7 @@ function loadSubmitedSubjects() {
       window.location.href = "login.html";
     }
   });
+  })
 }
 
 function displaySUbjectNumbers(array) {
@@ -453,8 +525,10 @@ function getCategory(rawCategory) {
 
 //functiont load clases
 function loadSubmitedClases() {
-  getSetup((schoolSetups) => {
-    const thisSchool = schoolSetups.find((s) => s.schoolId === "1");
+  classSpans = [];
+  getUser((user) => {
+     getSetup((schoolSetups) => {
+    const thisSchool = schoolSetups.find((s) => s.schoolId === user.schoolId);
     if (thisSchool) {
       classContainer.querySelector(".clases-div").innerHTML = "";
       const schoolClases = thisSchool.clases;
@@ -506,6 +580,7 @@ function loadSubmitedClases() {
       displayClassNumbers(classSpans);
     }
   });
+  })
 }
 
 function getClassLayout(schoolClases) {
@@ -598,6 +673,7 @@ function displayNewStystem() {
       span.style.backgroundColor = `${
         colors[Math.floor(Math.random() * colors.length)]
       }`;
+      span.dataset.text = "";
       span.dataset.text =
         clas + "/" + newSystem["type"] + "/" + getClassCategories(category);
       console.log(span.dataset.text);
@@ -606,9 +682,9 @@ function displayNewStystem() {
                   <i class="fa-solid fa-chalkboard"></i>
                   <h3>${clas}</h3>
                 `;
+      classSpans.push(span);          
       categoryBody.appendChild(span);
-      classSpans.push(span);
-
+    
       span.addEventListener("click", (e) => {
         e.stopPropagation();
 
@@ -624,8 +700,14 @@ function displayNewStystem() {
         });
       });
     });
+    streamSpans = [];
     categoryBox.appendChild(categoryBody);
     classContainer.querySelector(".clases-div").appendChild(categoryBox);
+    for(let x = 0; x < 4; x++){
+      const span = document.createElement("span");
+      span.dataset.text = streamsValues[x];
+      streamSpans.push(span)
+    }
     updateSubjects();
   });
 }
@@ -649,8 +731,9 @@ function displayClassNumbers(array) {
 
 function loadDefaultStreams() {
   streamSpans = [];
-  getSetup((schoolSetups) => {
-    const thisSchool = schoolSetups.find((s) => s.schoolId === "1");
+  getUser((user) => {
+      getSetup((schoolSetups) => {
+    const thisSchool = schoolSetups.find((s) => s.schoolId === user.schoolId);
     if (thisSchool) {
       streamContainer.innerHTML = "";
       const clases = thisSchool.clases;
@@ -702,7 +785,7 @@ function loadDefaultStreams() {
                     `;
             streams.appendChild(innerSpan);
           }
-
+          span.dataset.text = "";
           span.dataset.text = clas + ":" + defaultStreams.join("/");
 
           const addSpan = document.createElement("span");
@@ -729,11 +812,13 @@ function loadDefaultStreams() {
       });
     }
   });
+  })
 }
 
 function loadSubmitedStreams() {
-  getSetup((schoolSetups) => {
-    const thisSchool = schoolSetups.find((s) => s.schoolId === "1");
+  getUser((user) => {
+    getSetup((schoolSetups) => {
+    const thisSchool = schoolSetups.find((s) => s.schoolId === user.schoolId);
     if (thisSchool) {
       const savedStreams = thisSchool.streams.split("-");
       const streamlayout = getStreamLayout(savedStreams);
@@ -800,6 +885,7 @@ function loadSubmitedStreams() {
       });
     }
   });
+  })
 }
 
 let addedStreams = 0;
@@ -882,8 +968,8 @@ function defaultDepartmentSetup() {
   getTeachers((teachers) => {
     const icon = departmentContainer.querySelector(".icon i");
     const text = departmentContainer.querySelector(".text h3");
-    const continueBtn = departmentContainer.querySelector(".box-btn button");
     const iconParent = icon.parentElement.parentElement;
+    departmentContainer.style.display = "flex";
 
     continueBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -1007,9 +1093,10 @@ function defaultDepartmentSetup() {
 }
 
 function displayOtherDefaultDepartments() {
-  getTeachers((teachers) => {
+  getUser((user) => {
+     getTeachers((teachers) => {
     getSetup((schoolSetups) => {
-      const thisSchool = schoolSetups.find((s) => s.schoolId === "1");
+      const thisSchool = schoolSetups.find((s) => s.schoolId === user.schoolId);
 
       if (thisSchool) {
         const schoolSubjects = thisSchool.subjects.split("-");
@@ -1031,7 +1118,6 @@ function displayOtherDefaultDepartments() {
           if (continueBtn.classList.contains("step2")) {
             //if were currently in the second step
             iconParent.style.display = "none";
-            continueBtn.classList.add("step3");
             teacherCont.style.display = "flex";
             teacherCont.style.height = "100%";
             teacherCont.style.justifyContent = "flex-start";
@@ -1059,9 +1145,18 @@ function displayOtherDefaultDepartments() {
             const box = progress.querySelector(".box");
 
             box.innerHTML = `
-              <i class="fa-solid fa-check"></i> 
+              <i class="fa-solid fa-check big"></i> 
               <h3>changes saved succesfully</h3>
             `;
+
+            setTimeout(() => {
+              progress.style.transform = "scale(0)";
+              progress.style.opacity = "0";
+              numberSpans[1].classList.add("active");
+              completeDepartments();
+            }, 2000);
+
+            continueBtn.classList.add("last-step");
 
             return;
           }
@@ -1155,15 +1250,153 @@ function displayOtherDefaultDepartments() {
       }
     });
   });
+  })
+}
+
+function completeDepartments() {
+  const icon = departmentContainer.querySelector(".icon i");
+  const text = departmentContainer.querySelector(".text h3");
+  const iconParent = icon.parentElement.parentElement;
+
+  iconParent.style.display = "flex";
+  icon.classList.remove("fa-chalkboard-user", "fa-circle-user");
+  icon.classList.add("fa-check");
+  text.textContent = "head of departments were selected succesfully";
+  iconParent.nextElementSibling.style.display = "none";
+
+  numberSpans[2].classList.add("active");
+
+  continueBtn.addEventListener("click", () => {
+    if (continueBtn.classList.contains("last-step")) {
+      progressSpans.style.display = "none";
+      iconParent.style.display = "none";
+      displayAllHead();
+    }
+  });
+}
+
+function displayAllHead() {
+  getTeachers((teachers) => {
+    const adminTeachers = teachers.filter((teach) => teach.rank === "admin");
+    teacherCont.innerHTML = "";
+    if (adminTeachers.length > 0) {
+      const categoryBox = document.createElement("div");
+      categoryBox.className = "category";
+
+      const h2 = document.createElement("h2");
+      h2.textContent = `admin users (${adminTeachers.length})`;
+      categoryBox.appendChild(h2);
+
+      const teacherContainer = document.createElement("div");
+      teacherContainer.className = "teacher-container";
+      adminTeachers.forEach((teacher) => {
+        const teacherBox = document.createElement("div");
+        teacherBox.className = "boxes";
+        const profileImage =
+          teacher.profileImage || "./teachers/profileimage.png";
+        teacherBox.innerHTML = `
+              <div class="upper">
+                <div class="image">
+                  <img src="${profileImage}" alt="">
+                </div>
+              </div>
+              <div class="lower">
+                <h3 class="name">${teacher.firstname} ${teacher.middlename}</h3>
+                <p>${teacher.rank}</p>
+                <div class="subjects">
+                  <span>${teacher.subjectOne}</span>
+                  <span>${teacher.subjectTwo}</span>
+                </div>
+                  <h5 style="display:none;">${teacher.teacherCode}</h5>
+              </div>
+                <i style="display:none;" class="fas fa-check"></i>
+            `;
+        teacherContainer.appendChild(teacherBox);
+
+        teacherBox.addEventListener("click", (e) => {
+          e.stopPropagation();
+          teacherBox.style.animation = "delete 4s linear alternate";
+
+          setTimeout(() => {
+            teacherBox.style.display = "none";
+            editTeacher(teacher.teacherCode, "normal");
+            displayAllHead();
+          }, 4000);
+        });
+      });
+      categoryBox.appendChild(teacherContainer);
+      teacherCont.appendChild(categoryBox);
+    } else {
+      defaultDepartmentSetup();
+    }
+
+    const otherHods = teachers.filter((teach) => {
+      const [rank, subject] = teach.rank.split("-");
+      return (
+        rank === "H.O.D" && teach.rank !== "normal" && teach.rank !== "admin"
+      );
+    });
+
+    if (otherHods.length > 0) {
+      const categoryBox = document.createElement("div");
+      categoryBox.className = "category";
+
+      const h2 = document.createElement("h2");
+      h2.textContent = `Head of departments (${otherHods.length})`;
+      categoryBox.appendChild(h2);
+
+      const teacherContainer = document.createElement("div");
+      teacherContainer.className = "teacher-container";
+      otherHods.forEach((teacher) => {
+        const teacherBox = document.createElement("div");
+        teacherBox.className = "boxes";
+        const profileImage =
+          teacher.profileImage || "./teachers/profileimage.png";
+        teacherBox.innerHTML = `
+              <div class="upper">
+                <div class="image">
+                  <img src="${profileImage}" alt="">
+                </div>
+              </div>
+              <div class="lower">
+                <h3 class="name">${teacher.firstname} ${teacher.middlename}</h3>
+                <p>${teacher.rank}</p>
+                <div class="subjects">
+                  <span>${teacher.subjectOne}</span>
+                  <span>${teacher.subjectTwo}</span>
+                </div>
+                  <h5 style="display:none;">${teacher.teacherCode}</h5>
+              </div>
+                <i style="display:none;" class="fas fa-check"></i>
+            `;
+        teacherContainer.appendChild(teacherBox);
+        teacherBox.addEventListener("click", (e) => {
+          e.stopPropagation();
+          teacherBox.style.animation = "delete 4s linear alternate";
+
+          setTimeout(() => {
+            teacherBox.style.display = "none";
+            editTeacher(teacher.teacherCode, "normal");
+            displayAllHead();
+          }, 4000);
+        });
+      });
+      categoryBox.appendChild(teacherContainer);
+      teacherCont.appendChild(categoryBox);
+    } else {
+      defaultDepartmentSetup();
+    }
+  });
 }
 //department function end here
 
 //function to post changes to the database
-function postChanges(subjectData, classData, streamData) {
+function postChanges(subjectData, classData, streamData,layout = null) {
   const formData = new FormData();
   formData.append("subject-array", subjectData);
   formData.append("class-array", classData);
   formData.append("stream-array", streamData);
+  formData.append("layout-array", layout || "");
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "uploads.php", true);
@@ -1199,7 +1432,7 @@ function editTeacher(code, rank) {
         if (response.type) {
           // showSuccessMessage("changes applied succesfully");
           box.innerHTML = `
-            <i class="fa-solid fa-thumbs-up"></i> 
+            <i class="fa-solid fa-thumbs-up big"></i> 
             <h3>changes saved succesfully</h3>
           `;
 
@@ -1249,7 +1482,7 @@ function normalize(str) {
 //error handligng functions end gere
 
 //function calls
-defaultDepartmentSetup();
+
 //event losteners
 
 subjectLink.addEventListener("click", () => {
@@ -1296,7 +1529,17 @@ departmentLink.addEventListener("click", (e) => {
   Array.from(children)
     .filter((m) => !m.classList.contains("btn-section"))
     .map((m) => (m.style.display = "none"));
+  defaultDepartmentSetup();
 });
+
+layoutLink.addEventListener("click",(e) => {
+  e.stopPropagation();
+  const children = centralise.children;
+  Array.from(children)
+    .filter((m) => !m.classList.contains("btn-section"))
+    .map((m) => (m.style.display = "none"));
+  document.querySelector(".main-page-editing").style.display = "flex";  
+})
 
 const backBtn = btn.querySelector("button");
 backBtn.addEventListener("click", (e) => {
@@ -1425,13 +1668,9 @@ nextBtn.addEventListener("click", () => {
       });
 
       box.innerHTML = `
-        <i class="fa-solid fa-thumbs-up"></i> 
+        <i class="fa-solid fa-thumbs-up big"></i> 
         <h3>changes saved succesfully</h3>
        `;
-
-      const numberSpans = Array.from(progressSpans.children).filter((span) =>
-        span.classList.contains("value")
-      );
 
       setTimeout(() => {
         progress.style.transform = "scale(0)";
@@ -1443,3 +1682,465 @@ nextBtn.addEventListener("click", () => {
     });
   });
 });
+
+//layout functions
+
+const slideShowContainer = document.querySelector(".slideshow-container");
+const editSlide = slideShowContainer.querySelector(".left");
+const currentSlideBox = slideShowContainer.querySelector(".right");
+const newSliderInput = document.querySelector("#new-slide");
+const img = document.querySelector(".image");
+const label = document.querySelector("#new-slide-label");
+const applyRemoveBtn = slideShowContainer.querySelector(".btn");
+const title = editSlide.querySelector(".tittle");
+const desc = editSlide.querySelector(".desc");
+const applyBtn = applyRemoveBtn.querySelector(".apply")
+const removeBtn = applyRemoveBtn.querySelector(".remove")
+const changeInput = img.querySelector("input");
+
+const imageInputs = document.querySelector("#add-image")
+const imageInput = document.querySelector("#profile");
+
+let currentIndex = 0;
+let id;
+
+function showSliders(){
+  getUser((user) => {
+     getSliders((sliders) => {
+    const thisSchoolSliders = sliders.filter(s => s.schoolId === user.schoolId && s.type === "slider");
+
+    if(thisSchoolSliders.length > 0){
+
+      if(currentIndex >= thisSchoolSliders.length){
+        currentIndex = 0;
+      }else if(currentIndex < 0){
+        currentIndex = 0;
+      }
+
+      const currentSlide = thisSchoolSliders[currentIndex];
+      currentSlideBox.innerHTML = "";
+
+      const imageDiv = document.createElement("div");
+      imageDiv.className = "slide-show-box";
+      imageDiv.style.backgroundImage = `url(${currentSlide.img})`;
+
+      const textDiv = document.createElement("div");
+      textDiv.className = "text";
+      textDiv.innerHTML = `
+         <h3>${currentSlide.h2}</h3>
+         <p>${currentSlide.p}</p>
+      `;
+      imageDiv.appendChild(textDiv);
+
+      const lowerContainer = document.createElement("div");
+      lowerContainer.className = "dots";
+
+      const imagetext = document.createElement("h3");
+      imagetext.textContent = `image ${currentIndex+1}`;
+      lowerContainer.appendChild(imagetext);
+
+      const dotsContainer = document.createElement("div");
+      dotsContainer.className = "dots-section";
+
+      for(let x = 0; x < thisSchoolSliders.length; x++){
+        const span = document.createElement("span");
+        dotsContainer.appendChild(span);
+      }
+      lowerContainer.appendChild(dotsContainer);
+
+      Array.from(dotsContainer.children)[currentIndex].classList.add("active");
+
+      currentSlideBox.appendChild(imageDiv);
+      currentSlideBox.appendChild(lowerContainer);
+
+      img.style.backgroundImage = `url(${currentSlide.img})`;
+      title.value = currentSlide.h2
+      desc.value = currentSlide.p
+      
+      const change = img.querySelector("label");
+      change.addEventListener("click" , () => {
+        stopSlideShow();
+      })
+
+      changeInput.addEventListener("change" , () => {
+        stopSlideShow();
+        label.style.display ="none"
+        applyRemoveBtn.style.display = "flex";
+        readFile(changeInput,img);
+
+        applyBtn.addEventListener("click" , () => {
+          const verified = verifyInputFields([title,desc]);
+          if(verified){
+            postSliderChanges(title.value,desc.value,"","slider",changeInput.files[0],currentSlide.id);
+          }else{
+            showErrorMessage("input all required fields");
+            return;
+          }
+        })
+      })
+
+      Array.from(dotsContainer.children).forEach((dot,idx) => {
+        dot.addEventListener("click" , () => {
+          currentIndex = idx;
+          showSliders()
+        })
+      })
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          imageDiv.style.transform = "translateY(0)";
+          imageDiv.style.opacity = "1";
+
+          textDiv.style.transform = "translateY(0) scale(1)";
+          textDiv.style.opacity = "1";
+        })
+      })
+      currentIndex++
+    }else{
+      showAddoptions();
+    }
+
+  })
+  })
+}
+
+let sliderInterval = setInterval( showSliders, 6000);
+
+function stopSlideShow(){
+  clearInterval(sliderInterval);
+}
+
+function restartSlider(){
+  clearInterval(sliderInterval)
+  sliderInterval = setInterval( showSliders, 6000);
+}
+
+function showAddoptions(){
+  console.log("no image")
+}
+
+function readFile(input,img){
+  if(input.files.length > 0){
+    const file = input.files[0];
+    const filetype = file.type;
+
+    if(!filetype.startsWith("image/")){
+      showErrorMessage("a non-image file detected");
+      return;
+    }
+
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      const result = e.target.result;
+      img.style.backgroundImage = `url(${result})`;
+      if(img.classList.contains("image-file")) img.setAttribute('src' , result);
+    }
+    
+    fileReader.readAsDataURL(file)
+  }
+}
+
+function verifyInputFields(array){
+  let allFilled = true;
+  array.forEach(input => input.classList.remove("errors"));
+  array.forEach(input => {
+    if(input.value === ""){
+      input.classList.add("errors");
+      allFilled = false;
+    }
+  }) 
+
+  if(allFilled){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function postSliderChanges(h2,description,rank,type,image,id = null){
+  const sliderData = new FormData();
+  sliderData.append("image", image);
+  sliderData.append("h2", h2);
+  sliderData.append("p" , description);
+  sliderData.append("school_id" , "1");
+  sliderData.append("rank" , rank);
+  sliderData.append("type" , type);
+  sliderData.append("id" , id || "");
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "admincalendar.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        if (response.type) {
+          showSuccessMessage("changes applied succesfully");
+          restartSlider();
+          resumeInterval();
+          label.style.display = "flex";
+          applyRemoveBtn.style.display = "none";
+          newSliderInput.value = "";
+          changeInput.value = "";
+          imageInput.value = "";
+          imageInputs.value = "";
+        }
+      }
+    } catch (error) {
+      console.log("slider error", error);
+    }finally{
+      console.log(xhr.responseText)
+    }
+  };
+  xhr.send(sliderData);
+
+}
+
+let selectedImage = null;
+
+newSliderInput.addEventListener("change" , () => {
+   label.style.display ="none"
+   applyRemoveBtn.style.display = "flex";
+   readFile(newSliderInput,img)
+   stopSlideShow();
+
+   title.value = "";
+   desc.value = "";
+
+   applyBtn.addEventListener("click" , () => {
+     const verified = verifyInputFields([title,desc]);
+    if(verified){
+       postSliderChanges(title.value,desc.value,"","slider",newSliderInput.files[0]);
+    }else{
+      showErrorMessage("input all required fields");
+      return;
+    }
+   })
+
+})
+
+showSliders();
+
+//slideshow functions strt here
+const applySchool = document.querySelector(".school-name");
+const values = applySchool.querySelectorAll("textarea");
+const linkInputs = document.querySelectorAll(".social-media-div span input");
+
+let initialMottoLayout = {
+  schoolInfo : [
+    'motto-Better your best',
+    'mission-Better your best',
+    'vision-Better your best',
+  ]
+}
+
+function displaySchoolInfo(){
+  getUser((user) => {
+   getSetup((schoolSetups) => {
+    const thisSchool = schoolSetups.find(s => s.schoolId === user.schoolId);
+
+    if(thisSchool){
+      let layout = getLayout(thisSchool.layout);
+      if(!layout) layout = initialMottoLayout;
+      console.log(layout)
+
+      const schoolInfo = layout.schoolInfo;
+      if(schoolInfo){
+       values.forEach((textarea) => {
+        const matched = schoolInfo.find(s => {
+          const [id] = s.split("-");
+          return id === textarea.id;
+        });
+
+        if(matched){
+          const [, text] = matched.split("-");
+          textarea.value = text;
+        }
+      });
+    }
+    }
+  });
+  })
+}
+
+function getLayout(rawData){
+   const result = {};
+   const splitedData = rawData.split("&");
+   splitedData.forEach(data => {
+    const parts = data.split("/")
+     const [type,values] = data.split("/");
+     if(parts.length == 2){
+       const valuesArray = values.split(":")
+      if(!result[getType(type)]) result[getType(type)] = valuesArray;
+     } 
+   }) 
+  return result;
+}
+
+function getType(type){
+  switch(type){
+    case "sc": return "schoolInfo";
+    case "ln": return "schoolLinks";
+  }
+}
+
+const getSchoolInfolayout = () => {
+    const infoArray = (initialMottoLayout.schoolInfo).join(":");
+    const links = Array.from(linkInputs).map(m => {
+      return m.className +"-"+m.value
+    }).join(":")
+    const data = "sc"+"/"+infoArray+"&"+"ln"+"/"+links;
+    return data;
+}
+
+values.forEach(input => {
+  input.addEventListener("change" , () => {
+     const data = Array.from(values).map(val => val.id+"-"+val.value);
+     initialMottoLayout.schoolInfo = data;
+     const infodata = getSchoolInfolayout();
+     const verify = verifyInputFields(values);
+     if(verify){
+       updateSubjects(infodata);
+     }
+  })
+})
+
+const applySchoolInfo = document.querySelector(".applyz");
+applySchoolInfo.addEventListener("click" , () => {
+   const data = getSchoolInfolayout();
+   const verify = verifyInputFields(values);
+   if(verify){
+     updateSubjects(data);
+   }
+})
+
+displaySchoolInfo()
+
+//school heads function start here
+
+let currentIdx = 0;
+const schoolHeadName = document.querySelector("#name");
+const schoolHeadrank = document.querySelector("#rank");
+const schoolHeadDesc = document.querySelector("#information");
+const imageDiv = document.querySelector(".inputs .image img");
+
+function displaySchoolHeads () {
+  getUser((user) => {
+     getSliders((sliders) => {
+    const schoolHeads = sliders.filter(s => s.schoolId === user.schoolId && s.type === "head");
+    if(schoolHeads.length > 0){
+       if(currentIdx >= schoolHeads.length){
+        currentIdx = 0;
+       }else if(currentIdx < 0){
+         currentIdx = 0;
+       }  
+
+       const currentHead = schoolHeads[currentIdx];
+       schoolHeadName.value = currentHead.h2;
+       schoolHeadDesc.value = currentHead.p;
+       schoolHeadrank.value = currentHead.rank;
+       imageDiv.setAttribute('src' , currentHead.img);
+
+       currentIdx++;
+
+       imageInput.addEventListener("change" , () => {
+        stopInterval()
+        readFile(imageInput,imageDiv);
+
+        const applyBtn = document.querySelector(".inputs .apply");
+        applyBtn.addEventListener("click" , () => {
+          const verify = verifyInputFields([schoolHeadName,schoolHeadrank,schoolHeadDesc]);
+          if(verify){
+            postSliderChanges(schoolHeadName.value,schoolHeadDesc.value,schoolHeadrank.value,"head",imageInput.files[0],currentHead.id);
+          }
+        })
+      })
+
+    }else{
+      
+    }
+  })
+  })
+}
+
+displaySchoolHeads()
+let schoolHeadInterval = setInterval(displaySchoolHeads , 6000);
+
+function stopInterval(){
+   clearTimeout(schoolHeadInterval);
+}
+
+function resumeInterval(){
+  clearTimeout(schoolHeadInterval);
+  schoolHeadInterval = setInterval(displaySchoolHeads , 6000);
+}
+
+const addbTn = document.querySelector(".add-head");
+const deletebTn = document.querySelector(".delete-head");
+
+addbTn.addEventListener("click" , () => {
+  stopInterval();
+  schoolHeadDesc.value = "";
+  schoolHeadrank.value = "";
+  schoolHeadName.value = "";
+  imageInput.value = "";
+  imageDiv.setAttribute('src' , "./teachers/profileimage.png");
+  
+  imageInputs.addEventListener("change" , () => {
+    readFile(imageInputs,imageDiv);
+
+      const applyBtn = document.querySelector(".inputs .apply");
+      applyBtn.addEventListener("click" , () => {
+        const verify = verifyInputFields([schoolHeadName,schoolHeadrank,schoolHeadDesc]);
+        if(verify){
+          postSliderChanges(schoolHeadName.value,schoolHeadDesc.value,schoolHeadrank.value,"head",imageInputs.files[0]);
+      }
+      })
+  })
+
+})
+
+
+
+
+const applySchoolLinks = document.querySelector(".applyi");
+applySchoolLinks.addEventListener("click" , () => {
+   const data = getSchoolInfolayout();
+   const verify = verifyInputFields(linkInputs);
+   if(verify){
+     updateSubjects(data);
+   }
+})
+
+
+function displaySchoolLinks(){
+  getUser((user) => {
+     getSetup((schoolSetups) => {
+    const thisSchool = schoolSetups.find(s => s.schoolId === user.schoolId);
+
+    if(thisSchool){
+      let layout = getLayout(thisSchool.layout);
+      if(!layout) layout = initialMottoLayout;
+      console.log(layout)
+
+      const schoolInfo = layout.schoolLinks;
+      if(schoolInfo){
+            linkInputs.forEach((textarea) => {
+        const matched = schoolInfo.find(s => {
+          const [id] = s.split("-");
+          return id === textarea.className;
+        });
+     
+        if(matched){
+          const [, text] = matched.split("-");
+          textarea.value = text;
+        }else{
+          console.log("errro")
+        }
+      });
+      }
+    }
+  });
+  })
+}
+
+displaySchoolLinks()

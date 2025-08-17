@@ -17,6 +17,7 @@ include("connection2.php");
      $stream = $conn->real_escape_string($_POST['stream']);
      $email = $conn->real_escape_string($_POST['email']);
      $address = $conn->real_escape_string($_POST['address']);
+     $id = $conn->real_escape_string($_POST['id']);
      //4. image submittion
     // include("directory.php");
      $file = $_FILES['profile-image']['name'];
@@ -27,7 +28,7 @@ include("connection2.php");
      if(!empty($file)){
         if(move_uploaded_file($fileTemplateName , $uploadPath)){
           //check if student exist
-          $sqlCheck = "SELECT * FROM `main` WHERE `admission` = '$admission'";
+          $sqlCheck = "SELECT * FROM `main` WHERE `admission` = '$admission'AND`school_id`='$id'";
           $checkResult = $conn->query($sqlCheck);
           $countStudents = mysqli_num_rows($checkResult);
           if($countStudents > 0){
@@ -51,8 +52,8 @@ include("connection2.php");
           }else{
               //insert into database if the admission number does not exist  
         
-          $sqlInsert = "INSERT INTO main(firstname,middlename,lastname,othername,dateofbirth,student_location,admission,gender,class,stream,email,student_address,profileImage_name,profileimage_path) 
-          VALUES('$firstname','$middlename','$lastname','$othername','$dateOfBirth','$location','$admission','$gender','$class','$stream','$email','$address','$file','$uploadPath')";
+          $sqlInsert = "INSERT INTO main(firstname,middlename,lastname,othername,dateofbirth,student_location,admission,gender,class,stream,email,student_address,profileImage_name,profileimage_path,school_id) 
+          VALUES('$firstname','$middlename','$lastname','$othername','$dateOfBirth','$location','$admission','$gender','$class','$stream','$email','$address','$file','$uploadPath','$id')";
 
             //check if insertion was succesfull
           if($conn->query($sqlInsert) === TRUE){          
@@ -74,7 +75,7 @@ include("connection2.php");
         }    
      }else{
       
-      $sqlCheck = "SELECT * FROM `main` WHERE `admission` = '$admission'";
+      $sqlCheck = "SELECT * FROM `main` WHERE `admission` = '$admission'AND`school_id`='$id'";
       $checkResult = $conn->query($sqlCheck);
       $countStudents = mysqli_num_rows($checkResult);
 
@@ -98,8 +99,8 @@ include("connection2.php");
 
       }else{
 
-            $sqlInsert = "INSERT INTO main(firstname,middlename,lastname,othername,dateofbirth,student_location,admission,gender,class,stream,email,student_address) 
-            VALUES('$firstname','$middlename','$lastname','$othername','$dateOfBirth','$location','$admission','$gender','$class','$stream','$email','$address')";
+            $sqlInsert = "INSERT INTO main(firstname,middlename,lastname,othername,dateofbirth,student_location,admission,gender,class,stream,email,student_address,school_id) 
+            VALUES('$firstname','$middlename','$lastname','$othername','$dateOfBirth','$location','$admission','$gender','$class','$stream','$email','$address','$id')";
 
               //check if insertion was succesfull
             if($conn->query($sqlInsert) === TRUE){          

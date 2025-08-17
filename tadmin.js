@@ -46,87 +46,102 @@ function getUser(callback) {
 
 //function to getTeachers
 function getTeacherDetails(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool)
       }
     } catch (error) {
       console.log("Teacher errror", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get notes
 function getNotes(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getnotes.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool)
       }
     } catch (error) {
       console.log("Notes errror", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get assignments
 function getAssignments(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getassign.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool)
       }
     } catch (error) {
       console.log("Notes errror", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get quizes
 function getQuiz(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "questions.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool)
       }
     } catch (error) {
       console.log("Notes errror", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get quiz results
 function getQuizResult(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "quizresult.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool)
       }
     } catch (error) {
       console.log("Notes errror", error);
     }
   };
   xhr.send();
+  })
 }
 
 /* display functions stsrt here*/
@@ -260,9 +275,11 @@ function edit(container, myDetails) {
 
 //function saveChanges
 function saveChanges(value, code) {
+  getUser((user) => {
   const data = new FormData();
   data.append("aboutMe", value);
   data.append("code", code);
+  data.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "postaboutme.php", true);
   xhr.onload = () => {
@@ -281,6 +298,7 @@ function saveChanges(value, code) {
     }
   };
   xhr.send(data);
+  })
 }
 
 function assignDepartment(one, two) {

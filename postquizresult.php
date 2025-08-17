@@ -7,6 +7,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
    $score = $conn->real_escape_string($_POST['score']);
    $topicNumber = $conn->real_escape_string($_POST['topic']);
    $attempt = $conn->real_escape_string($_POST['attempt']);
+   $id = $conn->real_escape_string($_POST['id']);
 
    $sqlCheck = "SELECT * FROM `student_quiz_result` WHERE `score` = '$score' AND `quizCode` = '$quizCode' AND `admission` = '$addmision' AND `attemptDate` = '$attemptDate'";
    
@@ -16,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
    $feedback = [];
 
 
-    $sqlInsert = "INSERT INTO `student_quiz_result`(`score`, `admission`, `attempt`, `quizCode`, `topic`, `attemptDate`) VALUES ('$score','$addmision','$attempt','$quizCode','$topicNumber','$attemptDate')";
+    $sqlInsert = "INSERT INTO `student_quiz_result`(`score`, `admission`, `attempt`, `quizCode`, `topic`, `attemptDate`,`school_id`) VALUES ('$score','$addmision','$attempt','$quizCode','$topicNumber','$attemptDate','$id')";
 
     if($conn->query($sqlInsert) === TRUE){
         $feedback[] = [

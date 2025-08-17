@@ -108,19 +108,22 @@ function displayMobileNotifications(ul) {
 
 //function to get events
 function getEvents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "events.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Events error", error);
     }
   };
   xhr.send();
+  })
 }
 //this function perform the function of the calendar in the dashboars
 function updateCalendar() {
@@ -178,36 +181,42 @@ function updateCalendar() {
 
 //function to get teahcers
 function getTeachers(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Teachers error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get all teacher lessons
 function getTeacherLessons(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "lesson.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);callback(response);
       }
     } catch (error) {
       console.log("Teachers error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get logged in user
@@ -291,9 +300,9 @@ function displayTeachers() {
                                 <h3 class="name">${teacherDetails.firstname} ${teacherDetails.middlename}</h3>
                                 <p>${myteahcer.subject}</p>
                                 <div class="links">
-                                  <a href="https://wa.me/+254${classTeacher.phone}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-                                  <a href="tel:+254${classTeacher.phone}" ><i class="fas fa-phone"></i></a>
-                                  <a href="mailto:${classTeacher.email}"><i class="fa fa-envelope"></i></a>
+                                  <a href="https://wa.me/+254${teacherDetails.phone}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                                  <a href="tel:+254${teacherDetails.phone}" ><i class="fas fa-phone"></i></a>
+                                  <a href="mailto:${teacherDetails.email}"><i class="fa fa-envelope"></i></a>
                                 </div>
                                 </div>
                             `;
@@ -308,19 +317,22 @@ function displayTeachers() {
 
 //function to get notifications
 function getNotifications(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getnotifications.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Notification error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to diaplay notifications

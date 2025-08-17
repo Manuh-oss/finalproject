@@ -26,9 +26,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $eigthLesson = $conn->real_escape_string($eigthLessons[$index]);
         $ninthLesson = $conn->real_escape_string($ninthLessons[$index]);
         $tenthLesson = $conn->real_escape_string($tenthLessons[$index]);
+        $id = $conn->real_escape_string($_POST['id']);
         $day = $days[$index];
         
-        $sqlCheck = "SELECT * FROM `teachers_timetable` WHERE `teacher_code` = '$teacherCode' AND `day` = '$day'";
+        $sqlCheck = "SELECT * FROM `teachers_timetable` WHERE `teacher_code` = '$teacherCode' AND `day` = '$day'AND`school_id`='$id'";
         $result = $conn->query($sqlCheck);
         $countTimetable = mysqli_num_rows($result);
 
@@ -47,7 +48,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
               ]; 
           }
         }else{
-            $sqlInsert = "INSERT INTO `teachers_timetable`(`teacher_code`, `day`, `lesson_one`, `lesson_two`, `lesson_three`, `lesson_four`, `lesson_five`, `lesson_six`, `lesson_seven`, `lesson_eight`, `lesson_nine`, `lesson_ten`) VALUES ('$teacherCode','$day','$firstLesson','$secondLesson','$thirdLesson','$forthLesson','$fifthLesson','$sixthLesson','$seventhLesson','$eigthLesson','$ninthLesson','$tenthLesson')";
+            $sqlInsert = "INSERT INTO `teachers_timetable`(`teacher_code`, `day`, `lesson_one`, `lesson_two`, `lesson_three`, `lesson_four`, `lesson_five`, `lesson_six`, `lesson_seven`, `lesson_eight`, `lesson_nine`, `lesson_ten`,`school_id`) VALUES ('$teacherCode','$day','$firstLesson','$secondLesson','$thirdLesson','$forthLesson','$fifthLesson','$sixthLesson','$seventhLesson','$eigthLesson','$ninthLesson','$tenthLesson','$id')";
     
             if($conn->query($sqlInsert) === TRUE){
                 $feedback [] = [

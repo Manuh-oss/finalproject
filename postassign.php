@@ -5,6 +5,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $subject = $conn->real_escape_string($_POST['subject']);
     $code = $conn->real_escape_string($_POST['code']);
     $type = $conn->real_escape_string($_POST['type']);
+    $id = $conn->real_escape_string($_POST['id']);
     $directory = 'profileImage/';
 
     //file variables
@@ -13,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $filepath = $directory . basename($tempname);
 
     if(move_uploaded_file($tempname , $filepath)){
-      $sqlCheck = "SELECT * FROM `assignment` WHERE `code` = '$code' AND `file_name` = '$filename' AND `class` = '$class' AND `subject` = '$subject'";
+      $sqlCheck = "SELECT * FROM `assignment` WHERE `code` = '$code' AND `file_name` = '$filename' AND `class` = '$class' AND `subject` = '$subject'AND`school_id`='$id'";
       $result = $conn->query($sqlCheck);
       if($result){
         $count = mysqli_num_rows($result);
@@ -34,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             }
         }else{
            //else just insert it
-           $sqlInsert = "INSERT INTO `assignment`(`file_name`, `file_path`, `subject`, `class`, `stream`, `code`,`type`) VALUES ('$filename','$filepath','$subject','$class','111','$code','$type')";
+           $sqlInsert = "INSERT INTO `assignment`(`file_name`, `file_path`, `subject`, `class`, `stream`, `code`,`type`,`school_id`) VALUES ('$filename','$filepath','$subject','$class','111','$code','$type','$id')";
            if($conn->query($sqlInsert) === true){
             echo json_encode([
                 "message" => "insert success",

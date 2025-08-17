@@ -4,9 +4,11 @@ const LongBreak = ["b", "r", "e", "a", "k"];
 const lunch = ["l", "u", "n", "c", "h"];
 
 function getStudentTimetable(callback,clas,stream){
+  getUser((user) => {
   const data = new FormData();
   data.append("student-class" , clas);
   data.append("student-stream" , stream);
+  data.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open('POST','studenttimetable.php',true);
   xhr.onload =  ( ) => {
@@ -20,6 +22,7 @@ function getStudentTimetable(callback,clas,stream){
     }
   }
   xhr.send(data);
+  })
 }
 
 function getUser(callback){
@@ -39,8 +42,10 @@ function getUser(callback){
 }
 
 function getTeacherTimetable(callback,code){
+  getUser((user) => {
   const tcode = new FormData();
   tcode.append("teacherCode" , code);
+  tcode.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open('POST' , 'teachertimetable.php' , true);
   xhr.onload = () => {
@@ -54,6 +59,7 @@ function getTeacherTimetable(callback,code){
     }
   }
   xhr.send(tcode);
+  })
 }
 
 function verifyUser(){
@@ -139,8 +145,8 @@ function getTimetableId(rawData,user){
         if(getId(key)){
           if(user === "teacher"){
            const [subject,clas,stream,type] = value.split("-");
-             subjectz = subject;
-             teacherz = "form"+clas+"-"+converStream(stream);
+             subjectz = subject; 
+             teacherz = clas+"-"+(stream);
              typez = type;
           }else{
             const [subject,teacher,type] = value.split("-");

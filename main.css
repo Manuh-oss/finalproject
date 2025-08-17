@@ -1,0 +1,630 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fb;
+  overflow: auto;
+  inset: 0 0 0 0;
+}
+main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+:root {
+  --whitesmoke: #e7e7e7;
+  --white: #eee;
+  --light-text: #888888;
+  --light-purple: #884dff;
+  --dark-navy: #151140;
+  --wheat: #ffeed9;
+  --eggshell: #f0ebdb;
+  --gray: #918c91;
+  --darker-navy: #141726;
+  --light-navy: #0052a5;
+  --red: #ed0028;
+  --soft-white: #f6f9fc;
+  --light-gray: #f0f2f5;
+  --light-blue: #eef4fb;
+  --submit-btn: #28c76f;
+  --orange: #ffa726;
+  --dark-text-two: #333;
+  --dark-text-one: #222;
+}
+
+* {
+  box-sizing: border-box;
+  text-transform: capitalize;
+  text-decoration: none;
+  margin: 0;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+header{
+    position: sticky;
+    top: 0;
+    height: 8rem;
+    width: 100%;
+    background-color: #ffff;
+    display: flex;
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+header .links{
+    flex: 1 1 0;
+    display: flex;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+header .logo{
+    display: flex;
+    gap: 1rem;
+    font-size: 1.5rem;
+    align-items: center;
+}
+
+header .logo img{
+    height: 5rem;
+    width: 5rem;
+    max-height: 5rem;
+}
+
+header ul{
+    list-style: none;
+    display: flex;
+    height: 100%;
+    gap: 1rem;
+} 
+
+header ul li{
+    height: 100%;
+    color: navy;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+/*main content style start here*/
+main{
+    height: 100%;
+    width: 100%;
+    max-width: 100vw;
+    max-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:2rem 2rem 0;
+}
+
+main .slideshow{
+    width: 80%;
+    height: 50rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 50rem;
+}
+
+main .slideshow .image-container{
+    width: 100%;
+    height: 100%;
+    background-image: url(./slideshow/schoolbus.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: translateY(100%);
+    transition:opacity .6s linear,transform .6s linear;
+    opacity: 0.2;
+}
+
+main .slideshow .text-content{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    height: fit-content;
+    padding:1rem;
+    width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transform: translateY(100%) scale(0.5);
+    transition: transform .6s ease-in-out;
+    transition-delay: .6s;
+}
+
+main .slideshow .text-content h2{
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 2.8rem;
+}
+
+main .slideshow .text-content p{
+    font-size: 1.2rem;
+    color: #f8f9fb;
+    line-height: 2rem;
+}
+
+main .slideshow .dots{
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+    height: 4rem;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+main .slideshow .dots span{
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+
+.active{
+    background-color: #fff;
+    border: 1px solid #000;
+}
+
+main .slideshow .next{
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    background-color: rgba(0, 0,0, .5);
+    transform: translateY(-50%);
+    height: 4rem;
+    width: 4rem;
+    font-size: 1.5rem;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    cursor: pointer;
+}
+main .slideshow .prev{
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    background-color: rgba(0, 0,0, .5);
+    transform: translateY(-50%);
+    height: 4rem;
+    width: 4rem;
+    font-size: 1.5rem;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    cursor: pointer;
+}
+/*main content style end here*/
+
+
+.school-name{
+    display: flex;
+    gap: 2rem;
+    background-color: #fff;
+    width: 100%;
+    padding:0 2rem;
+}
+
+.school-name .text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.school-name .text h1{
+    font-size: 5rem;
+}
+
+.school-name .text p{
+    font-size: 2rem;
+}
+
+.school-name .image{
+    padding: 10rem 0;
+}
+
+/*welcome message styles start here*/
+.welcome{
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.welcome h1{
+    color: navy;
+    font-size: 3rem;
+}
+
+.welcome p{
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    width: 80%;
+}
+
+.school-info{
+    width: 100%;
+    height: 30rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.school-info .box{
+    background-image: linear-gradient(200deg, #00033d, #0600ab, #0033ff);
+    background-size: 300% 100%;
+    background-repeat: no-repeat;
+    height: 100%;
+    flex: 1 1 0;
+    color: #977dff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0 2rem;
+}
+
+.founders{
+    width: 100%;
+    height: 20rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.founders .box{
+    height: 100%;
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    max-width: 80%;
+}
+
+.founders .box .image{
+    height:20rem;
+    width: 20rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.founders .box .image img{
+    height: 15rem;
+    width: 15rem;
+}
+
+.founders .box .text{
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #d1d5db;
+    padding: 0 1rem;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.founders .box .text h3{
+    font-size: 1.5rem;
+}
+
+.founders .box .text h4{
+    font-size: 1.5rem;
+}
+
+.school-info .box:nth-child(1){background-position: 0% 0;}
+.school-info .box:nth-child(2){background-position: 50% 0;}
+.school-info .box:nth-child(3){background-position: 100% 0;}
+/*welcome message styles end here*/
+
+/*contact styles start here*/
+.contact{
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.contact h1{
+    color: navy;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.school-contact{
+    display: grid;
+    grid-template-columns: repeat(auto-fit , minmax(18rem , 1fr));
+    gap: 2rem;
+}
+
+.school-contact .box{
+    background-color: #fff;
+    height: 18rem;
+    border-radius: 1rem;
+    box-shadow: 5px 5px 3px rgba(0, 0,0, .1),
+    -5px 5px 10px rgba(0, 0,0, .1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.school-contact .box i{
+    height: 5rem;
+    width: 5rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    background-color: #0600ab;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.contact-page{
+    display: flex;
+    gap: 2rem;
+}
+
+.contact-page .phone-image{
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-page .phone-image img{
+    height: 30rem;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.contact-page .contact-form{
+    flex:1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #d1d5db;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 1rem;
+}
+
+.contact-page .contact-form .input-field{
+    display: flex;
+    gap: 1rem;
+}
+
+.contact-page .contact-form .input-field input{
+    height: 5rem;
+    flex: 1 1 0;
+    padding: 0 1rem;
+    outline: none;
+    border: 1px solid #d1d5db;
+    border-radius: .5rem;
+}
+
+.contact-page .contact-form textarea{
+    height: 15rem;
+    resize: none;
+    width: 100%;
+    padding: 1rem;
+    outline: none;
+    border: 1px solid #d1d5db;
+    border-radius: .5rem;
+}
+
+footer{
+    height: 6rem;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+/*contact styles end here*/
+
+/*education styles start here*/
+.education{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.education h1{
+   color: navy;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.education .education-body{
+    display: grid;
+    grid-template-columns: repeat(auto-fit , minmax(18rem , 1fr));
+    gap: 1.5rem;
+}
+
+.education-body .box{
+    height: 20rem;
+    box-shadow: 5px 5px 3px rgba(0, 0,0, .1),
+    -5px 5px 10px rgba(0, 0,0, .1);
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+}
+
+.education-body .box i{
+    font-size: 7rem;
+}
+
+.education-body .box:nth-child(1) i{color: #977dff;}
+.education-body .box:nth-child(2) i{color: var(--red);}
+.education-body .box:nth-child(3) i{color: var(--orange);}
+/*education styles end here*/
+
+@media (max-width:768px) {
+    header .links{
+        display: none;
+    }
+    main{
+        padding: 2rem 1rem;
+    }
+    main .slideshow .text-content{
+        bottom: 2.5rem;
+    }
+    main .slideshow .dots span{
+        height: 1rem;
+        width: 1rem;
+    }
+    .contact,.school-info,.founders,.education,.welcome,main .slideshow{
+        width: 100%;
+    }
+    .school-info{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem , 1fr));
+        gap: 1rem;
+        height: fit-content;
+    }
+    .school-info .box{
+        height: 20rem;
+        padding:1rem;
+        overflow: auto;
+        justify-content: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background-image: linear-gradient(100deg, #00033d, #0600ab, #0033ff);
+        background-size: 300% 100%;
+        background-repeat: no-repeat;
+    }
+    .school-info .box p{
+        font-size: 1.3rem;
+        line-height: 1.8rem;
+    }
+    .school-contact{
+        gap: 1rem;
+    }
+    .founders{
+        height: 15rem;
+    }
+    .founders .box{
+        flex: 1 1 0;
+        width: 100%;
+        max-width: none;
+        padding: 0 1rem;
+    }
+    .founders .box .text{
+        gap: 1rem;
+        display: flex;
+        justify-content: flex-start;
+        padding: 1.5rem;
+        height: 100%;
+        flex: 1 1 0;
+    }
+    .founders .box .text p{
+        font-size: 1.2rem;
+        line-height: 1.6rem;
+    }
+    .founders .box .image{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        max-width: 11rem;
+    }
+    .founders .box .image img{
+        height: 10rem;
+        width: 10rem;
+    }
+    .contact-page{
+        display: flex;
+        flex-direction: column;
+    }
+    .school-name{
+        display: flex;
+        flex-direction: column;
+    }
+    .school-name .image{
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width:500px) {
+    main{
+        padding: 1rem;
+    }
+    main .slideshow{
+        height: 20rem;
+        min-height: 30rem;
+    }
+    .welcome h1,.contact h1{
+        font-size: 2rem;
+        text-align: left;
+    }
+    main .slideshow .next{
+        transform: translateX(200%);
+    }
+    main .slideshow .prev{
+        transform: translateX(-200%);
+    }
+    .school-name{
+        padding: 1rem;
+    }
+    .school-name .text h1{
+        font-size: 3rem;
+    }
+    .school-name .text p{
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 2rem;
+    }
+    .school-name .image{
+        padding: 0;
+    }
+    .school-name .image img{
+        object-fit: cover;
+        aspect-ratio: 1/1;
+        max-height: 30rem;
+        width: 100%;
+    }
+}
+
+@media (max-width:450px) {
+    .contact-page .contact-form .input-field{
+        display: flex;
+        flex-direction: column;
+    }
+    .contact-page .contact-form .input-field input{
+        min-height: 5rem;
+    }
+    .school-info .box{
+      background-image: linear-gradient(100deg, #00033d, #0600ab,#00033d, #0033ff); 
+      background-size: 300% 100%;
+      background-repeat: no-repeat;
+    }
+}

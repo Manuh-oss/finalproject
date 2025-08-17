@@ -79,13 +79,15 @@ function getSubject() {
 }
 
 function getTeachers(subject) {
+  getUser((user) => {
   const allSubjects = [];
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onload = () => {
     if (xhr.status == 200) {
-      const response = JSON.parse(xhr.responseText);
+      const response = JSON.parse(xhr.responseText)
+      .filter(s => s.schoolId === user.schoolId);
       const subjectOne = response.filter(
         (newSubject) => newSubject.subjectOne === subject
       );
@@ -102,22 +104,26 @@ function getTeachers(subject) {
     }
   };
   xhr.send();
+  })
 }
 
 function getLessonsTaught(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "lesson.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("lesson Error", error);
     }
   };
   xhr.send();
+  })
 }
 
 function displayTeachers(array) {
@@ -197,7 +203,9 @@ function clickSubmitBtn(bool) {
 }
 
 function submitTeacher() {
+  getUser((user) => {
   const formData = new FormData(newForm);
+  formData.append("id" , user.schoolId)
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "submit.php", true);
   xhr.onload = () => {
@@ -217,6 +225,7 @@ function submitTeacher() {
     }
   };
   xhr.send(formData);
+  })
 }
 
 function hideSubjects() {

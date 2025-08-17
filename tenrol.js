@@ -70,15 +70,40 @@ function removeFile() {
   showErrorMessage("image removed succesfully");
 }
 
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    try{
+       if (xhr.status === 200) {
+         const response = JSON.parse(xhr.responseText);
+         callback(response)
+       }
+    }catch(error){
+       console.log("login error" , error);
+    }
+  };
+  xhr.send();
+}
+
 //function to post quiz form
 function postSubmitForm(){
+  getUser((user) => {
   const formData = new FormData(form);
   const xhr = new XMLHttpRequest();
   let department = assignDepartment(subjectOne.value,subjectTwo.value);
   formData.append("rank" , "normal");
   formData.append("department" , department);
   formData.append("teacher-code" , assingTeacherCode(department));
-  formData.append("rank" , "normal");
+  const urlData = new URLSearchParams(window.location.search)
+  const schoolId = urlData.get("school");
+  if(schoolId){
+   formData.append("rank" , "admin");
+   formData.append("schoolId" , schoolId);
+  }else{
+    formData.append("rank" , "normal");
+    formData.append("schoolId" , user.schoolId);
+  }
   formData.append("stream" , "");
   formData.append("class" , "");
   xhr.open('POST','tenrol.php',true);
@@ -88,6 +113,7 @@ function postSubmitForm(){
         const response = JSON.parse(xhr.responseText);
         if(response.type === true){
           showSuccessMessage("teacher details added succesfully");
+          if(schoolId) window.location.href = "login.html";
         }else{
           showErrorMessage("contact support");
           console.log(response.errorInfo); 
@@ -100,6 +126,7 @@ function postSubmitForm(){
     }
   }
   xhr.send(formData);
+  })
 }
 
 //function to verify inputs

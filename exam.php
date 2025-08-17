@@ -4,6 +4,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $class = $conn->real_escape_string($_POST['class']);
     $term = $conn->real_escape_string($_POST['term']);
     $exam = $conn->real_escape_string($_POST['exam']);
+    $id = $conn->real_escape_string($_POST['id']);
     $streams = ($_POST['stream']);
     $admissions = $_POST['admission'];
     $feedback = "";
@@ -12,7 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $admission = $conn->real_escape_string($admissions[$index]);
         $stream = $conn->real_escape_string($streams[$index]);
 
-        $sqlCheck = "SELECT * FROM `studentdetails` WHERE `class` = '$class' AND `term`= '$term' AND `exam` = '$exam' AND `admission` = '$admission'";
+        $sqlCheck = "SELECT * FROM `studentdetails` WHERE `class` = '$class' AND `term`= '$term' AND `exam` = '$exam' AND `admission` = '$admission'AND`school_id`='$id'";
         $result = $conn->query($sqlCheck);
         if($result){
           $countExams = mysqli_num_rows($result);
@@ -31,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 ];
             }
           }else{
-            $sqlInsert = "INSERT INTO `studentdetails` (class,term,exam,admission,stream) VALUES('$class','$term','$exam','$admission','$stream')";
+            $sqlInsert = "INSERT INTO `studentdetails` (class,term,exam,admission,stream,school_id) VALUES('$class','$term','$exam','$admission','$stream','$id')";
             if($conn->query($sqlInsert) === true){
                 $feedback = [
                     "message" => "success",

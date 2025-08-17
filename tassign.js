@@ -24,6 +24,7 @@ function recieveAssignment() {
       fileUpload.append("subject", subjectSelect.value);
       fileUpload.append("code", user.code);
       fileUpload.append("type", getType(file.type));
+      fileUpload.append("id", user.schoolId);
       if(getType(file.type)=== false){
         showErrorMessage("file type is not supported");
         return

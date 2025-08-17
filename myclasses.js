@@ -32,9 +32,13 @@ function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
-    if (xhr.status == 200) {
+    try{
+      if (xhr.status == 200) {
       const tcode = JSON.parse(xhr.responseText);
-      callback(tcode);
+        callback(tcode);
+      }
+    }catch(error){
+      console.log("login error",error);
     }
   };
   xhr.send();
@@ -42,53 +46,67 @@ function getUser(callback) {
 
 //function section start here
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Student Error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get results from database
 function getStudentMarks(clas, term, exam, callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("class", clas);
   data.append("term", term);
   data.append("exam", exam);
+  data.append("id", "");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Marks Error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 //function to get lessons
 function getLessons(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "lesson.php", true);
   xhr.onload = () => {
-    if (xhr.status == 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
+    try{
+      if (xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    }catch(error){
+      console.log("lesson error" , error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to display the lessons
@@ -104,8 +122,8 @@ function displayLessons() {
           const tr = document.createElement("tr");
           tr.innerHTML = `
                 <td>${idx + 1}</td>
-                <td>form${lesson.class}</td>
-                <td>${convertStream(lesson.stream)}</td>
+                <td>${lesson.class}</td>
+                <td>${(lesson.stream)}</td>
                 <td>${lesson.subject}</td>
                 <td><button type="button" onclick="viewResult('${
                   lesson.class

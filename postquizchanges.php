@@ -2,12 +2,13 @@
  include("connection1.php");
  if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-    $codes = $_POST['code'];
+  $codes = $_POST['code'];
 
   foreach($codes as $index => $code){
     $topic = $conn->real_escape_string($_POST['topic']);
     $code = $conn->real_escape_string($codes[$index]);
     $type = $conn->real_escape_string($_POST['type']);
+    $id = $conn->real_escape_string($_POST['id']);
 
     $sqlCheck = "SELECT * FROM `school_quiz` WHERE `Quiz_code` = '$code'";
     $result = $conn->query($sqlCheck);
@@ -21,7 +22,7 @@
 
     if($count_quiz > 0){
         if(!empty($type)){
-            $sqlUpdate = "UPDATE `school_quiz` SET `type`='$type', `topic_heading`='$topic' WHERE `Quiz_code` = '$code'";
+            $sqlUpdate = "UPDATE `school_quiz` SET `type`='$type', `topic_heading`='$topic' WHERE `Quiz_code` = '$code'AND`school_id`='$id'";
 
             if($conn->query($sqlUpdate) === TRUE){
             $feedback = [

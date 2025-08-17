@@ -14,12 +14,36 @@ printButton.addEventListener("click" , (e) => {
 
 //function to getStudents
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
+    try{
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+          callback(thisSchool);
+        }
+    }catch(error){
+      console.log("student error",error);
+    }
+  };
+  xhr.send();
+  })
+}
+
+//this function gets the user
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    try{
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       callback(response);
+    }
+    }catch(error){
+      console.log("login error",error)
     }
   };
   xhr.send();
@@ -27,10 +51,12 @@ function getStudents(callback) {
 
 //function to get their results
 function getResults() {
+  getUser((user) => {
   const param = new FormData();
   param.append("class", classSelect.value);
   param.append("term", termSelect.value || 2);
   param.append("exam", examSelect.value || 22);
+  param.append("id", user.schoolId);
   const body = table.querySelector("tbody");
   body.innerHTML = ""
   const xhr = new XMLHttpRequest();
@@ -81,11 +107,10 @@ function getResults() {
     }
     }catch(error){
       console.log("result error" , error);
-    }finally{
-      console.log(xhr.responseText)
     }
   };
   xhr.send(param);
+  })
 }
 
 function converExam(rawExam){

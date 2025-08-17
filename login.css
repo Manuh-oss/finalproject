@@ -277,3 +277,56 @@ main .logo img {
   opacity: 1;
   transform: translateX(0) scale(1);
 }
+
+
+@media (max-width:1000px) {
+  .login-container .box{
+    width: 100%;
+  }
+}
+
+@media (max-width:768px) {
+  .login-container .box{
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100%;
+    justify-content: center;
+  }
+  .login-container .box .left{
+    max-height: 40%;
+  }
+  .login-container .box .right{
+    max-height: 40%;
+    width: 100%;
+  }
+  main .logo{
+    height: 5rem;
+    width: 5rem;
+  }
+  .login-container .box .left h1{
+    font-size: 4rem;
+  }
+  .login-container .box .left .welcome{
+    min-height: none;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width:550px) {
+  .right .login-box{
+    width: 80%;
+    height: 100%;
+  }
+  .login-container .box{
+    gap: 5rem;
+  }
+  .login-container .box .right{
+    flex-grow: 1;
+    align-items: flex-end;
+  }
+  .right .login-box {
+    justify-content: flex-end;
+  }
+}

@@ -26,6 +26,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
     $class = $conn->real_escape_string($_POST['class']);
     $stream = $conn->real_escape_string($_POST['stream']);
     $rank = $conn->real_escape_string($_POST['rank']);
+    $schoolId = $conn->real_escape_string($_POST['schoolId']);
     //profile image and 
     $address = $conn->real_escape_string($_POST['address']);
     $department = $conn->real_escape_string($_POST['department']);
@@ -40,12 +41,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
         if(move_uploaded_file($fileTempName , $uploadPath)){
        
             //check for existence of teacher in database
-            $sql = "SELECT * FROM teachers WHERE firstname = '$firstname'  AND identification = '$identification' AND phone = '$phone'";
+            $sql = "SELECT * FROM teachers WHERE firstname = '$firstname'  AND identification = '$identification' AND phone = '$phone'AND`school_id`='$schoolId'";
             $result = $conn->query($sql);
             $countTeachers = mysqli_num_rows($result);
          
             if($countTeachers > 0){
-                $sqlUpdate = "UPDATE `teachers` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`phone`='$phone',`identification`='$identification',`dateOfBirth`='$dateOfBirth',`email`='$email',`gender`='$gender',`place`='$placeOfBirth',`department`='$department',`teachers_code`='$teacherCode',`subject_one`='$subjectOne',`subject_two`='$subjectTwo',`adress`='$address',`degree`='$degree',`university`='$university',`startDate`='$startDate',`endDate`='$endDate',`file_name`='$filename',`file_path`='$uploadPath',`classteacher_class`='$class',`classteacher_stream`='$stream',`rank`='$rank' WHERE `identification` = '$identification'";
+                $sqlUpdate = "UPDATE `teachers` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`phone`='$phone',`identification`='$identification',`dateOfBirth`='$dateOfBirth',`email`='$email',`gender`='$gender',`place`='$placeOfBirth',`department`='$department',`teachers_code`='$teacherCode',`subject_one`='$subjectOne',`subject_two`='$subjectTwo',`adress`='$address',`degree`='$degree',`university`='$university',`startDate`='$startDate',`endDate`='$endDate',`file_name`='$filename',`file_path`='$uploadPath',`classteacher_class`='$class',`classteacher_stream`='$stream',`rank`='$rank' WHERE `identification` = '$identification'AND`school_id`='$schoolId'";
 
                 if($conn->query($sqlUpdate) === TRUE){
                     $error = [
@@ -63,8 +64,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
                 }
 
             }else{
-                $sqlInsert = "INSERT INTO teachers (firstname,middlename,lastname,othername,phone,identification,email,dateOfBirth,place,gender,subject_one,subject_two,degree,university,startDate,endDate,adress,file_name,file_path,department,teachers_code)
-                VALUES('$firstname','$middlename','$lastname','$othername','$phone','$identification','$email','$dateOfBirth','$placeOfBirth','$gender','$subjectOne','$subjectTwo','$degree','$university','$startDate','$endDate','$address','$filename','$uploadPath','$department','$teacherCode')";
+                $sqlInsert = "INSERT INTO teachers (firstname,middlename,lastname,othername,phone,identification,email,dateOfBirth,place,gender,subject_one,subject_two,degree,university,startDate,endDate,adress,file_name,file_path,department,teachers_code,rank,school_id)
+                VALUES('$firstname','$middlename','$lastname','$othername','$phone','$identification','$email','$dateOfBirth','$placeOfBirth','$gender','$subjectOne','$subjectTwo','$degree','$university','$startDate','$endDate','$address','$filename','$uploadPath','$department','$teacherCode','$rank','$schoolId')";
     
                 if($conn->query($sqlInsert) === TRUE){
                     $error = [
@@ -91,12 +92,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
             echo json_encode($error);
         }
     }else{
-        $sql = "SELECT * FROM teachers WHERE firstname = '$firstname'  AND identification = '$identification' AND phone = '$phone'";
+        $sql = "SELECT * FROM teachers WHERE firstname = '$firstname'  AND identification = '$identification' AND phone = '$phone'AND`school_id`='$schoolId'";
         $result = $conn->query($sql);
         $countTeachers = mysqli_num_rows($result);
      
         if($countTeachers > 0){
-            $sqlUpdate = "UPDATE `teachers` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`phone`='$phone',`identification`='$identification',`dateOfBirth`='$dateOfBirth',`email`='$email',`gender`='$gender',`place`='$placeOfBirth',`department`='$department',`teachers_code`='$teacherCode',`subject_one`='$subjectOne',`subject_two`='$subjectTwo',`adress`='$address',`degree`='$degree',`university`='$university',`startDate`='$startDate',`endDate`='$endDate',`classteacher_class`='$class',`classteacher_stream`='$stream',`rank`='$rank' WHERE `identification` = '$identification'";
+            $sqlUpdate = "UPDATE `teachers` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`phone`='$phone',`identification`='$identification',`dateOfBirth`='$dateOfBirth',`email`='$email',`gender`='$gender',`place`='$placeOfBirth',`department`='$department',`teachers_code`='$teacherCode',`subject_one`='$subjectOne',`subject_two`='$subjectTwo',`adress`='$address',`degree`='$degree',`university`='$university',`startDate`='$startDate',`endDate`='$endDate',`classteacher_class`='$class',`classteacher_stream`='$stream',`rank`='$rank' WHERE `identification` = '$identification'AND`school_id`='$schoolId'";
 
             if($conn->query($sqlUpdate) === TRUE){
                 $error = [
@@ -115,8 +116,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
             }
 
         }else{
-            $sqlInsert = "INSERT INTO teachers (firstname,middlename,lastname,othername,phone,identification,email,dateOfBirth,place,gender,subject_one,subject_two,degree,university,startDate,endDate,adress,department,teachers_code)
-            VALUES('$firstname','$middlename','$lastname','$othername','$phone','$identification','$email','$dateOfBirth','$placeOfBirth','$gender','$subjectOne','$subjectTwo','$degree','$university','$startDate','$endDate','$address','$department','$teacherCode')";
+            $sqlInsert = "INSERT INTO teachers (firstname,middlename,lastname,othername,phone,identification,email,dateOfBirth,place,gender,subject_one,subject_two,degree,university,startDate,endDate,adress,department,teachers_code,rank,school_id)
+            VALUES('$firstname','$middlename','$lastname','$othername','$phone','$identification','$email','$dateOfBirth','$placeOfBirth','$gender','$subjectOne','$subjectTwo','$degree','$university','$startDate','$endDate','$address','$department','$teacherCode','$rank','$schoolId')";
 
             if($conn->query($sqlInsert) === TRUE){
                 $error = [

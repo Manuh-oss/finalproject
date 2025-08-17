@@ -15,6 +15,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
    $stream = $conn->real_escape_string($_POST['stream']);
    $admission = $conn->real_escape_string($_POST['admission']);
    $gender = $conn->real_escape_string($_POST['gender']);
+   $id = $conn->real_escape_string($_POST['id']);
    // 4. profile image submittion
    $filename = $_FILES['profile-image']['name'];
    $fileTemplate = $_FILES['profile-image']['tmp_name'];
@@ -27,7 +28,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
     if(move_uploaded_file($fileTemplate , $uploadPath)){
         // database check for existence of parent
     
-        $sqlCheck = "select * FROM parents1 WHERE admission = '$admission' AND firstname = '$firstname'";
+        $sqlCheck = "SELECT * FROM parents1 WHERE admission = '$admission' AND firstname = '$firstname' AND`school_id`='$id'";
         $checkresult = $conn->query($sqlCheck);
         $countParents = mysqli_num_rows($checkresult);
     
@@ -52,8 +53,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
         }else{
             // insert into database if one parent or no parent exist
 
-             $sqlInsert = "INSERT INTO parents1(firstname,middlename,lastname,phone,identification,type_parent,email,class,stream,admission,gender,profile_image_name,profile_image_path)
-             VALUES ('$firstname','$middlename','$lastname','$phoneNumber','$identification','$type','$email','$class','$stream','$admission','$gender','$filename','$uploadPath') ";
+             $sqlInsert = "INSERT INTO parents1(firstname,middlename,lastname,phone,identification,type_parent,email,class,stream,admission,gender,profile_image_name,profile_image_path,school_id)
+             VALUES ('$firstname','$middlename','$lastname','$phoneNumber','$identification','$type','$email','$class','$stream','$admission','$gender','$filename','$uploadPath','$id') ";
              
                //check if insertion was succesfull
                if($conn->query($sqlInsert) === TRUE){
@@ -84,7 +85,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
 
    }else{
     
-    $sqlCheck = "SELECT * FROM parents1 WHERE `admission` = '$admission' AND `identification` = '$identification'";
+    $sqlCheck = "SELECT * FROM parents1 WHERE `admission` = '$admission' AND `identification` = '$identification'AND`school_id`='$id'";
     $checkresult = $conn->query($sqlCheck);
     $countParents = mysqli_num_rows($checkresult);
 
@@ -109,8 +110,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
     }else{
         // insert into database if one parent or no parent exist
 
-         $sqlInsert = "INSERT INTO parents1(firstname,middlename,lastname,phone,identification,type_parent,email,class,stream,admission,gender)
-         VALUES ('$firstname','$middlename','$lastname','$phoneNumber','$identification','$type','$email','$class','$stream','$admission','$gender') ";
+         $sqlInsert = "INSERT INTO parents1(firstname,middlename,lastname,phone,identification,type_parent,email,class,stream,admission,gender,school_id)
+         VALUES ('$firstname','$middlename','$lastname','$phoneNumber','$identification','$type','$email','$class','$stream','$admission','$gender','$id') ";
          
            //check if insertion was succesfull
            if($conn->query($sqlInsert) === TRUE){

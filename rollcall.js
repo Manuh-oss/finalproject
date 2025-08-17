@@ -43,18 +43,26 @@ let printMode;
 
 //function to getStudents
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("student error", error);
     }
   };
   xhr.send();
+  })
 }
 
 function getResults(callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("class", "");
   data.append("term", "");
@@ -66,13 +74,15 @@ function getResults(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("result error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 function displayRollcall() {

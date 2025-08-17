@@ -28,36 +28,42 @@ function getUser(callback) {
 
 //function to getStudents
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+         const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+         callback(thisSchool);
       }
     } catch (error) {
       console.log("Student Error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function getTeachers
 function getTeachers(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Student Error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to verify teacher
@@ -68,7 +74,7 @@ function verifyTeacher() {
       if (user.from === "students") return;
       const foundTeacher = teachers.find((t) => t.teacherCode === user.code);
       if (foundTeacher) {
-        if (foundTeacher.rank === "H.O.D") {
+        if (foundTeacher.rank === "admin") {
           displayStudents(true);
         } else {
           displayStudents(false);
@@ -93,16 +99,13 @@ function displayStudents(boolean) {
         );
         thisClassStudents.forEach((student, idx) => {
           const tr = document.createElement("tr");
+          const name = student.firstname+" "+student.middlename+" "+student.lastname;
           tr.innerHTML = `
                       <td>${idx + 1}</td>
                       <td>${student.admission}</td>
-                      <td style="text-align: left;">${student.firstname} ${
-            student.middlename
-          } ${student.lastname}</td>
-                      <td class="remove">form${student.class}</td>
-                      <td class="remove" style="text-align: left;">${convertStream(
-                        student.stream
-                      )}</td>
+                      <td style="text-align: left;">${name}</td>
+                      <td class="remove">${student.class}</td>
+                      <td class="remove" style="text-align: left;">${student.stream}</td>
                       <td><input type="text" class="term-input"/><span></span></td>
                       <td><input type="text" class="exam-input"/><span></span></td>
                       <input type="hidden" class="" value="${
@@ -190,12 +193,14 @@ function convertExam(rawExam) {
 }
 
 function postFeedback(message,destination,from,description,type){
+  getUser((user) => {
   const data = new FormData();
   data.append("message" , message);
   data.append("destination" , destination);
   data.append("from" , from);
   data.append("description" , description);
   data.append("type" , type);
+  data.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open('POST','postfeedback.php',true);
   xhr.onload = () => {
@@ -210,16 +215,19 @@ function postFeedback(message,destination,from,description,type){
     }
   }
   xhr.send(data);
+  })
 }
 
 
 function postExamForm(){
+  getUser((user) => {
     console.log("am called")
    if(classSelect.value !== "" && termSelect.value !== "" && examSelect.value !== ""){
     const formData = new FormData(table);
     formData.append("class", classSelect.value);
     formData.append("term", termSelect.value);
     formData.append("exam", examSelect.value);
+    formData.append("id", user.schoolId);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "exam.php", true);
     xhr.onload = () => {
@@ -251,6 +259,7 @@ function postExamForm(){
    } else{
     showErrorMessage("please fill up term & exam");
    }
+   })
 }
 
 //errro handling functions

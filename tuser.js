@@ -72,19 +72,22 @@ const today =
 dateDisplay.textContent = today;
 //function to get events
 function getEvents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "events.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Events error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get logged in user
@@ -102,93 +105,110 @@ function getUser(callback) {
 
 //function get student details
 function getStudent(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Student error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get studeent marks
 function getStudentMarks(callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("term", "");
   data.append("exam", "");
   data.append("class", "");
+  data.append("id", "");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Result error", error);
     }
   };
   xhr.send(data);
+  })
 }
 
 //function to get user lessons taught
 function getLessons(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "lesson.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
-        const resonse = JSON.parse(xhr.responseText);
-        callback(resonse);
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Lesson error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get teacher timetable
 function getTeacherTimetable(callback, code) {
+  getUser((user) => {
   const tcode = new FormData();
   tcode.append("teacherCode", code);
+  tcode.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachertimetable.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("teacher error", error);
     }
   };
   xhr.send(tcode);
+  })
 }
 
 //function to et notifications
 function getNotifications(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getnotifications.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("Notification error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //calendar section start here
@@ -658,7 +678,8 @@ function handleSessions() {
         const myLessons = lessons.filter((l) => l.teacherCode === user.code);
         const dayToday = getDayToday(date.getDay());
         //this current day sessions
-        const mySessionsArray = Object.entries(mySessions[dayToday]);
+        if(mySessions.length < 0) return
+        const mySessionsArray = Object.entries(mySessions[dayToday] || {});
         let mySessionsToday = [];
         mySessionsArray.forEach(([sessionTime, session]) => {
           const actualLessonTime = lessonTime[sessionTime];

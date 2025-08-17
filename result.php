@@ -5,11 +5,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $class = $conn->real_escape_string($_POST['class']);
     $term = $conn->real_escape_string($_POST['term']);
     $exam = $conn->real_escape_string($_POST['exam']);
+    $id = $conn->real_escape_string($_POST['id']);
     $feedback = [];
 
     if(!empty($class) && !empty($term) && !empty($exam)){
        
-        $sqlGet = "SELECT * FROM studentdetails WHERE `class` = '$class' AND `term` = '$term' AND `exam` = '$exam'";
+        $sqlGet = "SELECT * FROM studentdetails WHERE `class` = '$class' AND `term` = '$term' AND `exam` = '$exam'AND`school_id`='$id'";
         $result = $conn->query($sqlGet);
 
         if($result){
@@ -51,6 +52,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "term" => $row['term'],
                 "class" => $row['class'],
                 "stream" => $row['stream'],
+                "schoolId" => $row['school_id'],
                 "overallPosition" => $row['Totals_position']
                ];
             }
@@ -63,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
 
     }else{
-       $sqlGet = "SELECT * FROM studentdetails";
+        $sqlGet = "SELECT * FROM studentdetails";
         $result = $conn->query($sqlGet);
 
         if($result){
@@ -96,6 +98,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "computer_position" => $row['computer_position'],
                 "french" => $row['french'],
                 "french_position" => $row['french_position'],
+                "subject14" => $row['subject14'],
+                "subject14_position" => $row['subject14_position'],
+                "subject15" => $row['subject15'],
+                "subject15_position" => $row['subject15_position'],
+                "subject16" => $row['subject16'],
+                "subject16_position" => $row['subject16_position'],
                 "streamPosition" => $row['Total_position'],
                 "meanPosition" => $row['mean_position'],
                 "total" => $row['Total'],
@@ -105,6 +113,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "term" => $row['term'],
                 "class" => $row['class'],
                 "stream" => $row['stream'],
+                "schoolId" => $row['school_id'],
                 "overallPosition" => $row['Totals_position']
                ];
             }

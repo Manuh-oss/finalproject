@@ -23,10 +23,14 @@ function getUser(callback){
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'saved_user.php' , true);
     xhr.onload = () => {
-        if(xhr.status === 200){
+       try{
+         if(xhr.status === 200){
             const response = JSON.parse(xhr.responseText);
             callback(response);
         }
+       }catch(error){
+         console.log("login error",error);
+       }
     }
     xhr.send();
 }
@@ -40,7 +44,7 @@ function getParentDetails(callback){
         if(xhr.status === 200){
             getUser((user) => {
                 const response = JSON.parse(xhr.responseText);
-                const student = response.find(s => s.admission === user.code);
+                const student = response.find(s => s.admission === user.code && s.schoolId === user.schoolId);
                 callback(student);
             })
         }
@@ -57,7 +61,7 @@ function getDetails(){
         if(xhr.status === 200){
             getUser((user) => {
                 const response = JSON.parse(xhr.responseText);
-                const student = response.find(s => s.admission === user.code);
+                const student = response.find(s => s.admission === user.code && s.schoolId === user.schoolId);
                 getDisplinaryRecord(student);
             })
         }
@@ -67,19 +71,22 @@ function getDetails(){
 
 //function get teachers 
 function getTeachers(callback){
+    getUser((user) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'teachers.php' , true);
     xhr.onload = () => {
         try{
              if(xhr.status === 200){
                const response = JSON.parse(xhr.responseText);
-               callback(response)
+               const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+               callback(thisSchool)
              }
         }catch(error){
             console.log("teacher error" , error);
         }
     }
     xhr.send(); 
+    }) 
 }
 
 //function get displinary record
@@ -90,7 +97,7 @@ function getDisplinaryRecord(studentProfile){
         if(xhr.status === 200){
             getUser((user) => {
                 const response = JSON.parse(xhr.responseText);
-                const student = response.filter(s => s.admission === user.code);
+                const student = response.filter(s => s.admission === user.code && s.schoolId === user.schoolId);
                 displayStudent(studentProfile,student)
             })
         }
@@ -222,6 +229,7 @@ function displayParent(){
 function contactParent(){
     const changeArray = Array.from(children);
     getParentDetails((parent) => {
+        if(parent){
         const atag = document.createElement("a");
         atag.style.textDecoration = "none"
         atag.href = `tel:+254${parent.phone}`;
@@ -233,6 +241,7 @@ function contactParent(){
         `;
         const oldElement = changeArray[3];
         oldElement.parentNode.replaceChild(atag , oldElement)
+        }
     })
 }
 
@@ -281,6 +290,7 @@ function directToclassTeacher(){
     getUser((user) => {
         const changeArray = Array.from(children);
         const classTeacher = teachers.find(t => t.classTeacher === (user.class+"-"+user.stream));
+        if(classTeacher){
         const atag = document.createElement("a");
         atag.href = `tadminprofile.html?code=${classTeacher.teacherCode}`;
         atag.className = "box";
@@ -292,6 +302,7 @@ function directToclassTeacher(){
         `;
         const oldElement = changeArray[2];
         oldElement.parentNode.replaceChild(atag , oldElement);
+        }
     })
   })
 }

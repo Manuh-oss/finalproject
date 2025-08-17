@@ -8,9 +8,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $class = $conn->real_escape_string($_POST['class']);
     $stream = $conn->real_escape_string($_POST['stream']);
     $subject = $conn->real_escape_string($_POST['subject']);
+    $id = $conn->real_escape_string($_POST['id']);
     $teacherCode = $conn->real_escape_string($_POST['teacher-code']);
 
-    $sqlCheck = "select * FROM teachers_subjects_taught WHERE class = '$class' AND stream = '$stream' AND subject = '$subject'";
+    $sqlCheck = "SELECT * FROM teachers_subjects_taught WHERE `class` = '$class' AND `stream` = '$stream' AND `subject` = '$subject'AND`school_id`='$id'";
     $resultFromSql = $conn->query($sqlCheck);
     $count_lessons = mysqli_num_rows($resultFromSql);
 
@@ -35,7 +36,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     }else{
 
-        $sqlInsert = "INSERT INTO `teachers_subjects_taught`( `teacher_code`, `class`, `stream`, `subject`) VALUES ('$teacherCode','$class','$stream','$subject')";
+        $sqlInsert = "INSERT INTO `teachers_subjects_taught`( `teacher_code`, `class`, `stream`, `subject`,`school_id`) VALUES ('$teacherCode','$class','$stream','$subject','$id')";
 
         if($conn->query($sqlInsert) === TRUE){
             $feedback = [

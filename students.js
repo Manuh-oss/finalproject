@@ -50,64 +50,65 @@ console.log(expandCollapse);
 const sortButton = document.querySelector(".sort .open");
 const sortDropdown = document.querySelector(".sort .dropdown");
 
-sortButton.addEventListener("click", function () {
-  if (sortButton.classList.contains("opened")) {
-    sortDropdown.style.height = "12rem";
-    sortDropdown.style.overflow = "auto";
-    sortButton.classList.remove("opened");
-  } else {
-    sortDropdown.style.height = "0";
-    sortDropdown.style.overflow = "hidden";
-    sortButton.classList.add("opened");
-  }
-});
 
 const inputValue = "";
 
-sortDropdownButtons.forEach((sortDropdownButton) => {
-  sortDropdownButton.addEventListener("click", function getSortValue() {
-    sortButton.innerHTML = `${this.textContent} <i class="fa fa-sort"></i>`;
-    sortDropdownInput.value = this.textContent;
-    inputValue = sortDropdownInput.value;
-  });
-});
 
 //ajax
 
-const newArray = Array.from(sortDropdownButtons);
-
 // all students display
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    try{
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      callback(response);
+    }
+    }catch(error){
+      console.log("login error",error)
+    }
+  };
+  xhr.send();
+}
 
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("STUDENT ERROR", error);
     }
   };
   xhr.send();
+  })
 }
 
 function getTeachers(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("STUDENT ERROR", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to display the students
@@ -550,7 +551,7 @@ function editTeacher(tcode) {
                     <input type="text" name="place-of-birth" value="${
                       foundTeacher.pob
                     }" id="" class="required">
-                    <input type="text" id="rank" value="${foundTeacher.rank}" />
+                    <input type="hidden" id="rank" value="${foundTeacher.rank}" />
                   </span>
                 </div>
               </div>
@@ -1040,6 +1041,7 @@ function assingTeacherCode(department) {
 }
 
 function postStudentForm(url,inputs,editForm,clas,stream,rank) {
+  getUser((user) => {
   const verified = verifyInputs(inputs);
   if (verified) {
     const formData = new FormData(editForm);
@@ -1047,6 +1049,7 @@ function postStudentForm(url,inputs,editForm,clas,stream,rank) {
       formData.append("class" , clas);
       formData.append("stream" , stream);
       formData.append("rank" , rank);
+      formData.append("id" , user.schoolId);
     }
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url , true);
@@ -1074,12 +1077,15 @@ function postStudentForm(url,inputs,editForm,clas,stream,rank) {
   } else {
     showErrorMessage("⚠️ Please fill in all required fields.");
   }
+  })
 }
 
 function updateLessons(tcode){
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   const data = new FormData();
   data.append("code" , tcode)
+  data.append("id" , user.schoolId)
   xhr.open('POST' , 'deletelessons.php',true);
   xhr.onload = () => {
     try{
@@ -1097,6 +1103,7 @@ function updateLessons(tcode){
     }
   }
   xhr.send(data)
+  })
 }
 
 //errro handling functions

@@ -8,6 +8,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $wednesdays = $_POST['wednesday'];
     $thursdays = $_POST['thursday'];
     $fridays = $_POST['friday'];
+    $id = $_POST['id'];
     $feedback = [];
 
     foreach($admissions as $index => $admission){
@@ -18,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $thursday = $conn->real_escape_string($thursdays[$index]);
         $friday = $conn->real_escape_string($fridays[$index]);
 
-        $sqlCheck = "SELECT * FROM `weekone` WHERE `week` = '$week' AND `admission` ='$admission'";
+        $sqlCheck = "SELECT * FROM `weekone` WHERE `week` = '$week' AND `admission` ='$admission'AND`school_id`='$id'";
         $result = $conn->query($sqlCheck);
         $countRegister = mysqli_num_rows($result);
 
@@ -37,7 +38,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 ];
             }
         }else{
-            $sqlInsert = "INSERT INTO `weekone`( `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `admission`, `week`) VALUES ('$monday','$tuesday','$wednesday','$thursday','$friday','$admission','$week')";
+            $sqlInsert = "INSERT INTO `weekone`( `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `admission`, `week`,`school_id`) VALUES ('$monday','$tuesday','$wednesday','$thursday','$friday','$admission','$week','$id')";
             if($conn->query($sqlInsert) === TRUE){              
                 $feedback = [
                     "message" => "insertion succesfull",

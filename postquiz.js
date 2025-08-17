@@ -73,9 +73,13 @@ function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
-    if (xhr.status == 200) {
-      const tcode = JSON.parse(xhr.responseText);
-      callback(tcode.code);
+    try{
+       if (xhr.status == 200) {
+        const tcode = JSON.parse(xhr.responseText);
+        callback(tcode.code);
+      }
+    }catch(error){
+      console.log("login error", error);
     }
   };
   xhr.send();
@@ -90,6 +94,7 @@ function verifyUser(subject) {
     formData.append("tcode", code.code);
     formData.append("class", classSelect.value);
     formData.append("stream", streamSelect.value);
+    formData.append("id", code.schoolId);
     xhr.open("POST", "validate.php", true);
     xhr.onload = () => {
       if (xhr.status == 200) {
@@ -111,8 +116,9 @@ function verifyUser(subject) {
 
 //if user is verified
 function getTopics(select) {
+  getUser((user) => {
   const param =
-    "class=" + classSelect.value + "&subject=" + subjectSelect.value;
+    "class=" + classSelect.value + "&subject=" + subjectSelect.value+"&id="+user.schoolId;
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getTopics.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -142,23 +148,27 @@ function getTopics(select) {
     }
   };
   xhr.send(param);
+  })
 }
 
 //function to get teachers
 function getTeachers(callback){
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open('POST' , 'teachers.php' , true);
   xhr.onload = () => {
     try{
       if(xhr.status === 200){
         const response = JSON.parse(xhr.responseText);
-        callback(response)
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId)
+        callback(thisSchool)
       }
     }catch(error){
       console.log("teacher error" , error)
     }
   } 
   xhr.send();
+  })
 }
 
 //function show verify form
@@ -458,6 +468,7 @@ function redirectToQuestion(index) {
 }
 
 function generateQuizCode() {
+  getUser((user) => {
   const random = Math.floor(Math.random() * 1000000);
   const param = "class=" + "" + "&subject=" + "";
   const xhr = new XMLHttpRequest();
@@ -466,7 +477,7 @@ function generateQuizCode() {
   xhr.onload = () => {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      const found = response.find((q) => q.teacherCode === random);
+      const found = response.find((q) => q.teacherCode === random && q.schoolId === user.schoolId);
       if (found) {
         generateQuizCode();
       } else {
@@ -488,6 +499,7 @@ function generateQuizCode() {
     }
   };
   xhr.send(param);
+  })
 }
 
 //event listeners
@@ -520,6 +532,7 @@ function postQuiz() {
       quiz.append("subject", subjectSelect.value);
       quiz.append("duration", duration.value);
       quiz.append("tcode", user.code);
+      quiz.append("id", user.schoolId);
       quiz.append("type", "quiz");
       const xhr = new XMLHttpRequest();
       xhr.open("POSt", "postquiz.php", true);
@@ -552,12 +565,14 @@ function postQuiz() {
 
 //this sends a notification to all the class students
 function postFeedback(message,destination,from,description,type){
+  getUser((user) => {
   const data = new FormData();
   data.append("message" , message);
   data.append("destination" , destination);
   data.append("from" , from);
   data.append("description" , description);
   data.append("type" , type);
+  data.append("id" , user.code);
   const xhr = new XMLHttpRequest();
   xhr.open('POST','postfeedback.php',true);
   xhr.onload = () => {
@@ -572,6 +587,7 @@ function postFeedback(message,destination,from,description,type){
     }
   }
   xhr.send(data);
+  })
 }
 
 function getGender(gender){

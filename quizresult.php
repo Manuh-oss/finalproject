@@ -4,9 +4,10 @@ include("connection1.php");
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $admision = $conn->real_escape_string($_POST['admission']);
-     $feedback = [];
+    $id = $conn->real_escape_string($_POST['id']);
+    $feedback = [];
     if(!empty($admision)){
-        $sql = "SELECT * FROM `student_quiz_result` WHERE admission = '$admision'";
+        $sql = "SELECT * FROM `student_quiz_result` WHERE admission = '$admision' AND `school_id`='$id'";
         $result = $conn->query($sql);
            
         while($row = $result->fetch_assoc()){
@@ -16,6 +17,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "admission" => $row['admission'],
                 "topic" => $row['topic'],
                 "date" => $row['attemptDate'],
+                "schoolId" => $row['school_id'],
                 "score" => $row['score']
             ];
         }
@@ -30,6 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             "admission" => $row['admission'],
             "topic" => $row['topic'],
             "date" => $row['attemptDate'],
+            "schoolId" => $row['school_id'],
             "score" => $row['score']
           ];
        }

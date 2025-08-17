@@ -13,6 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             "teacherCode" => $row['teacher_code'],
             "subject" => $row['subject'],
             "class" => $row['class'],
+            "schoolId" => $row['school_id'],
             "stream" => $row['stream']    
         ];
     

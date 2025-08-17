@@ -17,6 +17,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             "gender" => $row['gender'],
             "idnumber" => $row['identification'],
             "phone" => $row['phone'],
+            "schoolId" => $row['school_id'],
             "parentType" => $row['type_parent']
           ];
         }

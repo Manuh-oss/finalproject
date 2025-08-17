@@ -13,6 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $feedback[] = [
            "topic_number" => $row['Topic_number'],
            "topic_tittle" => $row['Topic_heading'],
+           "schoolId" => $row['school_id'],
            "topic_desc" => $row['Topic_brief']
         ];
     }

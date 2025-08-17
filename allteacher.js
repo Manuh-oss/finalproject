@@ -52,7 +52,7 @@ function getAssignments(callback) {
       try {
         if (xhr.status === 200) {
           const response = JSON.parse(xhr.responseText);
-          const match = response.filter((a) => a.code === code);
+          const match = response.filter((a) => a.code === code && a.schoolId === user.schoolId);
           callback(match);
         }
       } catch (error) {
@@ -130,7 +130,7 @@ function getNotes(callback) {
       try {
         if (xhr.status == 200) {
           const response = JSON.parse(xhr.responseText);
-          const mine = response.filter((n) => n.teacherCode === code);
+          const mine = response.filter((n) => n.teacherCode === code && n.schoolId === user.schoolId);
           callback(mine);
         }
       } catch (error) {

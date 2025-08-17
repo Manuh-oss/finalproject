@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $_SESSION['class'] = $row['class'];      
         $_SESSION['stream'] = $row['stream'];      
         $_SESSION['from'] = "student";  
-         
+        $_SESSION['school_id'] = $row['school_id']; 
        $error = [
            "message" => "success",
            "from" => "student",
@@ -52,6 +52,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           $_SESSION['class'] = $row['identification']; 
           $_SESSION['stream'] = "green";
           $_SESSION['from'] = "teacher";
+          $_SESSION['school_id'] = $row['school_id'];
           //  Response to JS
           echo json_encode([
               "message" => "success",

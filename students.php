@@ -34,7 +34,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
        "business" => $row['business_selection'],
        "agriculture" => $row['agriculture_selection'],
        "computer" => $row['computer_selection'],
-       "french" => $row['french_selection']
+       "french" => $row['french_selection'],
+       "schoolId" => $row['school_id'],
       ];
    }
 

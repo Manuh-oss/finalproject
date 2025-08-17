@@ -4,9 +4,10 @@ include("connection1.php");
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $subject = $conn->real_escape_string($_POST['subject']);
   $class = $conn->real_escape_string($_POST['class']);
+  $id = $conn->real_escape_string($_POST['id']);
 
   if(!empty($subject) && !empty($class)){
-    $sql = "SELECT * FROM `school_quiz` WHERE `subjects` = '$subject' AND `class` = '$class' ORDER BY `quizDate` DESC";
+    $sql = "SELECT * FROM `school_quiz` WHERE `subjects` = '$subject' AND `class`AND`school_id`='$id' = '$class' ORDER BY `quizDate` DESC";
     $result = $conn->query($sql);
   
     $feedback = [];
@@ -28,6 +29,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           "duration" => $row['quiz_duration'],
           "subject" => $row['subjects'],
           "type" => $row['type'],
+          "schoolId" => $row['school_id'],
           "class" => $row['class']
       ];
     }
@@ -55,6 +57,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           "teacherCode" => $row['teacher_code'],
           "duration" => $row['quiz_duration'],
           "class" => $row['class'],
+          "schoolId" => $row['school_id'],
           "type" => $row['type'],
           "subject" => $row['subjects']
       ];

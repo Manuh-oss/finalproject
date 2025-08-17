@@ -17,10 +17,14 @@ function getUser() {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
-    if (xhr.status == 200) {
-      const tcode = JSON.parse(xhr.responseText);
-      teacherCode.value = tcode.code;
-      getSubjects(tcode.code);
+    try{
+     if (xhr.status == 200) {
+       const tcode = JSON.parse(xhr.responseText);
+       teacherCode.value = tcode.code;
+       getSubjects(tcode.code);
+     }
+    }catch(error){
+      console.log("login error",error)
     }
   };
   xhr.send();
@@ -28,12 +32,13 @@ function getUser() {
 
 //function to get subject based on the teacher
 function getSubjects(code) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      const match = response.find((t) => t.teacherCode === code);
+      const match = response.find((t) => t.teacherCode === code && t.schoolId === user.schoolId);
       let options = `
           <option value="">select subject</option>
           <option value="${match.subjectOne}">${match.subjectOne}</option>
@@ -43,10 +48,12 @@ function getSubjects(code) {
     }
   };
   xhr.send();
+  })
 }
 
 //function to get topics on the selected subject
 function getTopics() {
+  getUser((user) => {
   getNotes();
   const param =
     "class=" + classSelect.value + "&subject=" + subjectSelect.value;
@@ -56,13 +63,14 @@ function getTopics() {
   xhr.onload = () => {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      if (response.length > 0) {
+      const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+      if (thisSchool.length > 0) {
         topicSelect.innerHTML = "";
         const defaultOption = document.createElement("option");
         defaultOption.value = "";
         defaultOption.textContent = "Select Topic";
         topicSelect.appendChild(defaultOption);
-        response.forEach((topic) => {
+        thisSchool.forEach((topic) => {
           const option = document.createElement("option");
           option.value = topic.topic_tittle;
           option.textContent = topic.topic_tittle;
@@ -74,10 +82,12 @@ function getTopics() {
     }
   };
   xhr.send(param);
+  })
 }
 
 //function to getNotes
 function getNotes() {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getnotes.php", true);
   xhr.onload = () => {
@@ -88,7 +98,8 @@ function getNotes() {
           n.teacherCode === teacherCode.value &&
           n.class === classSelect.value &&
           n.topic === topicSelect.value &&
-          n.subject === subjectSelect.value
+          n.subject === subjectSelect.value&&
+          n.schoolId === user.schoolId
       );
       if (note) {
         quill.clipboard.dangerouslyPasteHTML(note.notes);
@@ -100,10 +111,12 @@ function getNotes() {
     }
   };
   xhr.send();
+  })
 }
 
 //function to post notes to the database
 function postNotes() {
+  getUser((user) => {
   textarea.value = quill.root.innerHTML;
   const topicForm = new FormData();
   topicForm.append("subject", subjectSelect.value);
@@ -111,6 +124,7 @@ function postNotes() {
   topicForm.append("topic", topicSelect.value);
   topicForm.append("notes", textarea.value);
   topicForm.append("code", teacherCode.value);
+  topicForm.append("id", user.id);
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "postnotes.php", true);
@@ -121,6 +135,7 @@ function postNotes() {
     }
   };
   xhr.send(topicForm);
+  })
 }
 
 //this functions do the function of adding tables,list,bold,itallics and underlinement

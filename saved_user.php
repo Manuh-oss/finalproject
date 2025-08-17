@@ -10,6 +10,7 @@ if(isset($_SESSION['admission'])){
         "code" => $_SESSION['admission'],
         "class" => $_SESSION['class'],
         "stream" => $_SESSION['stream'],
+        "schoolId" => $_SESSION['school_id'],
         "from" => $_SESSION['from']
     ];
     echo json_encode($response);

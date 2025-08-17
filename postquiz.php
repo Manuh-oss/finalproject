@@ -30,9 +30,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $topic = $conn->real_escape_string($_POST['topics']);
     $type = $conn->real_escape_string($_POST['type']);
     $duration = $conn->real_escape_string($_POST['duration']);
+    $id = $conn->real_escape_string($_POST['id']);
     $quizCode = $conn->real_escape_string($quizCodes[$index]);
 
-    $sqlCheck = "SELECT * FROM `school_quiz` WHERE `question` = '$question' AND `teacher_code` =  '$teacherCode' ";
+    $sqlCheck = "SELECT * FROM `school_quiz` WHERE `question` = '$question' AND `teacher_code` =  '$teacherCode'AND`school_id`='$id'";
     $result = $conn->query($sqlCheck);
     if(!$result){
         $feedback = [
@@ -58,7 +59,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             ];
         }
     }else{
-        $sqlInsert = "INSERT INTO `school_quiz`(`question`, `answer1`, `answer2`, `answer3`, `answer4`, `correct_answer`, `subjects`, `topic_heading`, `Quiz_code`, `quiz_duration`, `teacher_code`,`class`,`solution`,`type`) VALUES ('$question','$answerOne','$answerTwo','$answerThree','$answerFour','$correct','$subject','$topic','$quizCode','$duration','$teacherCode','$class','$solution','$type')";
+        $sqlInsert = "INSERT INTO `school_quiz`(`question`, `answer1`, `answer2`, `answer3`, `answer4`, `correct_answer`, `subjects`, `topic_heading`, `Quiz_code`, `quiz_duration`, `teacher_code`,`class`,`solution`,`type`,`school_id`) VALUES ('$question','$answerOne','$answerTwo','$answerThree','$answerFour','$correct','$subject','$topic','$quizCode','$duration','$teacherCode','$class','$solution','$type','$id')";
 
         if($conn->query($sqlInsert) === TRUE){
            $feedback = [

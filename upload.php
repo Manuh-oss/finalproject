@@ -8,13 +8,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
    $term = $conn->real_escape_string($_POST['term']);
    $stream = $conn->real_escape_string($_POST['stream']);
    $exam = $conn->real_escape_string($_POST['exam']);
+   $id = $conn->real_escape_string($_POST['id']);
    $allFeedback = [];
 
    for($i = 0; $i < count($admissions) ; $i++){
     $admission = $conn->real_escape_string($admissions[$i]);
     $mark = $conn->real_escape_string($marks[$i]);
     
-    $sqlUpdate = "UPDATE `studentdetails` SET `$subject`='$mark' WHERE`admission`='$admission'AND`class`='$class'AND`stream`='$stream'AND`term`='$term'AND`exam`='$exam'";
+    $sqlUpdate = "UPDATE `studentdetails` SET `$subject`='$mark' WHERE`admission`='$admission'AND`class`='$class'AND`stream`='$stream'AND`term`='$term'AND`exam`='$exam'AND`school_id`='$id'";
 
     if($conn->query($sqlUpdate) === TRUE){
         $feedback = [

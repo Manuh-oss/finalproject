@@ -21,7 +21,23 @@ function getTCode() {
   xhr.onload = () => {
     if (xhr.status == 200) {
       const tcode = JSON.parse(xhr.responseText);
-      getTeacher(tcode.code);
+      getTeacher(tcode.code,tcode.schoolId);
+    }
+  };
+  xhr.send();
+}
+
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    try{
+       if (xhr.status == 200) {
+        const tcode = JSON.parse(xhr.responseText);
+        callback(tcode)
+      }
+    }catch(error){
+
     }
   };
   xhr.send();
@@ -29,18 +45,18 @@ function getTCode() {
 
 // this function gets the teacher and validates him
 
-function getTeacher(code) {
+function getTeacher(code,id) {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     if (xhr.status == 200) {
       const response = JSON.parse(xhr.responseText);
-      const match = response.find((t) => t.teacherCode === code);
+      const match = response.find((t) => t.teacherCode === code && t.schoolId === id);
   
       if(match){
         if (match.classTeacher !== "-") {
           const [clas, stream] = match.classTeacher.split("-");
-          getStudents(clas, stream);
+          getStudents(clas, stream,id);
         } else {
           document.querySelector(".submit-btn button").style.display = "none";
         }
@@ -51,7 +67,7 @@ function getTeacher(code) {
 }
 
 // this funtion gets students from database and filters them accorfding to class and stream
-function getStudents(clas, stream) {
+function getStudents(clas, stream,id) {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -59,9 +75,9 @@ function getStudents(clas, stream) {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       const students = response.filter(
-        (s) => s.class === clas && s.stream === stream
+        (s) => s.class === clas && s.stream === stream && s.schoolId === id
       );
-      classtext.innerText = `form${clas} ${convertStream(stream)} register`;
+      classtext.innerText = `${clas} ${(stream)} register`;
       displayStudents(students);
     }
   };
@@ -172,8 +188,9 @@ function convertStream(value) {
 //function to post the register
 
 function postRegister() {
-  console.log("am caleed");
+  getUser((user) => {
   const formData = new FormData(table);
+  formData.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "register.php", true);
   xhr.onload = () => {
@@ -191,6 +208,7 @@ function postRegister() {
     }
   };
   xhr.send(formData);
+  })
 }
 
 //this function get the current week number from januarry first

@@ -23,9 +23,11 @@ let stream;
 let timer;
 
 function getStudentTimetable(callback, clas, stream) {
+  getUser((user) => {
   const data = new FormData();
   data.append("student-class", clas);
   data.append("student-stream", stream);
+  data.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "studenttimetable.php", true);
   xhr.onload = () => {
@@ -39,6 +41,7 @@ function getStudentTimetable(callback, clas, stream) {
     }
   };
   xhr.send(data);
+  })
 }
 
 function getUser(callback) {
@@ -90,8 +93,10 @@ function getLessons(callback) {
 }
 
 function getTeacherTimetable(callback, code) {
+  getUser((user) => {
   const tcode = new FormData();
   tcode.append("teacherCode", code);
+  tcode.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachertimetable.php", true);
   xhr.onload = () => {
@@ -102,9 +107,12 @@ function getTeacherTimetable(callback, code) {
       }
     } catch (error) {
       console.log("teacher error", error);
+    }finally{
+      console.log(xhr.responseText)
     }
   };
   xhr.send(tcode);
+  })
 }
 
 function getStudentSessions(callback, clas, stream) {
@@ -467,14 +475,14 @@ function createTeacherTimetable(id, type, lessonInfo,editMode) {
                 input.style.display = "none";
                 span.innerHTML = `
                   <h3>${session.subject}</h3>
-                  <h4>form${session.class} ${convertStream(session.stream)}</h4>
+                  <h4>${session.class} ${(session.stream)}</h4>
                 `;
                 parent.appendChild(span);
               }else if(session.type === "s"){
                 input.style.display = "none";
                 span.innerHTML = `
                   <h3>${session.subject}</h3>
-                  <h4>form${session.class} ${convertStream(session.stream)}</h4>
+                  <h4>${session.class} ${(session.stream)}</h4>
                 `;
                 parent.appendChild(span); 
               }
@@ -501,7 +509,7 @@ function createTeacherTimetable(id, type, lessonInfo,editMode) {
               input.style.display = "none";
               span.innerHTML = `
                 <h3>${lessonInfo.subject}</h3>
-                <h4>form${clas} ${convertStream(stream)}</h4>
+                <h4>${clas} ${(stream)}</h4>
               `;
               parent.appendChild(span);
               input.value =
@@ -510,7 +518,7 @@ function createTeacherTimetable(id, type, lessonInfo,editMode) {
               input.style.display = "none"
               span.innerHTML = `
                 <h3>${lessonInfo.subject}</h3>
-                <h4>form${clas} ${convertStream(stream)}</h4>
+                <h4>${clas} ${(stream)}</h4>
               `;
               parent.appendChild(span);
               input.value =
@@ -833,9 +841,11 @@ function getCharacterMatchScore(user, correct) {
 
 //function to post results to the database
 function postStudentTimeTable() {
+  getUser((user) => {
   const formData = new FormData(studentForm);
   formData.append("student-class" ,  clas || classSelect.value);
   formData.append("student-stream" , stream || streamSelect.value);
+  formData.append("id" , user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "timetable.php", true);
   xhr.onload = () => {
@@ -844,9 +854,11 @@ function postStudentTimeTable() {
     }
   };
   xhr.send(formData);
+  })
 }
 
 function postEditChanges(id,value){
+  getUser((user) => {
   const [day,session] = id.split("-");
   const inputName = getInputPhpName(session);
   const data = new FormData();
@@ -855,6 +867,7 @@ function postEditChanges(id,value){
   data.append("stream" , stream || streamSelect.value);
   data.append("lesson" , inputName);
   data.append("value" , value || "");
+  data.append("id" , user.schoolId);
 
   const xhr = new XMLHttpRequest();
   xhr.open('POST','timetableedit.php',true);
@@ -872,6 +885,7 @@ function postEditChanges(id,value){
     }
   }
   xhr.send(data);
+  })
 }
 
 function getInputPhpName(session){
@@ -891,8 +905,10 @@ function getInputPhpName(session){
 }
 
 function postTeacherTimeTable(tcode) {
+  getUser((user) => {
   const formData = new FormData(teacherForm);
   formData.append("teacher-code", tcode);
+  formData.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "postteacher.php", true);
   xhr.onload = () => {
@@ -901,6 +917,7 @@ function postTeacherTimeTable(tcode) {
     }
   };
   xhr.send(formData);
+  })
 }
 
 //error function

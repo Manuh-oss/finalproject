@@ -38,27 +38,32 @@ function getUser(callback) {
 
 //function to get student Details
 function getStudents(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "students.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("student error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to get student MArks
 function getStudentMarks(clas, term, exam, callback) {
+  getUser((user) => {
   const data = new FormData();
   data.append("term", term);
   data.append("class", clas);
   data.append("exam", exam);
+  data.append("id", user.schoolId);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);
   xhr.onload = () => {
@@ -75,10 +80,14 @@ function getStudentMarks(clas, term, exam, callback) {
     }
   };
   xhr.send(data);
+  })
 }
 
 //function to get register details
 function getRegisterDetails(callback) {
+  getUser((user) => {
+  const data = new FormData();
+  data.append("id" , user.schoolId);  
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "countregister.php", true);
   xhr.onload = () => {
@@ -91,7 +100,8 @@ function getRegisterDetails(callback) {
       console.log("student error", error);
     }
   };
-  xhr.send();
+  xhr.send(data);
+  })
 }
 
 //function to get class count
@@ -100,6 +110,7 @@ function getClassNumbers(callback) {
     if (user.from !== "student") return;
     const data = new FormData();
     data.append("class", user.class);
+    data.append("class", user.schoolId);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "classcount.php", true);
     xhr.onload = () => {
@@ -118,19 +129,22 @@ function getClassNumbers(callback) {
 
 //function to ge teacher details
 function getTeacherDetails(callback) {
+  getUser((user) => {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
   xhr.onload = () => {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        callback(response);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
       }
     } catch (error) {
       console.log("student error", error);
     }
   };
   xhr.send();
+  })
 }
 
 //function to check if subject was dropped
@@ -335,7 +349,7 @@ function displayMymarks() {
               <div class="text">
                 <h4>overral position & stream position:</h4>
                 <h3>
-                  ${myMarks.overallPosition} / ${count["allcount"]} &
+                  ${myMarks.meanPosition} / ${count["allcount"]} &
                   ${myMarks.streamPosition} / ${count[myPersonalDetails.stream]}
                 </h3>
               </div>
@@ -362,8 +376,8 @@ function displayMymarks() {
               <div class="icon"><i class="fas fa-school"></i> </div>
                 <div class="text">
                   <h4>class details:</h4>
-                  <h3>form${myPersonalDetails.class} 
-                      ${convertStream(myPersonalDetails.stream)}
+                  <h3>${myPersonalDetails.class} 
+                      ${(myPersonalDetails.stream)}
                   </h3>
                 </div>
             </span>

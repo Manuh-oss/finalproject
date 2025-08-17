@@ -5,10 +5,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $subject = $conn->real_escape_string($_POST['subject']);
     $topic = $conn->real_escape_string($_POST['topic']);
     $notes = $conn->real_escape_string($_POST['notes']);
+    $id = $conn->real_escape_string($_POST['id']);
     $teacherCode = $conn->real_escape_string($_POST['code']);
     $feedBack = [];
 
-    $sqlCheck = "SELECT * FROM `notes` WHERE `class`= '$class' AND `subject` = '$subject' AND `topic` = '$topic' AND `teacherCode` = '$teacherCode' ";
+    $sqlCheck = "SELECT * FROM `notes` WHERE `class`= '$class' AND `subject` = '$subject' AND `topic` = '$topic' AND `teacherCode` = '$teacherCode'AND`school_id`='$id'";
     $result = $conn->query($sqlCheck);
     if($result){
         $countNotes = mysqli_num_rows($result);
@@ -26,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             ];
           }
         }else{
-            $sqlInsert = "INSERT INTO `notes`( `paragraph`, `class`, `subject`, `teacherCode`, `topic`) VALUES ('$notes','$class','$subject','$teacherCode','$topic')";
+            $sqlInsert = "INSERT INTO `notes`( `paragraph`, `class`, `subject`, `teacherCode`, `topic`,`school_id`) VALUES ('$notes','$class','$subject','$teacherCode','$topic','$id')";
             if($conn->query($sqlInsert) === TRUE){
                 $feedBack = [
                     "message" => "insertion succesfully",
