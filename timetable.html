@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="aside.css" />
     <link rel="stylesheet" href="timetable.css" />
     <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    </style>
   </head>
   <body>
     <div class="error-message" id="error-message">
@@ -36,31 +39,55 @@
             >
           </div>
           <div class="body">
-            <a href="#"
-              ><i class="fa fa-home"></i>
-              <span class="writing">Dashboard</span></a
-            >
-            <a href="#"
-              ><i class="fa fa-user-plus"></i>
-              <span class="writing">Enrol</span></a
-            >
-            <a href="#"
-              ><i class="fa fa-users"></i>
-              <span class="writing">Profiles</span></a
-            >
-            <a href="#"
-              ><i class="fa fa-clipboard"></i>
-              <span class="writing">Result</span></a
-            >
-            <a href="#"
-              ><i class="fa fa-calendar"></i>
-              <span class="writing">event</span></a
-            >
-            <a href="#"
-              ><i class="fa fa-table"></i>
-              <span class="writing">Timetable</span></a
-            >
-          </div>
+ <a href="#">
+   <i class="fa fa-home"></i>
+   <span class="writing">Dashboard</span>
+ </a>
+  <a href="setup.html">
+   <i class="fa-solid fa-gear"></i>
+   <span class="writing">setup</span>
+  </a>
+  <a href="enrol.html">
+   <i class="fa fa-user-plus"></i>
+   <span class="writing">enrol student</span>
+ </a>
+  <a href="tenarol.html">
+   <i class="fa fa-user-plus"></i>
+   <span class="writing">enrol teacher</span>
+ </a>
+ <a href="students.html">
+   <i class="fa fa-users"></i>
+   <span class="writing">all users</span>
+ </a>
+  <a href="admincalendar.html">
+    <i class="fa fa-calendar"></i>
+    <span class="writing">event</span>
+  </a>
+ <a href="selectsubjects.html">
+   <i class="fa fa-layer-group"></i>
+   <span class="writing">subject teachers</span>
+ </a>
+<a href="exam.html">
+   <i class="fa fa-clock"></i>
+   <span class="writing">exam</span>
+ </a>
+ <a href="rollcall.html">
+  <i class="fa fa-clipboard"></i>
+  <span class="writing">rollcall</span>
+ </a>
+<a href="qrcode.html">
+  <i class="fas fa-qrcode"></i>
+  <span class="writing">class codes</span>
+ </a>
+ <a href="timetable.html">
+   <i class="fa fa-table-columns"></i>
+   <span class="writing">timetable</span>
+ </a>
+ <a href="analysis.html">
+   <i class="fa fa-line-chart"></i>
+   <span class="writing">analysis</span>
+ </a>
+</div> 
         </nav>
       </aside>
       <div class="main-main" style="background-color: #f8f9fb;">
@@ -183,7 +210,7 @@
                   <button type="button" class="edit">edit</button>
                   <button type="button" class="remedials">remedials</button>
                </div>
-                <div class="centralise">
+               <div class="centralise">
                   <form class="student">
                     <div class="select">
                       <span>
@@ -215,25 +242,28 @@
                         <thead>
                           <tr>
                               <th></th>
-                              <th>8:00-8:40</th>
-                              <th>8:40-9:20</th>
-                              <th>9:20-9:30</th>
-                              <th>9:30-10:10</th>
-                              <th>10:10-10:50</th>
-                              <th>10:50-11:10</th>
-                              <th>11:10-11:50</th>
-                              <th>11:50-12:30</th>
-                              <th>12:30-1:10</th>
-                              <th>1:10-2:00</th>
-                              <th>2:00-2:40</th>
-                              <th>2:40-3:20</th>
-                              <th>3:20-4:00</th>
+                              <th>lesson one</th>
+                              <th>lesson two</th>
+                              <th>short break</th>
+                              <th>lesson three</th>
+                              <th>lesson four</th>
+                              <th>long break</th>
+                              <th>lesson five</th>
+                              <th>lesson six</th>
+                              <th>lunch</th>
+                              <th>lesson seven</th>
+                              <th>lesson eight</th>
+                              <th class="last-period">lesson nine</th>
                           </tr>
                         </thead>
                       <tbody>
           
                       </tbody>
                       </table>
+                      <div class="noresult">
+                        <img src="./subjects/term.avif" alt="">
+                        <h3>please select the above to continue</h3>
+                      </div>
                     </section>
 
         
@@ -261,19 +291,18 @@
                         <thead>
                           <tr>
                               <th></th>
-                              <th>8:00-8:40</th>
-                              <th>8:40-9:20</th>
-                              <th>9:20-9:30</th>
-                              <th>9:30-10:10</th>
-                              <th>10:10-10:50</th>
-                              <th>10:50-11:10</th>
-                              <th>11:10-11:50</th>
-                              <th>11:50-12:30</th>
-                              <th>12:30-1:10</th>
-                              <th>1:10-2:00</th>
-                              <th>2:00-2:40</th>
-                              <th>2:40-3:20</th>
-                              <th>3:20-4:00</th>
+                              <th>lesson one</th>
+                              <th>lesson two</th>
+                              <th>short break</th>
+                              <th>lesson three</th>
+                              <th>lesson four</th>
+                              <th>long break</th>
+                              <th>lesson five</th>
+                              <th>lesson six</th>
+                              <th>lunch</th>
+                              <th>lesson seven</th>
+                              <th>lesson eight</th>
+                              <th class="last-period">lesson nine</th>
                           </tr>
                         </thead>
                       <tbody>
@@ -309,12 +338,12 @@
                     </div>
                     <table></table>
                   </div>
-                </div>
+               </div>
           </div>
         </div>
       </div>
     </main>
-    <script src="tittle.js"></script>
     <script src="timetable2.js"></script>
+    <script src="navbar.js"></script>
   </body>
 </html>

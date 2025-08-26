@@ -10,7 +10,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
   $imageName = $_FILES['image']['name'];
   $tmp_name = $_FILES['image']['tmp_name'];
-  include("directory.php");
+   $dir = 'slider/';
+     if(!is_dir($dir)){
+       if(mkdir($dir,0777,true)){
+              
+       }
+      }
   $directory = "slider/";
 
   $uploadPath = $directory.basename($imageName);

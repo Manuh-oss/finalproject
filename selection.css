@@ -69,7 +69,7 @@
     align-items: center;
     opacity: 0;
     transform: scale(0.8);
-    transition: opacity .3s linear , transform .3s linear;
+    transition: opacity .4s linear , transform .4s linear;
     border: 1px solid #2d3e50;
     overflow: hidden;
 }
@@ -176,6 +176,53 @@
 
 .hide{
     display: none;
+}
+
+.progress-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 99999;
+  color: #eee;
+
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.removes{
+    display: none;
+}
+
+.progress-container .spinner {
+  height: 10rem;
+  width: 10rem;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  border-top: 0.2rem solid #eee;
+  animation: spin 0.8s linear infinite;
+}
+
+.progress-container .box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.progress-container .box p {
+  text-transform: none;
 }
 
 @media (max-width:1025px) {

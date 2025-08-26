@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="aside.css" />
     <link rel="stylesheet" href="selection.css" />
     <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    </style>
   </head>
   <body>
     <div class="error-message" id="error-message">
@@ -36,36 +39,43 @@
             >
           </div>
           <div class="body">
-            <a href="#"
+            <        <a href="tuser.html"
               ><i class="fa fa-home"></i>
               <span class="writing">Dashboard</span></a
             >
-            <a href="#"
+            <a href="tadminprofile.html"
               ><i class="fa fa-user"></i>
               <span class="writing">profile</span></a
             >
-            <a href="#"
+            <a href="marks2.html"
               ><i class="fa fa-upload"></i>
               <span class="writing">marks</span></a
             >
-            <a href="#"
-              ><i class="fa fa-book"></i> <span class="writing">Result</span></a
+             <a href="myclasses.html"
+              ><i class="fa fa-chalkboard"></i>
+              <span class="writing">my clases</span></a
             >
-            <a href="#"
-              ><i class="fa fa-clock"></i> <span class="writing">quiz</span></a
+            <a href="result.html"
+              ><i class="fa fa-book"></i>
+              <span class="writing">Result</span></a
             >
-            <a href="#"
-              ><i class="fa fa-pen"></i> <span class="writing">notes</span></a
+              <a href="quiz.html"
+              ><i class="fa fa-clock"></i>
+              <span class="writing">quiz</span></a
             >
-            <a href="#"
-              ><i class="fa fa-chair"></i>
-              <span class="writing">assignment</span></a
-            >
-            <a href="#"
+            <a href="tnotes.html"
+            ><i class="fa fa-pen"></i>
+            <span class="writing">notes</span></a
+             >
+             <a href="postassignment.html"
+             ><i class="fa fa-chair"></i>
+             <span class="writing">assignment</span></a
+           >
+            <a href="admincalendar.html"
               ><i class="fa fa-calendar"></i>
               <span class="writing">event</span></a
             >
-            <a href="#"
+            <a href="displaytimetable.html"
               ><i class="fa fa-table"></i>
               <span class="writing">Timetable</span></a
             >
@@ -276,7 +286,6 @@
                     <th class="remove">class</th>
                     <th class="remove">stream</th>
                     <th class="remove">gender</th>
-                    <th class="remove">teacher</th>
                     <th>status</th>
                   </tr>
                 </thead>
@@ -292,337 +301,15 @@
           </div>
         </form>
       </div>
+      
+          <div class="progress-container removes" id="container">
+            <div class="box">
+              <div class="spinner"></div>
+              <p class="text">Uploading marks please wait...</p>
+            </div>
+          </div>
+
     </main>
-    <script>
-      const parent = document.querySelector(".grid-container");
-      const children = parent.children;
-      const subjectGrid = parent.querySelectorAll(".subject-grid");
-      const delay = 0.2;
-      const classSelect = document.getElementById("class");
-      const streamSelect = document.getElementById("stream");
-      const form = document.querySelector(".main");
-      const subjectContainers = document.querySelectorAll(".subject-all");
-      const tableContainers = document.querySelectorAll(".table");
-      const improvedError = document.getElementById("error-message");
-      const improvedSuccess = document.getElementById("success-message");
-      const closePopup = document.querySelectorAll(".close-btn");
-      const backBtn = document.querySelector(".back");
-      const array = [];
-      const submitBtn = document.querySelector(".submit-bt");
-
-      const colors = [
-        "#AEDFF7",
-        "#F4D19B",
-        "#CFF2E1",
-        "#B2EBF2",
-        "#D1F2A5",
-        "#B0C4DE",
-        "#DDECC9",
-        "#E6CFC1",
-        "#E4DEF3",
-        "#F9E7C3",
-        "#D0E6B3",
-        "#F8C8DC",
-        "#A7FOF9",
-      ];
-
-      //this sets a tranition delay to every child
-      for (let x = 0; x < children.length; x++) {
-        children[x].style.transitionDelay = `${delay * x}` + "s";
-        children[x].style.backgroundColor = colors[x];
-        children[x].style.border = "none";
-        children[x].textContent =
-          children[x].querySelector(".text").textContent;
-      }
-
-      window.addEventListener("load", function () {
-        subjectGrid.forEach((element) => {
-          element.style.opacity = "1";
-          element.style.transform = "scale(1)";
-        });
-      });
-
-      const checkAllCheckbox = document.getElementById("checkAll");
-      const itemCheckboxes = document.querySelectorAll(".itemCheckbox");
-
-      function updateMainCheckBox() {
-        checkAllCheckbox.checked = Array.from(itemCheckboxes).every(
-          (box) => box.checked
-        );
-      }
-
-      function postSelectionForm() {
-        console.log("am called");
-        const formData = new FormData(form);
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "selection.php", true);
-        xhr.onload = () => {
-          if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            if (response.type === true) {
-              showSuccessMessage("student subject selection was successfull");
-            } else if (response.type === false) {
-              showErrorMessage("an error just occured");
-              console.log(response.message);
-            }
-          }
-        };
-        xhr.send(formData);
-      }
-
-      function getStudents(userClassSelect, userStreamSelect, check) {
-        const xhr = new XMLHttpRequest();
-
-        xhr.open("POST", "students.php", true);
-
-        let checkBox = "";
-        let arrays = [];
-
-        xhr.onload = () => {
-          if (xhr.status == 200) {
-            const response = JSON.parse(xhr.responseText);
-
-            document.querySelector(".selection-table table tbody").innerHTML =
-              "";
-
-            const sortClass = response.filter(
-              (newclass) => newclass.class == userClassSelect
-            );
-            const sortStream = sortClass.filter(
-              (newstream) => newstream.stream == userStreamSelect
-            );
-
-            for (let z = 0; z < sortStream.length; z++) {
-              switch (sortStream[z].class) {
-                case "1":
-                  sortStream[z].class = "form1";
-                  break;
-                case "2":
-                  sortStream[z].class = "form2";
-                  break;
-                case "3":
-                  sortStream[z].class = "form3";
-                  break;
-                case "4":
-                  sortStream[z].class = "form4";
-                  break;
-              }
-              switch (sortStream[z].stream) {
-                case "111":
-                  sortStream[z].stream = "green";
-                  break;
-                case "222":
-                  sortStream[z].stream = "blue";
-                  break;
-                case "333":
-                  sortStream[z].stream = "red";
-                  break;
-                case "444":
-                  sortStream[z].stream = "purple";
-                  break;
-              }
-
-              const tableRow = document.createElement("tr");
-
-              tableRow.innerHTML = `
-               <td>
-                  <input type="checkbox" name="" class="itemCheckbox" onclick="updateMainCheckBox()">
-                </td>
-                <td>${sortStream[z].admission}</td>
-                <td>${sortStream[z].firstname} ${sortStream[z].middlename} ${sortStream[z].lastname}</td>
-                <td class="remove">${sortStream[z].class} </td>
-                <td class="remove">${sortStream[z].stream}</td>
-                <td class="remove">${sortStream[z].gender}</td>
-                <td class="remove">mr paul</td>
-                <td>selected</td>
-                <td class="hidden"><input type="text" name="selections[]" id="" class="selects"></td>
-                <td class="hidden"><input type="text" name="admissions[]" id="" class=""value="${sortStream[z].admission}"></td>
-                <td class="hidden"><input type="text" name="ids[]" id="" class="" value="${sortStream[z].id}""></td>
-            `;
-              checkBox =
-                tableRow.firstElementChild.querySelector(".itemCheckbox");
-              document
-                .querySelector(".selection-table table tbody")
-                .appendChild(tableRow);
-              arrays.push(checkBox);
-            }
-          }
-
-          const allInputs = document.querySelectorAll(".selects");
-          arrays.forEach((item) => {
-            const display = item.parentElement.parentElement.children[7];
-            if (check) {
-              allInputs.forEach((input) => {
-                input.value = "selected";
-                display.style.color = "green";
-                display.innerHTML = `<i class="fa fa-check"></i> selected`;
-              });
-            } else {
-              allInputs.forEach((input) => {
-                input.value = "not-selected";
-                display.style.color = "red";
-                display.innerHTML = `<i class="fa fa-times"></i> dropped`;
-              });
-            }
-          });
-
-          checkAllCheckbox.checked = arrays.every((box) => box.checked);
-
-          arrays.forEach((check) => {
-            check.addEventListener("change", function () {
-              let ischecked = this.checked;
-              const display = this.parentElement.parentElement.children[7];
-              const input =
-                this.parentElement.parentElement.querySelector(".selects");
-
-              if (ischecked) {
-                display.style.color = "green";
-                display.innerHTML = `<i class="fa fa-check"></i> selected`;
-                input.value = "selected";
-              } else {
-                display.style.color = "red";
-                display.innerHTML = `<i class="fa fa-times"></i> dropped`;
-                input.value = "not-selected";
-              }
-            });
-          });
-        };
-
-        xhr.send();
-      }
-
-      function checkUserInput() {
-        classSelect.addEventListener("input", function (e) {
-          const userCselect = e.target.value;
-
-          streamSelect.addEventListener("input", function (e) {
-            const userSselect = e.target.value;
-            console.log(subject);
-            let allChecked = false;
-            getStudents(userCselect, userSselect, allChecked, subject);
-          });
-        });
-      }
-
-      function checkInputFilled(user, text) {
-        const selectInputs = document.querySelectorAll(".required");
-        selectInputs.forEach((item) => item.classList.remove("errors"));
-        selectInputs.forEach((selectInput) => {
-          let allIsfilled = false;
-          if (selectInput.value.trim() === "") {
-            allIsfilled = false;
-            selectInput.classList.add("errors");
-          } else {
-            allIsfilled = true;
-          }
-          if (allIsfilled) {
-            getLessonExample(user, text);
-          } else {
-            showErrorMessage("please select all input fields");
-          }
-        });
-      }
-
-      function getLessonExample(username, subject) {
-        const lessonXhr = new XMLHttpRequest();
-        lessonXhr.open("POST", "lesson.php", true);
-        checkUserInput(subject);
-        lessonXhr.onload = () => {
-          if (lessonXhr.status == 200) {
-            const lessonResponse = JSON.parse(lessonXhr.responseText);
-            const myLessons = lessonResponse.filter(
-              (l) => l.teacherCode === username
-            );
-            const found = myLessons.find(
-              (t) =>
-                t.class === classSelect.value &&
-                t.subject === subject &&
-                t.stream === streamSelect.value
-            );
-            if (found) {
-              hideSubjects();
-              checkUserInput();
-              showSuccessMessage("access granted");
-            } else {
-              showErrorMessage("access denied");
-            }
-          }
-        };
-
-        lessonXhr.send();
-      }
-
-      function getUsername(user) {
-        Array.from(children).forEach((child) => {
-          child.addEventListener("click", function () {
-            const text = this.textContent.trim();
-            checkInputFilled(user, text);
-            document.getElementById("subject").value = text;
-          });
-        });
-      }
-
-      function hideSubjects() {
-        parent.style.display = "none";
-        document.querySelector(".select").style.display = "none";
-        document.querySelector(".selection-table").style.display = "flex";
-        document.querySelector(".submit-btn").style.display = "flex";
-      }
-
-      function hideTable() {
-        parent.style.display = "grid";
-        document.querySelector(".select").style.display = "flex";
-        document.querySelector(".selection-table").style.display = "none";
-        document.querySelector(".submit-btn").style.display = "none";
-      }
-
-      function getTCode() {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", "saved_user.php", true);
-        xhr.onload = () => {
-          if (xhr.status == 200) {
-            const tcode = JSON.parse(xhr.responseText);
-            getUsername(tcode.code);
-          }
-        };
-        xhr.send();
-      }
-
-      function showErrorMessage(message) {
-        improvedError.classList.add("show-error");
-        improvedError.querySelector("#error-text").textContent =
-          message || "an error just occurred";
-
-        setTimeout(hideErrorMessage, 5000);
-      }
-
-      function hideErrorMessage() {
-        improvedError.classList.remove("show-error");
-        improvedSuccess.classList.remove("show-error");
-      }
-
-      function hideSuccessMessage() {
-        improvedSuccess.classList.remove("show-success");
-        improvedError.classList.remove("show-error");
-      }
-
-      function showSuccessMessage(messages) {
-        improvedSuccess.classList.add("show-success");
-        improvedSuccess.querySelector("#error-text").textContent =
-          messages || "congrats!";
-
-        setTimeout(hideSuccessMessage, 5000);
-      }
-
-      backBtn.addEventListener("click", () => {
-        hideTable();
-        window.location.reload();
-      });
-
-      submitBtn.addEventListener("click", postSelectionForm);
-      hideTable();
-      checkUserInput();
-      getTCode();
-    </script>
+    <script src="tselect.js"></script>
   </body>
 </html>

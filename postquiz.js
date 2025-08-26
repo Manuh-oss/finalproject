@@ -16,36 +16,88 @@ let currentQuestionInpt;
 let allQuestions = [];
 
 const children = subjectBox.querySelectorAll(".body .subject");
+const childrenBox = subjectBox.querySelector(".body");
 const delay = 0.2;
 
 const colors = [
-  "#AEDFF7",
-  "#F4D19B",
-  "#CFF2E1",
-  "#B2EBF2",
-  "#D1F2A5",
-  "#B0C4DE",
-  "#DDECC9",
-  "#E6CFC1",
-  "#E4DEF3",
-  "#F9E7C3",
-  "#D0E6B3",
-  "#F8C8DC",
-  "#A7FOF9",
+  "#AEDFF7", // light sky blue
+  "#F4D19B", // light orange
+  "#CFF2E1", // pale mint green
+  "#B2EBF2", // pale cyan
+  "#D1F2A5", // light lime green
+  "#B0C4DE", // light steel blue
+  "#DDECC9", // pale olive green
+  "#E6CFC1", // pale peach
+  "#E4DEF3", // pale lavender
+  "#F9E7C3", // pale gold
+  "#D0E6B3", // soft olive green
+  "#F8C8DC", // pale pink
+  "#B0C4DE", // light steel blue (duplicate)
+  "#C9E6E9", // pastel cyan
+  "#F7DBB4", // creamy peach
+  "#E0F7D7", // very pale green
+  "#D2EBF7", // baby blue
+  "#E8F4E2", // soft sage green
+  "#F0E5D7", // dusty beige
+  "#E2D8F2", // soft lilac
 ];
 
-//add colors to subject containers
-for (let s = 0; s < children.length; s++) {
-  children[s].style.background = colors[s];
-  children[s].style.transitionDelay = `${delay * s}` + "s";
-}
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
 
-window.addEventListener("load", function () {
-  Array.from(children).forEach((element) => {
-    element.style.opacity = "1";
-    element.style.transform = "scale(1)";
-  });
-});
+document.addEventListener("DOMContentLoaded" , () => {
+  loadSchoolData((schoolData) => {
+    const schoolSubjects = schoolData.subjects;
+    childrenBox.innerHTML = ""; 
+    schoolSubjects.forEach((subject , idx) => {
+      const div = document.createElement("div");
+      div.className = "subject";
+      div.textContent = subject;
+      div.style.transitionDelay = `${delay * idx}s`
+      div.style.backgroundColor = colors[idx]
+
+      childrenBox.appendChild(div);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          div.style.opacity = "1";
+          div.style.transform = "scale(1)";
+        })
+      })
+
+      div.addEventListener("click" , (e) => {
+       e.stopPropagation();
+       const dataBaseSubject = myDefaultSubjects[idx];
+       getClassStream(dataBaseSubject)
+       subjectSelect.value = myDefaultSubjects[idx];
+       //this enesures even if user is verified user cannot access any other subject
+        const topicBox = subjectBox.querySelector(".topics");
+        const buttonBox = subjectBox.querySelector(".button");
+        buttonBox.style.display = "none";
+        topicBox.style.display = "none";
+
+      })
+
+    })
+
+  })
+})
 
 //function to check if all class and stream values are filled
 function getClassStream(subject) {
@@ -76,7 +128,7 @@ function getUser(callback) {
     try{
        if (xhr.status == 200) {
         const tcode = JSON.parse(xhr.responseText);
-        callback(tcode.code);
+        callback(tcode);
       }
     }catch(error){
       console.log("login error", error);
@@ -117,37 +169,51 @@ function verifyUser(subject) {
 //if user is verified
 function getTopics(select) {
   getUser((user) => {
-  const param =
-    "class=" + classSelect.value + "&subject=" + subjectSelect.value+"&id="+user.schoolId;
+  const data = new FormData();
+  data.append("class" , classSelect.value);
+  data.append("subject" , subjectSelect.value);
+  data.append("stream" , streamSelect.value);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "getTopics.php", true);
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      if (response.length > 0) {
+     try{
+       if(xhr.status === 200){
+        const response = JSON.parse(xhr.responseText)
+        // .filter(s => s.schoolId === user.schoolId);
         const lastTopic = submitBox.querySelector("#last-topics");
-        lastTopic.innerHTML = "";
-        select.innerHTML = "";
-        const defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.textContent = "Select Topic";
-        select.appendChild(defaultOption);
-        lastTopic.appendChild(defaultOption.cloneNode(true));
+        if(response.length > 0){
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "--select topic--";
 
-        response.forEach((topic) => {
+           
+          select.appendChild(defaultOption);
+          lastTopic.appendChild(defaultOption.cloneNode(true));
+
+         response.forEach(res => {
           const option = document.createElement("option");
-          option.value = topic.topic_tittle;
-          option.textContent = topic.topic_tittle;
-          select.appendChild(option);
-          lastTopic.appendChild(option.cloneNode(true));
-        });
-      } else {
-        showErrorMessage("there are no allocated topics");
-      }
-    }
+          option.value = res.topic_tittle;
+          option.textContent = res.topic_tittle;
+
+          const option2 = document.createElement("option");
+          option2.value = res.topic_tittle;
+          option2.textContent = res.topic_tittle;
+
+          select.appendChild(option)
+          lastTopic.appendChild(option2)
+         })  
+
+
+        }else{
+          showErrorMessage(`no allocated ${subjectSelect.value} topics`);
+        }
+
+       }
+     }catch(error){
+      console.log("get topics error" , error)
+     }
   };
-  xhr.send(param);
+  xhr.send(data);
   })
 }
 
@@ -235,17 +301,6 @@ showSubjectForm();
 
 //event listeners
 //this gets the subject value from the clicking
-Array.from(children).forEach((child) => {
-  child.addEventListener("click", function () {
-    subjectSelect.value = this.textContent.trim();
-    getClassStream(this.textContent.trim());
-    //this enesures even if user is verified user cannot access any other subject
-    const topicBox = subjectBox.querySelector(".topics");
-    const buttonBox = subjectBox.querySelector(".button");
-    buttonBox.style.display = "none";
-    topicBox.style.display = "none";
-  });
-});
 
 //event listener for topic select on subject box container
 const topicSelect = subjectBox.querySelector(".topics select");
@@ -470,11 +525,12 @@ function redirectToQuestion(index) {
 function generateQuizCode() {
   getUser((user) => {
   const random = Math.floor(Math.random() * 1000000);
-  const param = "class=" + "" + "&subject=" + "";
+  const param = "class=" + "" + "&subject=" + ""+"&id="+user.schoolId;
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "questions.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onload = () => {
+    try{
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       const found = response.find((q) => q.teacherCode === random && q.schoolId === user.schoolId);
@@ -496,6 +552,11 @@ function generateQuizCode() {
       }
     } else {
       console.log(xhr.status);
+    }
+    }catch(error){
+      console.log("code generation eror" , error);
+    }finally{
+      console.log(xhr.responseText)
     }
   };
   xhr.send(param);

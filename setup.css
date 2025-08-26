@@ -438,6 +438,7 @@
   padding: 0 1rem;
   border-radius: 0.5rem;
   position: relative;
+  transition: transform .6s linear;
 }
 
 .stream-container .stream-category .body span .streams span .fa-pen {
@@ -1218,6 +1219,117 @@
   outline: none;
 }
 
+.term-progress-cont{
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 100000;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: scale(.5);
+  transition: opacity 1s ease-in-out,transform 1s ease-in-out;
+  display: none;
+}
+
+.term-progress-cont .box{
+  height: fit-content;
+  min-height: 32rem;
+  width: 47rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #fff;
+  padding: 2rem;
+}
+
+.term-progress-cont .box h3{
+  width: 100%;
+  padding:1rem 0;
+  border-bottom: 1px solid #b388ff;
+  color: #b388ff;
+  font-size: 1.5rem;
+  font-style: normal;
+}
+
+.term-progress-cont .box .image{
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.term-progress-cont .box .image h1{
+  flex: 1 1 0;
+  font-size: 3rem;
+  font-style: normal;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.term-progress-cont .box .image img{
+  aspect-ratio: 1/1;
+  height: 17rem;
+  width: 17rem;
+}
+
+.term-progress-cont .box .footer{
+  display: grid;
+  grid-template-columns: repeat(auto-fit , minmax(15rem , 1fr));
+  width: 100%;
+  gap: 1rem;
+}
+
+.term-progress-cont .box .footer h2{
+  height: 3.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  font-size: 2rem;
+  font-weight: 400;
+  gap: .5rem;
+}
+
+.term-progress-cont .box .footer h2 span{
+  font-style: italic;
+  font-size: 1.4rem;
+}
+
+.term-progress-cont .box .footer input{
+  height: 3.5rem;
+}
+
+.term-progress-cont .box .btns{
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  height: 5rem;
+  align-items: center;
+}
+
+.term-progress-cont .box .btns button{
+  height: 3rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: none;
+  color: #fff;
+  padding: 0 1rem;
+}
+
+.term-progress-cont .box .btns button:first-child{
+  background-color: var(--red);
+}
+
+.term-progress-cont .box .btns button:last-child{
+  background-color: #28c76f;
+}
+
 @media (max-width: 1025px) {
   .main-main {
     min-width: 100%;
@@ -1231,6 +1343,13 @@
 }
 
 @media (max-width: 600px) {
+  .term-progress-cont{
+    padding: 1rem;
+  }
+  .term-progress-cont .box{
+    width: 100%;
+    padding: 1rem;
+  }
   .main {
     padding: 0 1rem;
   }

@@ -317,7 +317,6 @@ ul li a{
     gap: 1rem;
     align-items: center;
     padding-bottom: 2rem;
-    display: none;
 }
 .notes-quiz .body ul{
     flex: 1 1 0;

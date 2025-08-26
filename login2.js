@@ -70,6 +70,7 @@ function validateAdmin(){
                   otpBox.style.display = "flex";
                   otpBox.style.transform = "translateX(0) scale(1)";
                   otpBox.style.opacity = "1";
+                  document.querySelector(".mail").textContent = username.value;
                   verifyOtps();
                 }else{
                   showErrorMessage("wrong credentials");
@@ -125,7 +126,9 @@ function validateOtp(){
   const userOtp = Array.from(otpInputs).map(input => input.value).join("");
   const data = new FormData();
   data.append("user-otp" , userOtp);
-  console.log(userOtp)
+
+  const Urls = new URLSearchParams(window.location.search);
+  const id = Urls.get("id");
 
   const xhr = new XMLHttpRequest();
   xhr.open('POST','otpverification.php',true);
@@ -136,7 +139,11 @@ function validateOtp(){
       if(xhr.status == 200){
         const response = JSON.parse(xhr.responseText);
         if(response.type){
-          window.location.href = "timetable.html";
+          if(id !== null){
+            window.location.href = "setup.html";
+          } else{
+            window.location.href = "timetable.html";
+          }
         }
       }
     }catch(error){
@@ -179,4 +186,33 @@ verfiyOtpBtn.addEventListener("click" , () => {
   if(verify){
     validateOtp();
   }
+})
+
+function getSchool(){
+  const hostname = window.location.hostname;
+  const hostnameParts = hostname.split(".");
+  const subDomain = hostnameParts[0];
+  return subDomain
+}
+
+function getSetup(callback) {
+  const subDomain = getSchool();
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getsetup.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.find(s => s.domain.toLowerCase() === subDomain);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("setup error", error);
+    }
+  };
+  xhr.send();
+}
+getSetup((setup) => {
+  console.log(setup)
+  document.querySelector("#badge").setAttribute('src' , setup.badge);
 })

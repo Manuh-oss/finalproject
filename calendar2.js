@@ -231,7 +231,7 @@ function getEvents(callback) {
           div.className = "today-events";
           div.innerHTML = `
             <div  class="image">
-               <img src="./teachers/images (54).jpeg" alt="">
+               <img src="./subjects/noevent.avif" alt="amen">
              </div>
              <h3>there are no events</h3>
            `;
@@ -344,7 +344,7 @@ function displayTodayEvent() {
         div.className = "today-events";
         div.innerHTML = `
             <div  class="image">
-               <img src="./teachers/images (54).jpeg" alt="">
+               <img src="./subjects/noevent.avif" alt="">
              </div>
              <h3>there are no current events</h3>
            `;

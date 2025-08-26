@@ -1,66 +1,60 @@
 <?php
 include("connection2.php");
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $class     = $conn->real_escape_string($_POST['class']     ?? '');
-    $stream    = $conn->real_escape_string($_POST['stream']    ?? '');
-    $exam      = $conn->real_escape_string($_POST['exam']      ?? '');
-    $term      = $conn->real_escape_string($_POST['term']      ?? '');
-    $admission = $conn->real_escape_string($_POST['admission'] ?? '');
-    $total     = $conn->real_escape_string($_POST['total']     ?? '');
-    $mean      = $conn->real_escape_string($_POST['mean']      ?? '');
-    $grade     = $conn->real_escape_string($_POST['grade']     ?? '');
-    $subject   = $conn->real_escape_string($_POST['subject']   ?? '');
-    $position  = $conn->real_escape_string($_POST['position']  ?? '');
-    $id  = $conn->real_escape_string($_POST['id']  ?? '');
 
-    // Detect mean mode
-    if (
-        isset($_POST['mean'], $_POST['total'], $_POST['grade']) &&
-        $_POST['total'] !== '' &&
-        $_POST['grade'] !== '' &&
-        $_POST['mean'] !== ''
-    ) {
-     $sqlUpdate = "UPDATE `studentdetails` SET `mean` = '$mean',`grade`='$grade',`Total`='$total',`Totals` = '$total' WHERE `admission` = '$admission' AND `class` = '$class' AND `exam` = '$exam' AND `term` = '$term'AND`school_id`='$id'";
-          if($conn->query($sqlUpdate) === TRUE){
-            $feedback = [
-              "message" => "success",
-              "admission" => $admission,
-              "class" => $class,
-              "term" => $term,
-              "exam" => $exam,
-              "type" => true
-            ];
-          }else{
-            $feedback = [
-              "message" => "error",
-              "type" => false
-            ];
-          }
-          echo json_encode($feedback);
-    }
-    elseif (
-        isset($_POST['subject'], $_POST['position']) &&
-        $_POST['subject'] !== '' &&
-        $_POST['position'] !== ''
-    ) {
-        $sqlUpdate = "UPDATE `studentdetails` SET `{$subject}_position` = '$position' WHERE `admission` = '$admission' AND `class` = '$class' AND `exam` = '$exam' AND `term` = '$term'AND`school_id`='$id'";
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+  $means = $_POST['mean'];
+  $admissions = $_POST['admission'];
+  $ids = $_POST['id'];
+  $totals = $_POST['total'];
+  $grades = $_POST['grade'];
+  $error = null;
+$debug = [];
+  foreach($admissions as $index => $admis){
+    $mean = $conn->real_escape_string($means[$index]);
+    $admission = $conn->real_escape_string($admissions[$index]);
+    $id = $conn->real_escape_string($ids[$index]);
+    $total = $conn->real_escape_string($totals[$index]);
+    $grade = $conn->real_escape_string($grades[$index]);
 
-        if($conn->query($sqlUpdate) === TRUE){
-          $feedback = [
-            "message" => "success",
-            "type" => true
-          ];
-        }else{
-          $feedback = [
-            "message" => "error",
-            "type" => false
-          ];
-        }
-        echo json_encode($feedback);
-    }
-    else {
-        echo json_encode(["message" => "empty variables noted"]);
-    }
+    $class = $conn->real_escape_string($_POST['class']);
+    $stream = $conn->real_escape_string($_POST['stream']);
+    $term = $conn->real_escape_string($_POST['term']);
+    $exam = $conn->real_escape_string($_POST['exam']);
+
+    $sqlUpdate = "UPDATE `studentdetails` SET `mean`='$mean',`Total`='$total',`Totals`='$total',`Grade`='$grade' WHERE `admission`='$admission' AND `class`='$class' AND `stream`='$stream' AND `term`='$term' AND `exam`='$exam'";
+
+    //  if($conn->query($sqlUpdate) !== TRUE){
+    //    $error = [
+    //     "message" => "error",
+    //     "errorInfo" => $conn->error,
+    //     "type" => false
+    //    ];
+    //    break;
+    // }
+
+     $debug[] = [
+        "mean" => $mean,
+        "admission" => $admission,
+        "id" => $id,
+        "total" => $total,
+        "grade" => $grade,
+        "sql" => $conn->query($sqlUpdate)
+    ];
+
+  }
+
+  echo json_encode($debug);
+
+  //  if($error){
+  //     echo json_encode($error);
+  //   }else{
+  //     echo json_encode([
+  //       "message" => "success",
+  //       "type" => true,
+  //     ]);
+  //   }
+
 }
 
+$conn->close();
 ?>

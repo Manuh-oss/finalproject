@@ -3,10 +3,10 @@ const calendar = document.querySelector(".calendar");
 const notificationContainer = document.querySelector(".notification");
 const date = new Date();
 
-date.setHours(new Date().getHours() - 15);
-date.setDate(new Date().getDate() - 3)
-
-let subject;
+const improvedError = document.getElementById("error-message");
+const improvedSuccess = document.getElementById("success-message");
+const progressContainer = document.getElementById("container");
+const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
 const months = [
   "January",
   "February",
@@ -21,6 +21,20 @@ const months = [
   "November",
   "December",
 ];
+
+const sessionsobject = {
+  first: "lesson1",
+  second: "lesson2",
+  third: "lesson3",
+  forth: "lesson4",
+  fifth: "lesson5",
+  sixth: "lesson6",
+  seventh: "lesson7",
+  eigth: "lesson8",
+  ninth: "lesson9",
+  tenth: "lesson10",
+};
+
 const subjectIcons = {
   english: "fa-book",
   kiswahili: "fa-language",
@@ -35,6 +49,9 @@ const subjectIcons = {
   agriculture: "fa-tractor",
   computer: "fa-desktop",
   french: "fa-flag",
+  subject14: "fa-music",
+  subject15: "fa-clipboard",
+  subject16: "fa-chalkboard",
 };
 const subjectBgImages = {
   english: "./subjects/language.jpg",
@@ -47,334 +64,735 @@ const subjectBgImages = {
   cre: "./subjects/geo-bg.jpg",
   history: "./subjects/geo-bg.jpg",
   business: "./subjects/tech-bg.jpg",
-  computer: "./subjects/tech-bg.jpg",
   french: "./subjects/tech-bg.jpg",
   agriculture: "./subjects/tech-bg.jpg",
+  computer: "./subjects/phyc-bg.jpg",
+  subject14: "./subjects/tech-bg.jpg",
+  subject15: "./subjects/geo-bg.jpg",
+  subject16: "./subjects/language.jpg",
 };
-const lessonTime = {
-  lesson1: "08:00-08:40/am",
-  lesson2: "08:40-09:20/am",
-  shortBreak: "09:20-09:30",
-  lesson3: "09:30-10:10/am",
-  lesson4: "10:10-10:50/am",
-  longBreak: "10:50-11:10",
-  lesson5: "11:10-11:50/am",
-  lesson6: "11:50-12:30/pm",
-  lesson7: "12:30-13:10/pm",
-  lunch: "13:10-14:00",
-  lesson8: "14:00-14:40/pm",
-  lesson9: "14:00-15:20/pm",
-  lesson10: "15:20-16:00/pm",
-};
-const days = ["sun", "mon", "tue", "wed", "thur", "fri", "sat"];
+
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
+
 const today =
-  date.getDate() + " " + months[date.getMonth()] + ", " + date.getFullYear();
-dateDisplay.textContent = today;
-//function to get events
-function getEvents(callback) {
-  getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "events.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Events error", error);
-    }
-  };
-  xhr.send();
-  })
-}
+  date.getDate() + " " + months[date.getMonth()] + "," + date.getFullYear();
 
-//function to get logged in user
-function getUser(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "saved_user.php", true);
-  xhr.onload = () => {
-    if (xhr.status == 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
-    }
-  };
-  xhr.send();
-}
+const userDays = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];
 
-//function get student details
-function getStudent(callback) {
-  getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "students.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Student error", error);
-    }
-  };
-  xhr.send();
-  })
-}
+const lowerClasses = [
+  "pp1",
+  "playgroup",
+  "pp2",
+  "grade 1",
+  "grade 2",
+  "grade 3",
+  "grade 4",
+  "grade 5",
+  "grade 6",
+];
+const higherClases = [
+  "grade 7",
+  "grade 8",
+  "grade 9",
+  "grade 10",
+  "grade 11",
+  "grade 12",
+];
 
-//function to get studeent marks
-function getStudentMarks(callback) {
-  getUser((user) => {
-  const data = new FormData();
-  data.append("term", "");
-  data.append("exam", "");
-  data.append("class", "");
-  data.append("id", "");
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "result.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Result error", error);
-    }
-  };
-  xhr.send(data);
-  })
-}
+const allClasesTimes = [
+  {
+    lesson1: "8:10-8:45",
+    lesson2: "8:45-9:20",
+    lesson3: "9:30-10:05",
+    lesson4: "10:05-10:50",
+    lesson5: "11:30-12:05",
+    lesson6: "12:05-12:40",
+    lesson7: "2:00-2:35",
+    lesson8: "2:35-3:10",
+  },
+  {
+    lesson1: "8:00-8:40",
+    lesson2: "8:40-9:20",
+    lesson3: "9:30-10:10",
+    lesson4: "10:10-10:50",
+    lesson5: "11:30-12:10",
+    lesson6: "12:10-12:50",
+    lesson7: "2:00-2:40",
+    lesson8: "2:40-3:20",
+    lesson9: "3:20-4:00",
+  },
+];
 
-//function to get user lessons taught
-function getLessons(callback) {
-  getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "lesson.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Lesson error", error);
-    }
-  };
-  xhr.send();
-  })
-}
+const shortDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-//function to get teacher timetable
-function getTeacherTimetable(callback, code) {
-  getUser((user) => {
-  const tcode = new FormData();
-  tcode.append("teacherCode", code);
-  tcode.append("id", user.schoolId);
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "teachertimetable.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("teacher error", error);
-    }
-  };
-  xhr.send(tcode);
-  })
-}
+const eventColors = {
+  meeting: "#1e90ff",
+  educative: "#228b22",
+  personal: "#ff7043",
+  reminder: "#c62828",
+};
 
-//function to et notifications
-function getNotifications(callback) {
-  getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "getnotifications.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Notification error", error);
-    }
-  };
-  xhr.send();
-  })
-}
-
-//calendar section start here
-function getCalendarValues(baseDate = new Date()) {
-  const oneDayBefore = new Date(baseDate);
-  oneDayBefore.setDate(baseDate.getDate() - 1);
-
-  const twoDaysBefore = new Date(baseDate);
-  twoDaysBefore.setDate(baseDate.getDate() - 2);
-
-  const oneDayAfter = new Date(baseDate);
-  oneDayAfter.setDate(baseDate.getDate() + 1);
-
-  const twoDaysAfter = new Date(baseDate);
-  twoDaysAfter.setDate(baseDate.getDate() + 2);
-  const today = baseDate;
-
-  return {
-    oneDayBefore,
-    twoDaysBefore,
-    today,
-    oneDayAfter,
-    twoDaysAfter,
-  };
-}
-
-function displayCalendar() {
-  getEvents((events) => {
-    getUser((user) => {
-      const calendarValues = getCalendarValues();
-      const calendarDates = Object.values(calendarValues).map((cal) =>
-        getCalendarDates(cal)
-      );
-      displayEvents(events);
-      const body = calendar.querySelector(".body");
-      body.innerHTML = "";
-      const dates = Object.values(calendarValues);
-      calendarDates.forEach((date, idx) => {
-        const myEvent = events.find(
-          (evt) =>
-            evt.date === date && //acording to date
-            (evt.destination === "teacher" || //checks if the suer submited or he has one
-              evt.user === user.code)
-        );
-        const span = document.createElement("span");
-        if (idx == 2) {
-          //to highlight today
-          span.style.backgroundColor = "#0052a5";
-          span.style.color = "#eee";
-          span.style.transform = "scale(1.2)";
-          span.style.transition = "transform .4s linear";
-        }
-        if (myEvent) {
-          //if there is an event
-          span.style.backgroundColor = `${getBgColor(myEvent.category).bg}`;
-          span.style.color = `${getBgColor(myEvent.category).cl}`;
-        }
-        span.innerHTML = `
-        <h3>${days[dates[idx].getDay()]}</h3>
-        <h4>${dates[idx].getDate()}</h4>
-        `;
-        body.appendChild(span);
-      });
+//ajax functions
+async function getUser() {
+  try {
+    const response = await fetch("saved_user.php", {
+      method: "GET",
     });
-  });
-}
-
-function displayEvents(events) {
-  getUser((user) => {
-    const calendarValues = getCalendarValues();
-    const dates = Object.values(calendarValues);
-    const today = getCalendarDates(dates[2]);
-
-    const todayEvents = events.find(
-      (evt) =>
-        evt.date === today &&
-        (evt.user === user.code || evt.destination === "teacher")
-    );
-
-    const evntBox = calendar.querySelector(".event");
-
-    if (todayEvents) {
-      evntBox.innerHTML = `
-          <h3>${todayEvents.tittle}</h3>
-          <p>${todayEvents.description}</p>
-      `;
-    } else {
-      evntBox.innerHTML = `
-          <h3>no events</h3>
-          <p></p>
-        `;
-    }
-  });
-}
-
-function getCalendarDates(constructor) {
-  return (
-    constructor.getDate() +
-    "/" +
-    (constructor.getMonth() + 1) +
-    "/" +
-    constructor.getFullYear()
-  );
-}
-
-function getBgColor(category) {
-  switch (category) {
-    case "educative":
-      return {
-        bg: "#228B22",
-        cl: "#fff",
-      };
-      break;
-    case "reminder":
-      return {
-        bg: "#C62828",
-        cl: "#fff",
-      };
-      break;
-    case "personal":
-      return {
-        bg: "#FF7043",
-        cl: "#fff",
-      };
-      break;
-    case "meeting":
-      return {
-        bg: "#1E90FF",
-        cl: "#fff",
-      };
-      break;
-    default:
-      return "#eee";
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("login error", error);
   }
 }
-//calendar section end here
 
-/*notification code sand function strart here future manuh */
-function displayNotifications() {
-  getNotifications((notifications) => {
-    getLessons((lessons) => {
-      let myNotifications;
-      lessons.forEach((lesson) => {
-        myNotifications = notifications.filter((not) => {
-          const [user, clas] = not.destination.split("-");
-          return (user === "teacher" && clas === lesson.class) || "all";
+//function to get teachers
+async function getTeachers() {
+  const user = await getUser();
+  try {
+    const response = await fetch("teachers.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((t) => t.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("teachers error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+async function getStudents() {
+  const user = await getUser();
+  try {
+    const response = await fetch("students.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((s) => s.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("teachers error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+//function to get teacher lessons
+async function getLessons() {
+  const user = await getUser();
+  try {
+    const response = await fetch("lesson.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((t) => t.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("lessons error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+//function to get marks
+async function getMarks() {
+  const user = await getUser();
+  const data = new FormData();
+  data.append("class", "");
+  data.append("exam", "");
+  data.append("term", "");
+  data.append("id", "");
+
+  try {
+    const response = await fetch("result.php", {
+      method: "POST",
+      body: data,
+    });
+    const result = await response.json();
+    const schoolResult = result.filter((r) => r.schoolId === user.schoolId);
+    return schoolResult;
+  } catch (error) {
+    console.log("marks error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+//function to get school details
+async function getSetup() {
+  try {
+    const user = await getUser();
+    const response = await fetch("getsetup.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((s) => s.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("setup error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+//function to get events
+async function getEvents() {
+  showLoader("getting events, please wait...");
+  const user = await getUser();
+  try {
+    const response = await fetch("events.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((t) => t.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("events error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+async function getTeacherSessions(code) {
+  const user = await getUser();
+  const data = new FormData();
+  data.append("teacherCode", code);
+  data.append("id", user.schoolId);
+  try {
+    const response = await fetch("teachersessions.php", {
+      method: "POST",
+      body: data,
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("teacher sessions error", error);
+  }
+}
+
+function getSessionArray(rawSessions) {
+  let mySessions = [];
+  const notAllowed = ["day", "class", "stream", "schoolId", "teacherCode"];
+  if (rawSessions.length === 0) return [];
+  rawSessions.forEach((daySes, idx) => {
+    const day = days[idx];
+    Object.entries(daySes).forEach(([key, value]) => {
+      if (!notAllowed.includes(key) && value !== "") {
+        if (value !== "") {
+          const sessionKey = Object.keys(sessionsobject).find(
+            (ses) => sessionsobject[ses] === key
+          );
+          let sessionObject;
+
+          if (value === "occupied") {
+            sessionObject = {
+              id: `${key}`,
+              name: "",
+              type: "",
+              subject: "occupied",
+            };
+          }
+
+          if (value.split("-").length === 3) {
+            sessionObject = {
+              id: `${key}`,
+              name: value.split("-")[1],
+              type: value.split("-")[2],
+              subject: value.split("-")[0],
+            };
+          } else if (value.split("-").length === 4) {
+            sessionObject = {
+              id: `${key}`,
+              subject: value.split("-")[0],
+              class: value.split("-")[1],
+              stream: value.split("-")[2],
+              type: value.split("-")[3],
+            };
+          }
+
+          if (!mySessions.some((s) => s.id === sessionObject.id)) {
+            mySessions.push(sessionObject);
+          }
+        }
+      }
+    });
+  });
+  return mySessions;
+}
+
+//accessory functions
+
+function showLoader(message) {
+  progressContainer.classList.remove("removes");
+  progressContainer.classList.add("active");
+  const messageText = progressContainer.querySelector(".text");
+  messageText.textContent = message;
+}
+
+function removeLoader() {
+  progressContainer.classList.add("removes");
+  progressContainer.classList.remove("active");
+}
+
+function formatDate(date) {
+  return `${date.getDate()}/${
+    date.getMonth() + 1
+  }/${date.getFullYear()}-${date.getDay()}`;
+}
+
+function normalise(string) {
+  return string.toLowerCase().trim().replace(" ", "");
+}
+
+function convertExam(rawExam) {
+  switch (rawExam) {
+    case "11":
+      return "opener";
+      break;
+    case "22":
+      return "midterm";
+      break;
+    case "33":
+      return "endterm";
+      break;
+    default:
+      return "midterm";
+  }
+}
+
+function getTotalMinutes(rawTime) {
+  const [hour, minute] = rawTime.split(":");
+  return Number(minute) + Number(hour) * 60;
+}
+
+function incrementLessonKey(lessonKey) {
+  const match = lessonKey.match(/^lesson(\d+)$/i);
+  if (!match) return null; // not a valid lesson key
+  const num = parseInt(match[1], 10);
+  return `lesson${num + 1}`;
+}
+
+/*
+  main functions start here
+*/
+
+async function updateWelcomeMessage() {
+  const user = await getUser();
+  const teachers = await getTeachers();
+  const thisUser = teachers.find((t) => t.teacherCode === user.code);
+
+  if (thisUser) {
+    const data = [
+      {
+        h2: `welcome back ${thisUser.firstname}`,
+        p: "Welcome to your Teacher’s Dashboard — a centralized space where you can manage class registers, assign subjects, track student progress, and stay updated with school activities, all designed to make your teaching experience smoother and more efficient.",
+        img: "./subjects/profile.jpg",
+        a: [`${today}`, "#"],
+      },
+      {
+        h2: "📋 Update Class Register",
+        p: "Submit and update your class register with ease to keep attendance accurate and up to date. This helps maintain clear records for both student participation and overall class management.",
+        img: "./subjects/register.jpg",
+        a: ["view regiter", "register.html"],
+      },
+      {
+        h2: "Manage Topic Selection",
+        p: "Select or manage lesson topics to guide what your class will learn each day. Keeping topics organized ensures structured teaching and smooth lesson delivery.",
+        img: "./subjects/topics.avif",
+        a: ["update topics", "topics.html"],
+      },
+      {
+        h2: "View School Events",
+        p: "Stay informed about upcoming and past school events directly from your dashboard. This feature keeps you connected with important activities across the school.",
+        img: "./subjects/eventsImage.avif",
+        a: ["view scheduled events", "admincalendar.html"],
+      },
+      {
+        h2: "Assign Students to Subjects",
+        p: "Easily assign students to the subjects they should study in your class. This keeps records organized and ensures each student is linked to the correct subjects for lessons, exams, and reports.",
+        img: "./subjects/select.avif",
+        a: ["select students", "teacherselection.html"],
+      },
+    ];
+    return data;
+  } else {
+    showLoader("user was not found, redirecting to main page");
+    setTimeout(() => {
+      window.location.href = "main.html";
+    }, 4000);
+  }
+}
+
+let done = [];
+let currentindex = 0;
+
+const welcomeMesage = document.querySelector(".main .welcome-message");
+
+async function showSlideShow() {
+  const sliders = await updateWelcomeMessage();
+  if (currentindex >= sliders.length) {
+    currentindex = 0;
+  }
+  welcomeMesage.innerHTML = "";
+  const currentSlider = sliders[currentindex];
+  const text = document.createElement("div");
+  text.className = "text";
+  text.style.transform = "scale(.8)";
+  text.style.opacity = "0";
+  text.innerHTML = `
+       <h2>${currentSlider.h2}</h2>
+       <p>${currentSlider.p}</p>
+       <a href='${currentSlider.a[1]}'>${currentSlider.a[0]}</a>
+     `;
+
+  const image = document.createElement("div");
+  image.className = "image";
+  image.style.transform = "scale(.8)";
+  image.style.opacity = "0";
+  image.innerHTML = `
+        <img src="${currentSlider.img}" alt="" />
+     `;
+
+  welcomeMesage.appendChild(text);
+  welcomeMesage.appendChild(image);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      image.style.transform = "scale(1)";
+      image.style.opacity = "1";
+      text.style.transform = "scale(1)";
+      text.style.opacity = "1";
+    });
+  });
+
+  currentindex++;
+}
+
+showSlideShow();
+setInterval(showSlideShow, 5000);
+
+/* calendar function*/
+
+async function displayCalendar() {
+  const dates = await getAllDates();
+  const allEvents = await getEvents();
+  const spans = document.querySelector(".calendar .body");
+  const eventDesc = document.querySelector(".calendar .event");
+  spans.innerHTML = "";
+
+  for (const [day, date] of Object.entries(dates)) {
+    const [dates, days] = formatDate(date).split("-");
+    const event = allEvents.find((evt) => evt.date === dates);
+    const span = document.createElement("span");
+    span.innerHTML = `
+       <h3>${shortDays[days]}</h3>
+       <h4>${dates.split("/")[0]}</h4>
+     `;
+    if (
+      event &&
+      (event.destination === "all" || event.destination === "teacher")
+    ) {
+      span.style.backgroundColor = eventColors[event.category];
+      span.style.color = "#fff";
+      if (event && day === "today") {
+        eventDesc.innerHTML = `
+          <h3>${event.tittle}</h3>
+          <h4>${event.description}</h4>
+        `;
+      }
+    }
+    spans.appendChild(span);
+  }
+}
+displayCalendar();
+
+function getAllDates() {
+  const twoDaysAfter = new Date(date);
+  twoDaysAfter.setDate(date.getDate() + 2);
+  const twoDaysBefore = new Date(date);
+  twoDaysBefore.setDate(date.getDate() - 2);
+  const oneDaysAfter = new Date(date);
+  oneDaysAfter.setDate(date.getDate() + 1);
+  const oneDaysBefore = new Date(date);
+  oneDaysBefore.setDate(date.getDate() - 1);
+
+  return {
+    twoDB: twoDaysBefore,
+    oneDB: oneDaysBefore,
+    today: new Date(),
+    oneDA: oneDaysAfter,
+    twoDA: twoDaysAfter,
+  };
+}
+
+/* marks function start here */
+let currentMarkIndex = 0;
+async function getMarksChartData() {
+  const lessons = await getLessons();
+  const marks = await getMarks();
+  const students = await getStudents();
+  const user = await getUser();
+
+  const allExams = {};
+
+  const myLessons = lessons.filter((les) => les.teacherCode === user.code); //get all user clases
+  if (myLessons.length > 0) {
+    for (const lesson of myLessons) {
+      const classResults = marks.filter((mark) => {
+        const classMatch = normalise(mark.class) === normalise(lesson.class);
+        const streamMatch = normalise(mark.stream) === normalise(lesson.stream);
+
+        if (streamMatch && classMatch) {
+          const exam = `${mark.class}-${mark.stream}-${convertExam(
+            mark.exam
+          )}-term${mark.term}`;
+          if (!allExams[exam]) {
+            allExams[exam] = [];
+          }
+          allExams[exam].push(Number(mark[lesson.subject]));
+        }
+      });
+    }
+  }
+
+  const allExamEntries = Object.entries(allExams);
+
+  // Check if we are at the end of the array and reset if needed
+  if (currentMarkIndex >= allExamEntries.length) {
+    currentMarkIndex = 0;
+  }
+
+  const currentExam = allExamEntries[currentMarkIndex];
+
+  if (currentExam[1].length > 0) {
+    const completed = currentExam[1].filter((m) => m !== 0);
+    const progress = (completed.length / currentExam[1].length) * 100;
+    displayChart(currentExam);
+    displayMarkProgrees(progress, currentExam[0].split("-"));
+  }
+
+  currentMarkIndex++;
+}
+
+let chart = null;
+function displayChart(data) {
+  if (chart !== null) chart.destroy();
+  const canvas = document.getElementById("my-chart").getContext("2d");
+  const gradient = canvas.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, "blue");
+  gradient.addColorStop(1, "white");
+  const values = data[1];
+
+  const chartData = {
+    labels: values.map((val, index) => index + 1),
+    datasets: [
+      {
+        data: data[1].sort((a, b) => b - a),
+        label: data[0].split("-").join(" "),
+        fill: true,
+        backgroundColor: gradient,
+        borderWidth: 1,
+        borderColor: "blue",
+        tension: 0.4,
+        pointRadius: 0,
+      },
+    ],
+  };
+
+  chart = new Chart(canvas, {
+    type: "line",
+    data: chartData,
+  });
+}
+
+function displayMarkProgrees(progress, currentClass) {
+  const outerCircle = document.querySelector(".progress");
+  const text = document.querySelector(".percentage");
+  text.textContent = progress.toFixed(1);
+
+  const circumference = Math.PI * 54 * 2;
+  outerCircle.style.strokeDasharray = circumference;
+
+  const offset = circumference - (progress / 100) * circumference;
+  outerCircle.style.strokeDashoffset = offset;
+}
+
+getMarksChartData();
+setInterval(getMarksChartData, 6000);
+/* marks function end here */
+
+/* my sessions function start here */
+
+async function displayMySessions() {
+  const user = await getUser();
+  const mySessions = await getTeacherSessions(user.code);
+
+  const todaySessions = mySessions.filter(
+    (ses) => ses.day === userDays[date.getDay()]
+  );
+  const allSessions = getSessionArray(todaySessions);
+  const sessionDiv = document.querySelector(".my-classes-box .body");
+  const timeNow = date.getHours() + ":" + date.getMinutes();
+  const rawTimeNow = getTotalMinutes(timeNow);
+
+  for (const [idx, session] of allSessions.entries()) {
+    if (session.subject !== "occupied") {
+      const classValue = session.class;
+      let sessionTimes;
+      if (higherClases.includes(classValue)) {
+        sessionTimes = allClasesTimes[1];
+      } else if (lowerClasses.includes(classValue)) {
+        sessionTimes = allClasesTimes[0];
+      }
+
+      const [lessonFrom, lessonTo] = sessionTimes[session.id].split("-");
+      const box = document.createElement("div");
+      box.className = "box";
+
+      //box initial styles
+      box.style.background = `url(${
+        subjectBgImages[session.subject.toLowerCase()]
+      })`;
+      box.style.opacity = "0";
+      box.style.transform = "scale(.8)";
+      box.style.transitionDelay = `${0.2 * idx}s`;
+
+      let type;
+      let to;
+      session.type === "d" ? (type = "double") : (type = "single");
+
+      if (type === "double") {
+        const [lessonFrom, lessonTo] =
+          sessionTimes[incrementLessonKey(session.id)].split("-");
+        to = lessonTo;
+      } else {
+        to = lessonTo;
+      }
+
+      const allowed = [1, 2, 3, 4, 5];
+      const difference = getTotalMinutes(lessonFrom) - rawTimeNow;
+      box.innerHTML = `
+        <div class="opacity">
+          <h3><i class="fa ${subjectIcons[normalise(session.subject)]}"></i> ${
+        session.subject
+      } (${type})</h3>
+          <h4><i class="fa fa-clock"> ${lessonFrom} - ${to}</i></h4>
+          <h5>${session.class} ${session.stream}</h5>
+          <h5>25 students</h5>
+        </div>
+      `;
+
+      if (allowed.includes(difference)) {
+        box.style.animation = "scale 1s ease-in-out infinite";
+      } else if (
+        getTotalMinutes(lessonFrom) < rawTimeNow &&
+        getTotalMinutes(to) > rawTimeNow
+      ) {
+        const h4 = box.querySelector("h4");
+        h4.textContent = "lesson ongoing";
+      }
+
+      console.log(rawTimeNow);
+      console.log(getTotalMinutes(lessonFrom));
+      console.log(getTotalMinutes(to));
+
+      sessionDiv.appendChild(box);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          box.style.opacity = "1";
+          box.style.transform = "scale(1)";
         });
       });
+    }
+  }
+}
 
-      if (myNotifications.length > 0) {
-        const ul = notificationContainer.querySelector("ul");
-        ul.innerHTML = "";
+displayMySessions();
+/* my sessions function end here */
 
-        myNotifications.forEach((notification) => {
-          const atag = getRedirection(notification.type);
-          const li = document.createElement("li");
-          li.innerHTML = `
+async function getNotificaions() {
+  const user = await getUser();
+  try {
+    const response = await fetch("getnotifications.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+
+    const thisSchool = result.filter((n) => n.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("notification error", error);
+  }
+}
+
+async function displayNotifications() {
+  const lessons = await getLessons();
+  const notifications = await getNotificaions();
+  let myNotifications;
+  lessons.forEach((lesson) => {
+    myNotifications = notifications.filter((not) => {
+      const [user, clas] = not.destination.split("-");
+      return (user === "teacher" && clas === lesson.class) || "all";
+    });
+  });
+
+  if (myNotifications.length > 0) {
+    const ul = notificationContainer.querySelector("ul");
+    ul.innerHTML = "";
+
+    myNotifications.forEach((notification, idx) => {
+      const atag = getRedirection(notification.type);
+      const li = document.createElement("li");
+
+      li.style.opacity = "0";
+      li.style.transform = "scale(.8)";
+      li.style.transitionDelay = `${0.3 * idx}s`;
+
+      li.innerHTML = `
              <i class="fa fa-comment"></i>
              <p>${notification.message}</p>
          `;
-          ul.appendChild(li);
-          const nextLi = document.createElement("li");
-          const [type, href, info] = notification.type.split("-");
-          nextLi.className = "expanded";
-          nextLi.style.display = "none";
-          nextLi.innerHTML = `
+      ul.appendChild(li);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          li.style.opacity = "1";
+          li.style.transform = "scale(1)";
+        });
+      });
+
+      const nextLi = document.createElement("li");
+      const [type, href, info] = notification.type.split("-");
+      nextLi.className = "expanded";
+      nextLi.style.display = "none";
+      nextLi.innerHTML = `
             <div class="head">
                   <i class="fa-regular fa-comment"></i>
                   <h3>${type} <i class="fa fa-angle-down"></i></h3>
@@ -386,29 +804,27 @@ function displayNotifications() {
                   <a href="${atag.href}">${atag.text}</a>
                </div>
          `;
-          ul.appendChild(nextLi);
+      ul.appendChild(nextLi);
 
-          li.addEventListener("click", () => {
-            const next = li.nextElementSibling;
-            if (next.classList.contains("expanded")) {
-              li.style.display = "none";
-              next.style.display = "flex";
-            }
-          });
+      li.addEventListener("click", () => {
+        const next = li.nextElementSibling;
+        if (next.classList.contains("expanded")) {
+          li.style.display = "none";
+          next.style.display = "flex";
+        }
+      });
 
-          nextLi.addEventListener("click", () => {
-            const prev = nextLi.previousElementSibling;
-            if (prev) {
-              nextLi.style.display = "none";
-              prev.style.display = "flex";
-            } else {
-              alert("error");
-            }
-          });
-        });
-      }
+      nextLi.addEventListener("click", () => {
+        const prev = nextLi.previousElementSibling;
+        if (prev) {
+          nextLi.style.display = "none";
+          prev.style.display = "flex";
+        } else {
+          alert("error");
+        }
+      });
     });
-  });
+  }
 }
 
 function getRedirection(nottype) {
@@ -433,405 +849,118 @@ function getRedirection(nottype) {
       };
   }
 }
-/*notification code sand function strart end future manuh */
 
-/*msrks functions the graph and the progress functions */
-let doneClases = [];
-let examQueue = [];
-function handleMarks() {
-  getStudentMarks((studentMarks) => {
-    getStudent((students) => {
-      getLessons((lessons) => {
-        getUser((user) => {
-          let organisedExamData = {};
-          /* steps to take
-            1. we going to loop through each lesson taught
-            2. we going to the the class and the marks fro that class
-            3. we going to check for all available exams
-            4. we going to check how many students exist 
-            5. we going to the out of themwho has their marks at zero
-        */
-          const myLessons = lessons.filter((l) => l.teacherCode === user.code);
-          let randomClass;
-          if (myLessons.length > 0) {
-            //if user teaches lessons
-            let tries = 0;
-            do {
-              const random = Math.floor(Math.random() * myLessons.length);
-              randomClass = myLessons[random];
-              tries++;
-              if (tries > 1000) break; // safety stop
-            } while (
-              doneClases.some(
-                (c) =>
-                  c.class === randomClass.class &&
-                  c.stream === randomClass.stream
-              )
-            );
-            if (doneClases.length === myLessons.length) doneClases = [];
-            doneClases.push(randomClass);
-
-            const myClassData = studentMarks.filter((marks) => {
-              return (
-                marks.class === randomClass.class &&
-                marks.stream === randomClass.stream
-              );
-            }); //this filters this class marks data
-
-            myClassData.forEach((classData) => {
-              const exam = classData.exam;
-              const term = classData.term;
-              //this is to organise the data
-              if (!organisedExamData[exam + "-" + term]) {
-                organisedExamData[exam + "-" + term] = [];
-              }
-              //this finds the student detai;s
-              const studentDetails = students.find(
-                (s) => s.admission === classData.admission
-              );
-              //if student exist
-              if (studentDetails) {
-                //and does the subject
-                if (studentDetails[randomClass.subject] !== "not-selected") {
-                  //this pushes the user subject taught
-                  organisedExamData[exam + "-" + term].push(
-                    classData[randomClass.subject]
-                  );
-                }
-              }
-            });
-
-            subject = randomClass.subject;
-
-            /*
-              i know you will probably wonder how i did this lets break it down future manuh
-              the examQueue is an array and the organisedExamData is an object with keys and values
-              this is the structue of organisedExamData 
-              {
-                11-1 : [array of marks]
-                22-1 : [array of marks]
-                33-1 : [array of marks]
-              }
-              so when i pass examQueues to ObjectEntries in organisedExamData(shown bellow)
-              the examQueues structure looks like
-              [
-               ["11-1" , [array of marks]]
-               ["22-1" , [array of marks]]
-               ["33-1" , [array of marks]]
-              ]
-               because this is an array we have some addedfunctionalities and functions
-               we used shift to remove the first element in the array
-               so it becomes [
-                ["22-1" , [array of marks]]
-                ["33-1" , [array of marks]]
-               ]
-                understoofd manuh
-            */
-
-            examQueue = Object.entries(organisedExamData);
-
-            if (examQueue.length > 0) {
-              const [exam, data] = examQueue[0];
-              displayMarksProgress(exam, data);
-              displayChart(exam, data);
-            } else {
-              handleMarks(); // If class has no exam data, skip to next
-            }
-          }
-        });
-      });
-    });
-  });
-}
-
-function showNextExamProgress() {
-  examQueue.shift(); //this removes the first array
-
-  if (examQueue.length > 0) {
-    const [exam, data] = examQueue[0];
-    displayMarksProgress(exam, data);
-    displayChart(exam, data);
-  } else {
-    handleMarks(); // Move to next class
-  }
-}
-
-function displayMarksProgress(exam, examData) {
-  const notFilledMarks = examData.filter((mark) => Number(mark) === 0);
-  const filledCount = examData.length - notFilledMarks.length;
-  const percentageDone = (filledCount / examData.length) * 100;
-
-  const circle = document.querySelector(".marks-completion .progress");
-  const text = document.querySelector(".marks-completion .percentage");
-  const examText = document.querySelector(".exam-text");
-
-  const radius = circle.r.baseVal.value;
-  const circumference = 2 * Math.PI * radius;
-
-  circle.style.strokeDasharray = `${circumference}`;
-  circle.style.strokeDashoffset = `${
-    circumference - (percentageDone / 100) * circumference
-  }`;
-
-  // Optional: log or update text
-  const [exams, term] = exam.split("-");
-  text.textContent = percentageDone.toFixed(1) + "%";
-  examText.textContent = `term${term} ${converExam(exams)}`;
-}
-
-let chart = null;
-function displayChart(exam, examData) {
-  if (chart !== null) {
-    chart.destroy();
-  }
-  const ctx = document.getElementById("my-chart").getContext("2d");
-
-  // Create gradient fill
-  const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-  gradient.addColorStop(0, "blue");
-  gradient.addColorStop(1, "white");
-
-  const [exams, term] = exam.split("-");
-
-  const newData = examData.map((m) => Number(m)).filter((m) => m !== 0);
-
-  chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: newData.map((_, index) => `#${index + 1}`),
-      datasets: [
-        {
-          label: `${subject}`,
-          data: Object.values(newData).sort(),
-          fill: true, // enable area under the line
-          backgroundColor: gradient,
-          borderWidth: 1,
-          borderColor: "blue",
-          tension: 0.4, // smooth curves
-          pointRadius: 0,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: {
-          ticks: {
-            font: {
-              size: 6,
-              family: "Arial",
-              style: "italic",
-              weight: "bold",
-            },
-            color: "#333",
-          },
-        },
-        y: {
-          ticks: {
-            font: {
-              size: 8,
-              family: "Courier New",
-              style: "normal",
-              weight: "500",
-            },
-            color: "#666",
-          },
-          title: {
-            display: true,
-            text: "marks",
-            font: {
-              size: 7,
-              weight: 400,
-            },
-          },
-        },
-      },
-    },
-  });
-}
-
-function converExam(rawExam) {
-  switch (rawExam) {
-    case "11":
-      return "opener";
-      break;
-    case "22":
-      return "midterm";
-      break;
-    case "33":
-      return "endterm";
-      break;
-    default:
-      return "unknown";
-  }
-}
-
-/*msrks functions the graph and the progress end functions */
-
-/*my clases functions all to do with my clases*/
-
-function handleSessions() {
-  getLessons((lessons) => {
-    getUser((user) => {
-      getTeacherTimetable((mySessions) => {
-        //this is to get user classes taught
-        const myLessons = lessons.filter((l) => l.teacherCode === user.code);
-        const dayToday = getDayToday(date.getDay());
-        //this current day sessions
-        if(mySessions.length < 0) return
-        const mySessionsArray = Object.entries(mySessions[dayToday] || {});
-        let mySessionsToday = [];
-        mySessionsArray.forEach(([sessionTime, session]) => {
-          const actualLessonTime = lessonTime[sessionTime];
-          if (actualLessonTime) {
-            //this is to filter things like day
-            if (session !== "") {
-              const [time, reference] = actualLessonTime.split("/");
-              const [from, to] = time.split("-");
-              let sessionData = {
-                from: from,
-                to: to,
-                reference: reference,
-                session: session,
-              };
-              mySessionsToday.push(sessionData);
-            }
-          }
-        });
-        displaySessions(mySessionsToday);
-      }, user.code);
-    });
-  });
-}
-  const classesDiv = document.querySelector(".my-classes-box");
-
-function displaySessions(sessionsToday) {
-  sessionsToday.sort(
-    (a, b) => getMinutesSumation(a.from) - getMinutesSumation(b.from)
-  );
-  console.log(sessionsToday)
-  const timeNow = date.getHours() * 60 + date.getMinutes();
-  const remainingSessions = sessionsToday.filter((session) => {
-    return timeNow <= getMinutesSumation(session.to);
-  }); //this gets the remaining today sessions
-
-  let time;
-
-  if (remainingSessions.length > 0) {
-    classesDiv.innerHTML = ""
-    remainingSessions.forEach((session) => {
-      const sessionDiv = document.createElement("div");
-      const [subject, clas, stream, type] = session.session.split("-");
-      sessionDiv.className = "box";
-      const status = checkSessionTime(session,sessionDiv);
-      if(status !== "lesson ongoing"){
-        time = session.from+" "+"-"+" "+session.to;
-      }else{
-        time = "lesson ongoing"
-      }
-      console.log(status)
-      sessionDiv.innerHTML = `
-        <div class="opacity" style="background:url(
-          ${subjectBgImages[subject.toLowerCase()]}
-        )">
-          <h3><i class="fa ${subjectIcons[subject.toLowerCase()]}"></i> ${subject}</h3>
-          <h4><i class="fa fa-clock"> ${time}</i></h4>
-          <h5>form${clas} ${converStream(stream)}</h5>
-          <h5>25 students</h5>
-        </div>
-      `;
-      classesDiv.appendChild(sessionDiv);
-    });
-  }
-}
-
-function getMinutesSumation(time) {
-  const [hour, minute] = time.split(":").map(Number);
-  return hour * 60 + minute;
-}
-
-function checkSessionTime(session, sessionDiv) {
-  const lessonFrom = getMinutesSumation(session.from);
-  const lessonTo = getMinutesSumation(session.to);
-  const timeNow = date.getHours() * 60 + date.getMinutes();
-
-  if (timeNow >= lessonFrom && timeNow < lessonTo) {
-    return "lesson ongoing";
-  }
-  if (lessonFrom - timeNow === 5) {
-    highlightSession(sessionDiv);
-    setTimeout(() => {
-      clearSession(sessionDiv);
-    }, 300000);
-  }else{
-    return "not yet";
-  }
-}
-date.setMinutes(new Date().getMinutes() + 15);
-console.log(date.getHours(),":",date.getMinutes())
-function highlightSession(div) {
-  div.style.animation = "scale .6s linear infinite";
-  const icon = div.querySelector(".fa-clock");
-  if (icon) icon.classList.add("fa-beat");
-}
-
-function clearSession(div) {
-  div.style.animation = "";
-  const icon = div.querySelector(".fa-clock");
-  if (icon) icon.classList.remove("fa-beat");
-}
-
-function converStream(rawStream) {
-  switch (rawStream) {
-    case "111":
-      return "green";
-      break;
-    case "222":
-      return "blue";
-      break;
-    case "333":
-      return "red";
-      break;
-    case "444":
-      return "purple";
-      break;
-    default:
-      return "green";
-  }
-}
-
-function getDayToday(actualDay) {
-  switch (actualDay) {
-    case 0:
-      return "weekend";
-      break;
-    case 1:
-      return 0;
-      break;
-    case 2:
-      return 1;
-      break;
-    case 3:
-      return 2;
-      break;
-    case 4:
-      return 3;
-      break;
-    case 5:
-      return 4;
-      break;
-    case 6:
-      return "weekend";
-      break;
-  }
-}
-
-/*my clases functions all to do with my clases*/
-
-//function calls
-displayCalendar();
 displayNotifications();
-handleMarks();
-handleSessions();
 
-setInterval(showNextExamProgress, 4000);
+//
+const displineRecord = document.querySelector(".top button");
+const displineBox = document.getElementById("discpline-record");
+
+const close = displineBox.querySelector(".close-dis");
+const submit = displineBox.querySelector(".submit-dis");
+
+const allInputs = Array.from(displineBox.querySelectorAll("input"));
+
+close.addEventListener("click", () => {
+  displineBox.style.opacity = "0";
+  displineBox.style.transform = "scale(.3)";
+
+  setTimeout(() => {
+    displineBox.style.display = "none";
+  }, 1000);
+});
+
+displineRecord.addEventListener("click", () => {
+  displineBox.style.display = "flex";
+
+  requestAnimationFrame(() => {
+    displineBox.style.opacity = "1";
+    displineBox.style.transform = "scale(1)";
+  });
+});
+
+submit.addEventListener("click" , async() => {
+  const filled = verifySelects(allInputs);
+
+  if(filled){
+   const response = await postDisplineRecord();
+   if(response.type){
+      displineBox.style.opacity = "0";
+      displineBox.style.transform = "scale(.3)";
+
+      setTimeout(() => {
+        displineBox.style.display = "none";
+        showSuccessMessage("record added successfully")
+      }, 1000);
+   }
+  }
+})
+
+function verifySelects(array) {
+  let allFilled = true;
+  array.forEach((select) => select.classList.remove("errors"));
+  array.forEach((select) => {
+    if (select.value == -"") {
+      select.classList.add("errors");
+      allFilled = false;
+    }
+  });
+
+  if (allFilled) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+async function postDisplineRecord() {
+  const user = await getUser();
+  const data = new FormData();
+  data.append("date", allInputs[0].value);
+  data.append("location", allInputs[1].value);
+  data.append("admission", allInputs[2].value);
+  data.append("incident", allInputs[3].value);
+  data.append("action", allInputs[4].value);
+  data.append("user", user.code);
+  data.append("id", user.schoolId);
+
+  try{
+    const response = await fetch("postrecords.php" , {
+      method : 'POST',
+      body : data
+    }) 
+    const result = await response.json();
+    return result;
+  }catch(error){
+    console.log("posting displine error" , error);
+  }finally{
+    removeLoader();
+  }
+}
+
+//error functions
+function showErrorMessage(message) {
+  improvedError.classList.add("show-error");
+  improvedError.querySelector("#error-text").textContent =
+    message || "an error just occurred";
+
+  setTimeout(hideErrorMessage, 5000);
+}
+
+function hideErrorMessage() {
+  improvedError.classList.remove("show-error");
+  improvedSuccess.classList.remove("show-error");
+}
+
+function hideSuccessMessage() {
+  improvedSuccess.classList.remove("show-success");
+  improvedError.classList.remove("show-error");
+}
+
+function showSuccessMessage(messages) {
+  improvedSuccess.classList.add("show-success");
+  improvedSuccess.querySelector("#error-text").textContent =
+    messages || "congrats!";
+
+  setTimeout(hideSuccessMessage, 5000);
+}

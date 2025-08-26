@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="aside.css" />
     <link rel="stylesheet" href="setup.css" />
     <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    </style>
   </head>
   <body>
     <div class="error-message" id="error-message">
@@ -701,7 +704,26 @@
               <div class="circle-progress"></div>
               <h3>saving changes, please wait...</h3>
             </div>
-          </div>        
+          </div>   
+          <div class="term-progress-cont">
+            <div class="box">
+              <h3>term details</h3>
+              <div class="image">
+                <h1>current term : <span></span></h1>
+                <img src="./subjects/term.avif" alt="">
+              </div>
+              <div class="footer">
+                <input type="text" placeholder="current-term" id="term">
+                <input type="date" placeholder="start-date" id="start-date">
+                <input type="date" placeholder="end-date" id="end-date">
+                <h2>120 <span>days</span></h2>
+              </div>
+              <div class="btns">
+                <button type="button" class="close">close</button>
+                <button type="button" class="save">save</button>
+              </div>
+            </div>
+          </div>     
         </div>
 
       </div>

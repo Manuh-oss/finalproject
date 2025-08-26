@@ -6,16 +6,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $name = $conn->real_escape_string($_POST['name']);
     $address = $conn->real_escape_string($_POST['address']);
     $subjects = $conn->real_escape_string($_POST['subject']);
+    $domain = $conn->real_escape_string($_POST['domain']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $contacts = $conn->real_escape_string($_POST['contacts']);
+    $term = $conn->real_escape_string($_POST['term']);
+    $activities = $conn->real_escape_string($_POST['activities']);
 
     $badgeName = $_FILES['badge']['name'];
     $tmp_badgename = $_FILES['badge']['tmp_name'];
-    include("directory.php");
+    $dir = 'schoolBadges/';
+     if(!is_dir($dir)){
+       if(mkdir($dir,0777,true)){
+              
+       }
+      }
     $directory = "schoolBadges/";
 
     $uploadPath = $directory.basename($badgeName);
 
     if(move_uploaded_file($tmp_badgename , $uploadPath)){
-      $sqlCheck = "SELECT * FROM `school-information` WHERE `school_name`='$name'AND`school_address`='$address'";
+      $sqlCheck = "SELECT * FROM `school-information` WHERE `school_name`='$name'AND`school_address`='$address'AND`subdomain`='$domain'";
       $result = $conn->query($sqlCheck);
 
       if($result){
@@ -23,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $countSchools = mysqli_num_rows($result);
         if($countSchools > 0){
 
-           $sqlUpdate = "UPDATE `school-information` SET`school_name`='$name',`school_address`='$address',`subjects`='$subjects',`class`='$class',`streams`='$stream',`school_badge`='$uploadPath' WHERE `school_name`='$name'AND`school_address`='$address'";
+           $sqlUpdate = "UPDATE `school-information` SET`term`='$term',`school_name`='$name',`email`='$email',`contactInfo`='$contacts',`activities`='$activities',`school_address`='$address',`subjects`='$subjects',`class`='$class',`streams`='$stream',`school_badge`='$uploadPath' WHERE `school_name`='$name'AND`school_address`='$address'AND`subdomain`='$domain'";
 
              if($conn->query($sqlUpdate)){
                 echo json_encode([
@@ -39,15 +49,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
              }
 
         }else{
-           $sqlInsert = "INSERT INTO `school-information`(`school_name`, `school_address`, `subjects`, `class`, `streams`,`school_badge`) VALUES ('$name','$address','$subjects','$class','$stream','$uploadPath')";
+           $sqlInsert = "INSERT INTO `school-information`(`school_name`, `school_address`, `subjects`, `class`, `streams`,`school_badge`,`subdomain`,`email`,`activities`,`contactInfo`,`term`) VALUES ('$name','$address','$subjects','$class','$stream','$uploadPath','$domain','$email','$activities','$contacts','$term')";
             if($conn->query($sqlInsert)){
-                   $sqlId = "SELECT `school_id` FROM `school-information` WHERE `school_name`='$name' AND `school_address`='$address'";
+                   $sqlId = "SELECT `school_id`,`subdomain` FROM `school-information` WHERE `school_name`='$name' AND `school_address`='$address'";
                         $idresult = $conn->query($sqlId);
 
                         if ($idresult && $row = $idresult->fetch_assoc()) {
                             echo json_encode([
                                 "message" => "insert success",
                                 "schoolId" => $row['school_id'],
+                                "domain" => $row['subdomain'],
                                 "type" => true,
                             ]);
                         } else {

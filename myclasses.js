@@ -151,7 +151,7 @@ function viewResult(clas, stream, subject) {
   viewContainer.style.display = "flex";
 
   getStudents((studentsData) => {
-    getStudentMarks(clas, termSelect, examSelect, (studentMarks) => {
+    getStudentMarks("", "","", (studentMarks) => {
       mainclas = clas;
       mainstream = stream;
       mainsubject = subject;
@@ -160,9 +160,13 @@ function viewResult(clas, stream, subject) {
       otherTeachersMarks();
 
       const thisStreamStudents = studentMarks.filter(
-        (sm) => sm.stream === stream
+        (sm) => 
+          sm.stream === stream &&
+          sm.term === termSelect &&
+          sm.exam === examSelect &&
+          sm.class === clas
       );
-
+      
       subjects.forEach((subj) => {
         groupedSUbjectMarks[subj] = [];
 
@@ -176,21 +180,23 @@ function viewResult(clas, stream, subject) {
 
           if (found && found[subj] !== "not-selected") {
             groupedSUbjectMarks[subj].push(studentMark[subj]);
+            console.log("admission" , found.admission ,"status" , found[subj])
 
             if (!streamStudents.some((s) => s.admission === found.admission)) {
               streamStudents.push({
                 name: `${found.firstname} ${found.middlename} ${found.lastname}`,
+                status : found[subject],
                 mark: foundMark[subject],
                 admission: found.admission,
                 subject: subject,
-                stream: convertStream(found.stream),
+                stream: (found.stream),
                 class: "form" + found.class,
               });
             }
           }
         });
       });
-
+       
       const mySubject = groupedSUbjectMarks[subject]; // make sure subject is passed correctly
       selectedSubjectMark = mySubject;
       const counts = getCounts(mySubject);
@@ -220,8 +226,9 @@ function displayStudents(students) {
       tr.style.display = "none";
       tr.classList.add("hidden-tr")
     }
-
-    tbody.appendChild(tr);  
+    if(row.status !== "not-selected"){
+      tbody.appendChild(tr); 
+    } 
   });
 
   const viewAll = document.querySelector(".view-more");
@@ -364,9 +371,21 @@ function getGrade(marks) {
 let otherTeacherGraph = null;
 
 function otherTeachersMarks() {
-  getStudentMarks(mainclas,termSelect.value || "2",examSelect.value || "22",(studentMarks) => {
-      getStudents((students) => {
+  loadSchoolData((schoolData) => {
+  getStudentMarks("","","",(studentMarkz) => {
+    getStudents((students) => {
         let groupedStreamMarks = {}; //this stores the stream datta console log it for clarification
+        const studentMarks = studentMarkz.filter(sm => {
+          return (
+            sm.class === mainclas &&
+            (sm.term === termSelect.value || sm.term === "2") &&
+            (sm.exam === examSelect.value || sm.exam === "22") &&
+            sm.stream === mainstream
+          );
+        });
+
+        const thisClassStreams = schoolData.streams[mainclas];
+
         studentMarks.forEach((studentMark) => {
           //loop through each student mark
           const found = students.find( (s) => s.admission === studentMark.admission); //this checks if the student actually dropped the subject or not
@@ -374,7 +393,7 @@ function otherTeachersMarks() {
             //if the student exist
             if (found[mainsubject] !== "not-selected") {
               // and he never dropped the subject
-              streams.forEach((stream) => {
+             thisClassStreams.forEach((stream) => {
                 if (!groupedStreamMarks[stream]) {
                   groupedStreamMarks[stream] = [];
                 }
@@ -426,9 +445,9 @@ function otherTeachersMarks() {
           type: "bar",
           data: chartData,
         });
-      });
-    }
-  );
+     });
+   });
+   });
 }
 
 let genderMeanChart = null;

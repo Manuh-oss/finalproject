@@ -19,38 +19,84 @@ const subjectGrid = parent.querySelectorAll(".subject-grid");
 const teacherGrid = parent.querySelectorAll(".teacher-box");
 
 const colors = [
-  "#AEDFF7",
-  "#F4D19B",
-  "#CFF2E1",
-  "#B2EBF2",
-  "#D1F2A5",
-  "#B0C4DE",
-  "#DDECC9",
-  "#E6CFC1",
-  "#E4DEF3",
-  "#F9E7C3",
-  "#D0E6B3",
-  "#F8C8DC",
-  "#A7FOF9",
+  "#AEDFF7", // light sky blue
+  "#F4D19B", // light orange
+  "#CFF2E1", // pale mint green
+  "#B2EBF2", // pale cyan
+  "#D1F2A5", // light lime green
+  "#B0C4DE", // light steel blue
+  "#DDECC9", // pale olive green
+  "#E6CFC1", // pale peach
+  "#E4DEF3", // pale lavender
+  "#F9E7C3", // pale gold
+  "#D0E6B3", // soft olive green
+  "#F8C8DC", // pale pink
+  "#B0C4DE", // light steel blue (duplicate)
+  "#C9E6E9", // pastel cyan
+  "#F7DBB4", // creamy peach
+  "#E0F7D7", // very pale green
+  "#D2EBF7", // baby blue
+  "#E8F4E2", // soft sage green
+  "#F0E5D7", // dusty beige
+  "#E2D8F2", // soft lilac
 ];
 
 let delay = 0.2;
 
-for (let x = 0; x < children.length; x++) {
-  children[x].style.transitionDelay = `${delay * x}` + "s";
-  children[x].style.backgroundColor = colors[x];
-  children[x].style.border = "none";
-  children[x].textContent = children[x].querySelector(".text").textContent;
-}
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
 
-window.addEventListener("load", function () {
-  subjectGrid.forEach((element) => {
-    element.style.opacity = "1";
-    element.style.transform = "scale(1)";
-  });
-});
+loadSchoolData((schoolData) => {
+   const schoolSubjects = schoolData.subjects;
+   parent.innerHTML = ""
+   schoolSubjects.forEach((subj , idx) => {
+    const div = document.createElement("div");
+    div.textContent = subj;
+    div.className = "subject-grid";
+    div.style.opacity = "0";
+    div.style.transform = "scale(0.8)";
+    div.style.transitionDelay = `${delay * idx}s`;
+    div.style.backgroundColor =  colors[idx];
 
-function validateInputs(subject) {
+    parent.appendChild(div);
+    
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        div.style.opacity = "1";
+        div.style.transform = "scale(1)";
+      })
+    })
+
+    div.addEventListener("click" , (e) => {
+      e.stopPropagation();
+      const divValue = div.textContent.trim();
+      const index = schoolSubjects.indexOf(divValue);
+      const subject = myDefaultSubjects[index];
+      if(validateInputs()){
+         displayTeachers(subject);
+      }
+    })
+
+   })
+})
+
+function validateInputs() {
   let allIsfilled = true;
   requiredInputs.forEach((required) => required.classList.remove("errors"));
   requiredInputs.forEach((input) => {
@@ -63,45 +109,28 @@ function validateInputs(subject) {
   });
 
   if (allIsfilled) {
-    getTeachers(subject);
+    return true;
   } else {
     showErrorMessage("all input fields are required");
+     return false;
   }
 }
 
-function getSubject() {
-  subjectGrid.forEach((grid) => {
-    grid.addEventListener("click", function () {
-      subjectInput.value = grid.textContent.trim();
-      validateInputs(grid.textContent.trim());
-    });
-  });
-}
-
-function getTeachers(subject) {
+function getTeachers(callback) {
   getUser((user) => {
   const allSubjects = [];
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "teachers.php", true);
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onload = () => {
-    if (xhr.status == 200) {
-      const response = JSON.parse(xhr.responseText)
-      .filter(s => s.schoolId === user.schoolId);
-      const subjectOne = response.filter(
-        (newSubject) => newSubject.subjectOne === subject
-      );
-      const subjectTwo = response.filter(
-        (newSubject) => newSubject.subjectTwo === subject
-      );
-      for (let x = 0; x < subjectOne.length; x++) {
-        allSubjects.push(subjectOne[x]);
-      }
-      for (let y = 0; y < subjectTwo.length; y++) {
-        allSubjects.push(subjectTwo[y]);
-      }
-      displayTeachers(allSubjects);
-    }
+     try{
+       if(xhr.status == 200){
+         const response = JSON.parse(xhr.responseText);
+         const schoolteachers = response.filter(t => t.schoolId === user.schoolId);
+         callback(schoolteachers);
+       }
+     }catch(error){
+       console.log("teacher error", error);
+     }
   };
   xhr.send();
   })
@@ -126,96 +155,120 @@ function getLessonsTaught(callback) {
   })
 }
 
-function displayTeachers(array) {
-  hideSubjects();
-  parentTwo.innerHTML = "";
-  if (array.length > 0) {
+function displayTeachers(subject) {
+  loadSchoolData((schoolData) => {
+  const subjects = schoolData.subjects;
+  getTeachers((teachers) => {
     getLessonsTaught((lessons) => {
-      parentTwo.style.display = "grid";
-      array.forEach((teacher, i) => {
-        const newDiv = document.createElement("div");
+       const thisSubjectTeachers = teachers.filter(t => {
+        return (
+          t.subjectOne === subject ||
+          t.subjectTwo === subject
+        )
+       });
+       if(thisSubjectTeachers.length > 0){
+        hideSubjects();
+        submitBtn.disabled = true;
+        parentTwo.innerHTML = "";
+        const classSelect = document.querySelector("#class")
+        const streamSelect = document.querySelector("#stream")
+        
+        thisSubjectTeachers.forEach((teacher , idx) => {
+           const profileImage = teacher.profileImage || "./teachers/profileimage.png";
+           const myLessons = lessons.filter(t => t.teacherCode === teacher.teacherCode);
 
-        const profileImage = teacher.profileImage || "./teachers/profileimage.png";
-        const myLessons = lessons.filter(
-          (l) => l.teacherCode === teacher.teacherCode
-        );
+           const teacherDiv = document.createElement("div");
+           teacherDiv.className = "box";
+           teacherDiv.style.transitionDelay = `${delay * idx}` + "s";
+           teacherDiv.style.opacity = "0";
+           teacherDiv.style.transform = "scale(0.8)";
 
-        newDiv.className = "box";
-        newDiv.style.transitionDelay = `${delay * i}` + "s";
-        newDiv.style.opacity = "1";
-        newDiv.style.transform = "scale(1)";
-        newDiv.innerHTML = `
-             <div class="upper">
+           const subjectOneIdx = myDefaultSubjects.indexOf(teacher.subjectOne);
+           const subjectTwoIdx = myDefaultSubjects.indexOf(teacher.subjectTwo);
+
+           teacherDiv.innerHTML = `
+              <div class="upper">
                   <div class="image">
-                    <img src="${profileImage}" alt="">
-                  </div>
-                </div>
-                <div class="lower">
+                     <img src="${profileImage}" alt="${teacher.firstname}">
+                 </div>
+              </div>
+              <div class="lower">
                   <h3 class="name">${teacher.firstname} ${teacher.middlename}</h3>
                   <p>${teacher.rank}</p>
                   <div class="subjects">
-                    <span>${teacher.subjectOne}</span>
-                    <span>${teacher.subjectTwo}</span>
+                    <span>${subjects[subjectOneIdx]}</span>
+                    <span>${subjects[subjectTwoIdx]}</span>
                   </div>
-                  <h5 style="display:none;">${teacher.teacherCode}</h5>
                   <h4>teaching ${myLessons.length} lessons</h4>
-                </div>
-                <i style="display:none;" class="fas fa-check"></i>
-        `;
-        parentTwo.appendChild(newDiv);
-      });
-      postTeacher(parentTwo.querySelectorAll(".box"));
-    });
-  } else {
-    parentTwo.style.display = "flex";
-    const noresult = document.createElement("div");
-    noresult.className = "noresult";
-    noresult.innerHTML = `
-    <img src="./subjects/noresulttwo.jpeg" alt="">
-    `;
-    parentTwo.appendChild(noresult);
-  }
+              </div>
+              <i style="display:none;" class="fas fa-check"></i>
+           `;
+           parentTwo.appendChild(teacherDiv);
+
+           requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              teacherDiv.style.opacity = "1";
+              teacherDiv.style.transform = "scale(1)";
+            })
+           })
+
+           teacherDiv.addEventListener("click" , (e) => {
+            e.stopPropagation();
+            const icon = teacherDiv.querySelector(".fa-check");
+            const icons = parentTwo.querySelectorAll(".fa-check");
+            icons.forEach(icon => icon.style.display = "none"); //hide all icons when one is selected
+            icon.style.display = "grid";
+
+            submitBtn.disabled = false;
+
+            showSuccessMessage(`${teacher.firstname} selected succesfully`)
+
+            let teacherData = {
+              subject : subject,
+              class : classSelect.value,
+              stream : streamSelect.value,
+              code : teacher.teacherCode,
+            }
+
+            submitBtn.addEventListener("click" , () => {
+              submitTeacher(teacherData);
+            })
+            
+           })
+
+        })
+
+       }else{
+        showErrorMessage("no subject teachers were found");
+       }
+    })
+  }) 
+}) 
 }
 
-function postTeacher(array) {
-  Array.from(array).forEach((div) => {
-    div.addEventListener("click", function () {
-      codeInput.value = div.querySelector(".lower h5").textContent;
-      const allCheckBoxes = div.parentElement.querySelectorAll(".fa-check");
-      allCheckBoxes.forEach((checkBox) => (checkBox.style.display = "none"));
-      if (codeInput.value.trim() !== "") {
-        showSuccessMessage("teacher selected successfully");
-        const checkBox = this.querySelector(".fa-check");
-        checkBox.style.display = "grid";
-        clickSubmitBtn(true);
-      } else {
-        console.log("error");
-        clickSubmitBtn(false);
-      }
-    });
-  });
-}
-
-function clickSubmitBtn(bool) {
-  if (bool) {
-    submitBtn.addEventListener("click", submitTeacher);
-  }
-}
-
-function submitTeacher() {
+function submitTeacher(data) {
   getUser((user) => {
-  const formData = new FormData(newForm);
+  const formData = new FormData();
   formData.append("id" , user.schoolId)
+  formData.append("teacher-code" , data.code)
+  formData.append("class" , data.class)
+  formData.append("subject" , data.subject)
+  formData.append("stream" , data.stream)
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "submit.php", true);
+  submitBtn.textContent = "submiting please wait...";
   xhr.onload = () => {
     try {
       if (xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
-        if (response.type == true) {
-          showSuccessMessage(response.message);
+        if (response.type) {
+          showSuccessMessage("teacher added succesfully");
+          submitBtn.disabled = true;
+          submitBtn.textContent = "submit";
+          const icons = parentTwo.querySelectorAll(".fa-check");
+          icons.forEach(icon => icon.style.display = "none"); //hide all icons when one is selected
         } else if (response.message == false) {
-          showErrorMessage(response.message);
+          showErrorMessage("error adding teacher");
         }
       }
     } catch (error) {
@@ -238,6 +291,7 @@ function hideTeachers() {
   parentTwo.style.display = "none";
   parent.style.display = "grid";
   submitBtn.parentElement.style.display = "none";
+  requiredInputs.forEach((required) => required.value = "");
 }
 
 function showErrorMessage(message) {
@@ -266,6 +320,4 @@ function showSuccessMessage(messages) {
   setTimeout(hideSuccessMessage, 5000);
 }
 
-getSubject();
-clickSubmitBtn();
 backBtn.addEventListener("click", hideTeachers);

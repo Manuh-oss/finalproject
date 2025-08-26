@@ -16,6 +16,7 @@ function getMyQuizes(callback) {
   const data = new FormData();
   data.append("class", "");
   data.append("subject", "");
+  data.append("id", user.schoolId);
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "questions.php", true);
@@ -28,7 +29,7 @@ function getMyQuizes(callback) {
       }
     } catch (error) {
       console.log("Quix error", error);
-    }
+    } 
   };
   xhr.send(data);
   })
@@ -38,6 +39,7 @@ function getQuizResult(callback) {
   getUser((user) => {
   const data = new FormData();
   data.append("admission", "");
+  data.append("id" , user.schoolId)
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "quizresult.php", true);
@@ -50,7 +52,7 @@ function getQuizResult(callback) {
       }
     } catch (error) {
       console.log("Quix error", error);
-    }
+    } 
   };
   xhr.send(data);
   })
@@ -227,6 +229,17 @@ function displayQuizBoxes() {
             //rsult showing propagation end here
           });
         });
+      }else{
+        ul.style.display = "none";
+        const noResult = document.createElement("div");
+        noResult.className = "no-result";
+        noResult.innerHTML = `
+           <div  class="image">
+               <img src="./subjects/noresultfive.jpeg" alt="">
+           </div>
+           <h3>there are no current events</h3>
+        `;
+        ul.parentElement.appendChild(noResult)
       }
     });
   });
@@ -400,7 +413,7 @@ function showQuizResult(quizData) {
                         student.firstname+" "+student.middlename+" "+student.lastname
                     }
                     if(count == 3){
-                        td.textContent = "form"+student.class
+                        td.textContent = student.class
                     }
                     if(count == 4){
                         td.textContent = convertStream(student.stream);

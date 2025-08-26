@@ -25,72 +25,118 @@ let currentTopicInpt;
 const improvedError = document.getElementById("error-message");
 const improvedSuccess = document.getElementById("success-message");
 
-const subjectDivs = verifyBox.querySelectorAll(".subject");
+const subjecBox = verifyBox.querySelector(".body");
 const colors = [
-  "#AEDFF7",
-  "#F4D19B",
-  "#CFF2E1",
-  "#B2EBF2",
-  "#D1F2A5",
-  "#B0C4DE",
-  "#DDECC9",
-  "#E6CFC1",
-  "#E4DEF3",
-  "#F9E7C3",
-  "#D0E6B3",
-  "#F8C8DC",
-  "#A7FOF9",
+  "#AEDFF7", // light sky blue
+  "#F4D19B", // light orange
+  "#CFF2E1", // pale mint green
+  "#B2EBF2", // pale cyan
+  "#D1F2A5", // light lime green
+  "#B0C4DE", // light steel blue
+  "#DDECC9", // pale olive green
+  "#E6CFC1", // pale peach
+  "#E4DEF3", // pale lavender
+  "#F9E7C3", // pale gold
+  "#D0E6B3", // soft olive green
+  "#F8C8DC", // pale pink
+  "#B0C4DE", // light steel blue (duplicate)
+  "#C9E6E9", // pastel cyan
+  "#F7DBB4", // creamy peach
+  "#E0F7D7", // very pale green
+  "#D2EBF7", // baby blue
+  "#E8F4E2", // soft sage green
+  "#F0E5D7", // dusty beige
+  "#E2D8F2", // soft lilac
 ];
 
-//function to add background color to all subject divs
-subjectDivs.forEach((subjectDiv, idx) => {
-  subjectDiv.style.backgroundColor = `${colors[idx]}`;
-  subjectDiv.style.transitionDelay = `${delay * idx}` + "s";
-});
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
 
-//this adds opacity one and a scle of i to ever box when the page reloads
-window.addEventListener("load", function () {
-  Array.from(subjectDivs).forEach((element) => {
-    element.style.opacity = "1";
-    element.style.transform = "scale(1)";
-  });
-});
+loadSchoolData((schoolData) => {
+  const subjects = schoolData.subjects;
 
-//this get subject and checks if user selected class
-subjectDivs.forEach((subjectDiv) => {
-  subjectDiv.addEventListener("click", function () {
-    hiddenBtn.style.display = "none";
-    if (verirfySelectField.value.trim() === "") {
-      showErrorMessage("please select class to continue");
-    } else {
-      subject = this.textContent;
-      clas = verirfySelectField.value;
-      submitClass.value = verirfySelectField.value;
-      submitSubject.value = this.textContent;
-      verifyTeacher();
+  subjects.forEach((subj , idx) => {
+    const div = document.createElement("div");
+    div.className = "subject";
+    div.textContent = subj;
+    div.style.backgroundColor = colors[idx];
+    div.style.transitionDelay = `${delay * idx}s`;
+
+    subjecBox.appendChild(div);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        div.style.opacity = "1";
+        div.style.transform = "scale(1)"
+      })
+    })
+
+    div.addEventListener("click" , () => {
+      hiddenBtn.style.display = "none";
+      if (verirfySelectField.value.trim() === "") {
+        showErrorMessage("please select class to continue");
+      } else {
+        subject = myDefaultSubjects[idx];
+        clas = verirfySelectField.value;
+        verifyTeacher();
+      }
+    })
+
+  })
+
+})
+
+function getTeachers(callback){
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST','teachers.php',true);
+  xhr.onload = () => {
+    try{
+      if(xhr.status === 200){
+        const response = JSON.parse(xhr.responseText);
+        callback(response)
+      } 
+    }catch(error){
+      console.log(error);
     }
-  });
-});
+  }
+  xhr.send()
+}
 
 //function verify teacher
 function verifyTeacher() {
   getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  const param = "tcode=" + teacherCode + "&subject=" + subject + "&id=" + user.schoolId;
-  xhr.open("POST", "validate2.php", true);
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.onload = () => {
-    if (xhr.status == 200) {
-      const response = JSON.parse(xhr.responseText);
-      if (response.type == true && response.message === "validated") {
-        hiddenBtn.style.display = "flex";
-        showSuccessMessage("access granted");
-      } else {
-        showErrorMessage("access denied");
+    getTeachers((teachers) => {
+      const match = teachers.find(t => t.teacherCode === user.code && t.schoolId === user.schoolId);
+      if(match){
+        const rank = match.rank.split("-");
+        if(rank.length > 0){
+           if(subject === rank[1]){
+             showSuccessMessage("access granted");
+             showTopicContainer();
+           }else{
+            showErrorMessage("access denied");
+           }           
+        }else{
+          showErrorMessage("user is no H.O.D")
+        }       
       }
-    }
-  };
-  xhr.send(param);
+    })
  })
 }
 
@@ -283,6 +329,8 @@ function postTopics() {
   getUser((user) => {
   const formData = new FormData(mainForm);
   formData.append("id" , user.schoolId);
+  formData.append("class" , clas);
+  formData.append("subject" , subject);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "topics.php", true);
   xhr.onload = () => {
@@ -295,7 +343,7 @@ function postTopics() {
         const message = `${subject} topics have just been ${alah}`;
         const destination = `teachers-all`;
         const from = `H.O.D-${subject}`;
-        const description = `${divCount} topics have just been added </br>you can now succesfully add:notes,quizes e.t.c`;
+        const description = `${11} topics have just been added </br>you can now succesfully add:notes,quizes e.t.c`;
         const type = `educative-topic-all`;
         postFeedback(message,destination,from,description,type);
       } else {

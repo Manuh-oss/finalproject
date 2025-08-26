@@ -99,20 +99,52 @@ function submitChanges(){
     .map(input => input.value)
     .join("-");
     const subjects = subjectArray.join("-");
+    const contacts = getContactsArray();
+    const activities = getActivitiessArray(); 
+    const domain = document.querySelector(".domain").value
+    const email = document.querySelector(".email").value
 
-    postSchoolInfo(subjects,clasesValue,streamValue);
+    document.querySelector(".submit").disabled = true;
+
+    postSchoolInfo(subjects,clasesValue,streamValue,contacts,activities,domain,email);
   }else{
     showErrorMessage("please input all required fields")
   }
 }
 
-function postSchoolInfo(subjects,clases,streams){
+function getContactsArray(){
+   const weekDays = document.querySelector(".weekdays");
+   const weekends = document.querySelector(".weekend");
+   const phone = document.querySelector(".phone1");
+   const phone2 = document.querySelector(".phone2");
+
+   return [weekDays,weekends,phone,phone2]
+   .map(inp => inp.id+"/"+inp.value)
+   .join("-");
+}
+
+function getActivitiessArray(){
+  const activites = document.querySelectorAll(".educational-details span");
+  return Array.from(activites).map(span => {
+    const icon = span.querySelector(".icon");
+    const act = span.querySelector(".activity");
+
+    return icon.value+"/"+act.value;
+  }).join("-");
+}
+
+function postSchoolInfo(subjects,clases,streams,contacts,activities,domain,email){
     const schoolData = new FormData();
     schoolData.append("name" , schoolName.value);
     schoolData.append("address" , schoolAdress.value);
     schoolData.append("class" , clases)
+    schoolData.append("email" , email)
+    schoolData.append("domain" , domain)
+    schoolData.append("activities" , activities)
+    schoolData.append("contacts" , contacts)
     schoolData.append("stream" , streams)
     schoolData.append("subject" , subjects)
+    schoolData.append("term" , "term 1-10/10/2020-10/10/2021");
     schoolData.append("badge" , input.files[0]);
 
     const xhr = new XMLHttpRequest();
@@ -122,11 +154,17 @@ function postSchoolInfo(subjects,clases,streams){
             if(xhr.status == 200){
                 const response = JSON.parse(xhr.responseText);
                 if(response.type){
-                    const id = response.schoolId
-                    window.location.href = `tenarol.html?school=${id}`;
+                    if(response.message === "update success"){
+                       showSuccessMessage("update was succesfull");
+                       document.querySelector(".submit").disabled = false;
+                    }else{
+                       const id = response.schoolId
+                       const timestamp = new Date().getTime();
+                       window.location.href = `tenarol.html?school=${id}&t=${timestamp}&domain=${response.domain}`;
+                    }
                 }else{
                     showErrorMessage("contact support");
-                    console.log(response.errorInfo);
+                    console.log(response.errorInfo)
                 }
             }
         }catch(error){

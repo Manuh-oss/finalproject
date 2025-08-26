@@ -225,11 +225,20 @@
     height: 3.5rem;
 }
 
-.submit-button-box button[type="button"]{
+.submit-button-box .submit{
     border: none;
     color: #eee;
     background-color: #458b00;
     cursor: pointer;
+    height: 3.5rem;
+}
+
+.go-back{
+    background-color: #ED0028;
+    color: #eee;
+    border: none;
+    cursor: pointer;
+    padding: 0 1.3rem;
     height: 3.5rem;
 }
 

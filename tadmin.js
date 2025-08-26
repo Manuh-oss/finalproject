@@ -10,6 +10,8 @@ const assignment = document.querySelector(".assignment");
 const quiz = document.querySelector(".quiz");
 const notesbtn = document.querySelector(".notes");
 
+const noresultDiv = document.querySelector(".noresult");
+
 const subjectIcons = {
   english: "fa-book",
   kiswahili: "fa-language",
@@ -333,7 +335,9 @@ function displayNotes() {
       const tcode = getTeacherCode(code);
       const myNotes = notes.filter((note) => note.teacherCode === tcode);
       const ul = bodz.querySelector("ul")
+      ul.innerHTML = "";
       if (myNotes.length > 0) {
+        noresultDiv.style.display = "none";
         ul.innerHTML = "";
         myNotes.forEach((note) => {
           const li = document.createElement("li");
@@ -359,6 +363,8 @@ function displayNotes() {
             right.appendChild(notesBox);
           });
         });
+      }else{
+        noresultDiv.style.display = "flex";
       }
     });
   });
@@ -371,7 +377,9 @@ function displayAssignments() {
       const tcode = getTeacherCode(user)
       const myAssignments = assignments.filter((a) => a.code === tcode);
       const ul = bodz.querySelector("ul");
+      ul.innerHTML = "";
       if (myAssignments.length > 0) {
+        noresultDiv.style.display = "none";
         ul.innerHTML = "";
         console.log(ul)
         myAssignments.forEach((assign) => {
@@ -398,7 +406,7 @@ function displayAssignments() {
           ul.appendChild(li);
         });
       } else {
-        console.log("no image found")
+        noresultDiv.style.display = "flex";
       }
     });
   });
@@ -439,6 +447,7 @@ notesbtn.addEventListener("click" , () => {
   notesbtn.style.borderBottom = "1.5px solid navy";
   assignment.style.borderBottom = "none";
   quiz.style.borderBottom = "none";
+  noresultDiv.style.display = "none"
 })
 
 assignment.addEventListener("click" , () =>{
@@ -446,6 +455,7 @@ assignment.addEventListener("click" , () =>{
   assignment.style.borderBottom = "1.5px solid navy";
   notesbtn.style.borderBottom = "none";
   quiz.style.borderBottom = "none";
+  noresultDiv.style.display = "none";
 });
 
 quiz.addEventListener("click" , (e) => {

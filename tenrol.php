@@ -33,7 +33,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
     $teacherCode = $conn->real_escape_string($_POST['teacher-code']);
     $filename = $_FILES['profile-image']['name'];
     $fileTempName = $_FILES['profile-image']['tmp_name'];
-    include("directory.php");
+    $dir = 'teachersProfile/';
+     if(!is_dir($dir)){
+       if(mkdir($dir,0777,true)){
+              
+       }
+      }
     $uploadDirectory = 'teachersProfile/';
     $uploadPath = $uploadDirectory . basename($filename);
 

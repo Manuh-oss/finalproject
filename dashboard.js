@@ -429,7 +429,7 @@ const slideShows = [
     tittle: `View Scheduled Events`,
     text: `You may have important events or activities scheduled in your calendar.
             To stay informed and avoid missing out, we recommend checking your event list regularly.`,
-    image: ["./slideshow/eventsImage.avif","./slideshow/eventsback.avif"],
+    image: ["./subjects/eventsImage.avif","./subjects/eventsback.avif"],
     link: {
       link: "admincalendar.html",
       text: "View your events",
@@ -440,7 +440,7 @@ const slideShows = [
     text: ` You might have new assignments available for your class. 
   We recommend checking the assignments section regularly to stay updated and avoid missing any tasks or deadlines. 
   Click the link below to view your assignments and ensure you’re keeping up with your academic progress.`,
-    image: ["./slideshow/assignment4.webp","./slideshow/assignmentback.jpg"],
+    image: ["./subjects/assignment4.webp","./subjects/assignmentback.jpg"],
     link: {
       link: "assignment.html",
       text: "View your assignment",
@@ -450,7 +450,7 @@ const slideShows = [
     tittle: `🕒 View Your Class Timetable`,
     text: `Your class timetable may have been updated or contains important details for your weekly schedule.
             We recommend checking it regularly to stay organized and ensure you're aware of any changes to your lessons.`,
-    image: ["./slideshow/timetable2.jpg","./slideshow/timetableback2.jpg"],
+    image: ["./subjects/timetable2.jpg","./subjects/timetableback2.jpg"],
     link: {
       link: "displaytimetable.html",
       text: "View your timetable",
@@ -460,7 +460,7 @@ const slideShows = [
     tittle: `Test Your Knowledge 🤔`,
     text: `A quiz may be available for your class.
           Quizzes help reinforce your understanding and track your progress. We recommend checking the quiz section to see if any have been assigned.`,
-    image: ["./slideshow/quiz.avif" , "./slideshow/quizback.jpg"],
+    image: ["./subjects/quiz.avif" , "./subjects/quizback.jpg"],
     link: {
       link: "postquiz.html",
       text: "Go to Quiz Page",

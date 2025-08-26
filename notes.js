@@ -13,7 +13,7 @@ const teacherCode = document.querySelector("#teacher-code");
 
 //function section
 //functioon to get teacher code from login
-function getUser() {
+function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
   xhr.onload = () => {
@@ -21,7 +21,7 @@ function getUser() {
      if (xhr.status == 200) {
        const tcode = JSON.parse(xhr.responseText);
        teacherCode.value = tcode.code;
-       getSubjects(tcode.code);
+       callback(tcode);
      }
     }catch(error){
       console.log("login error",error)
@@ -30,24 +30,33 @@ function getUser() {
   xhr.send();
 }
 
-//function to get subject based on the teacher
-function getSubjects(code) {
-  getUser((user) => {
+function getTeachers(callback){
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", "teachers.php", true);
+  xhr.open('POST','teachers.php',true);
   xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      const match = response.find((t) => t.teacherCode === code && t.schoolId === user.schoolId);
-      let options = `
-          <option value="">select subject</option>
-          <option value="${match.subjectOne}">${match.subjectOne}</option>
-          <option value="${match.subjectTwo}">${match.subjectTwo}</option>
-        `;
-      subjectSelect.innerHTML = options;
+    try{
+      if(xhr.status === 200){
+        const response = JSON.parse(xhr.responseText);
+        callback(response)
+      } 
+    }catch(error){
+      console.log(error);
     }
-  };
-  xhr.send();
+  }
+  xhr.send()
+}
+
+//function to get subject based on the teacher
+function getSubjects() {
+  getUser((user) => {
+    getTeachers((teachers) => {
+      const thisteacher = teachers.find(t => t.teacherCode === user.code && t.schoolId === user.schoolId);
+      subjectSelect.innerHTML = `
+        <option value=''>--select subject--</option>
+        <option value='${thisteacher.subjectOne}'>${thisteacher.subjectOne}</option>
+        <option value='${thisteacher.subjectTwo}'>${thisteacher.subjectTwo}</option>
+      `;
+    })
   })
 }
 
@@ -124,14 +133,27 @@ function postNotes() {
   topicForm.append("topic", topicSelect.value);
   topicForm.append("notes", textarea.value);
   topicForm.append("code", teacherCode.value);
-  topicForm.append("id", user.id);
+  topicForm.append("id", user.schoolId);
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "postnotes.php", true);
   xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = xhr.responseText;
-      console.log(response);
+    try{
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        if(response.type){
+          console.log(xhr.responseText)
+          if(response.message === "updated succesfully"){
+            showSuccessMessage("changes were saved successfully")
+          }else{
+            showSuccessMessage(`${topicSelect.value} notes were added succesfully`)
+          }
+        }else{
+          showErrorMessage("contact support");
+        }
+      }
+    }catch(error){
+      console.log("posting error" , error)
     }
   };
   xhr.send(topicForm);
@@ -207,8 +229,8 @@ const quill = new Quill("#editor" , {
 });
 
 //function calls
-getUser();
-getTopics();
+//getTopics();
+getSubjects()
 
 //event listeners
 classSelect.addEventListener("change", getTopics);

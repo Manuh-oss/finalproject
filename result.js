@@ -23,6 +23,25 @@ const subjects = [
   "french",
 ];
 
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
+
 //function section
 function getUser(callback) {
   const xhr = new XMLHttpRequest();
@@ -110,7 +129,7 @@ function getClassNumbers(callback) {
     if (user.from !== "student") return;
     const data = new FormData();
     data.append("class", user.class);
-    data.append("class", user.schoolId);
+    data.append("id", user.schoolId);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "classcount.php", true);
     xhr.onload = () => {
@@ -259,6 +278,8 @@ function getMarks(callback) {
                 (s) => s.admission === user.code
               ); //this gets logged in user details
 
+              console.log(myPersonalDetails)
+
               const registerInfo = registerDetails[user.code]; //this gets the student register info
               //now lets get class teacher details
               const thisClass = user.class + "-" + user.stream;
@@ -291,19 +312,34 @@ function getMarks(callback) {
 }
 
 function displayMymarks() {
+  loadSchoolData((schoolData) => {
   getMarks((resultSlipData) => {
     const myPersonalDetails = resultSlipData.personalData;
     const myMarks = resultSlipData.myExamData;
-    const regInfo = resultSlipData.registerInfo;
+    const regInformation = resultSlipData.registerInfo;
     const classTeacher = resultSlipData.classTeacher;
     const count = resultSlipData.myClassNumbers;
 
     resultContainer.innerHTML = "";
-    console.log("am called");
+    let tprofileImage;
+    let regInfo;
 
     const profileImage =
-      myPersonalDetails.profileImage || "./teachers/martin.jpg";
-    const tprofileImage = classTeacher.profileImage || "./teachers/martin.jpg";
+      myPersonalDetails.profileImage || "./teachers/profileimage.png";
+    if(classTeacher){
+       tprofileImage = classTeacher.profileImage || "./teachers/profileimage.png";
+    }else{
+      tprofileImage = "./teachers/profileimage.png"
+    }  
+    if(regInformation){
+      regInfo = regInformation
+    }else{
+      regInfo = {
+        absent : "no data",
+        presenr : "no data",
+        permitted : "no data"
+      }
+    }
     const name =
       myPersonalDetails.firstname +
       " " +
@@ -315,7 +351,7 @@ function displayMymarks() {
     resultDiv.className = "result-container";
     resultDiv.innerHTML = `
     <div class="print">
-      <button type="button" onclick="downLoad(${resultDiv})">
+      <button type="button" class='download-result'>
           <i class="fas fa-print"></i> download
       </button>   
      </div>
@@ -367,7 +403,7 @@ function displayMymarks() {
               <div class="icon"><i class="fas fa-chart-line"></i></div>
                 <div class="text">
                   <h4>total marks & mean mark:</h4>
-                  <h3>${myMarks.total} ${myMarks.mean}</h3>
+                  <h3>${myMarks.total} & ${myMarks.mean}</h3>
               </div>
             </span>
           </div>
@@ -391,7 +427,7 @@ function displayMymarks() {
           </div>
           </div>
             <div class="viewing">
-              <h3>your viewing form${myMarks.class}
+              <h3>your viewing ${myMarks.class}
                  term${myMarks.term} ${convertExam(myMarks.exam)} exam
                </h3>
             </div>
@@ -407,7 +443,7 @@ function displayMymarks() {
           <th>Remark</th>
         </tr>
         <tbody>
-          ${showResultTable(myMarks, count, myPersonalDetails)}
+          ${showResultTable(myMarks, count, myPersonalDetails,schoolData.subjects)}
         </tbody>       
       </table>
     </div>
@@ -529,23 +565,28 @@ function displayMymarks() {
           </div>
     `;
     resultContainer.appendChild(resultDiv);
+    const downloadBtn = resultDiv.querySelector(".download-result");
+    downloadBtn.addEventListener("click" , () => {
+      downLoad(resultDiv)
+    })
   });
+  })
 }
 
 //function to show result table
-function showResultTable(data, count, details) {
-  const filterdSubjects = subjects.filter(subj => details[subj] !== "not-selected");
-  return filterdSubjects.map(subject => {
-    return `
-        <tr>
-          <td>${subject}</td>
-          <td>${data[subject]}</td>
-          <td>${getGrades(data[subject])}</td>
-          <td>${data[subject + "_position"]} out of ${count[subject]}</td>
-          <td>${getRemarks(data[subject])}</td>
-        </tr>
-    `;
-  }).join("")
+function showResultTable(data, count, details,subjects) {
+     const filterdSubjects = myDefaultSubjects.filter(subj => details[subj] !== "not-selected");
+     return filterdSubjects.map((subject , idx) => {
+        return `
+            <tr>
+              <td>${subjects[idx]}</td>
+              <td>${data[subject]}</td>
+              <td>${getGrades(data[subject])}</td>
+              <td>${data[subject + "_position"]} out of ${count[subject]}</td>
+              <td>${getRemarks(data[subject])}</td>
+            </tr>
+        `;
+      }).join("")
 }
 
 function getRemarks(marks) {
@@ -604,13 +645,19 @@ function verifySelects() {
 });
 
 function downLoad(div){
+  console.log("am called")
   const opt = {
-    margin:       0.5,
-    filename:     'ResultSlip.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-    
+    margin: 0.5,
+    filename: 'ResultSlip.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+        scale: 2, 
+        useCORS: true,      // allow loading external images/fonts
+        logging: true       // optional, logs capture process
+    },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+};
+
+
   html2pdf().set(opt).from(div).save();
 }

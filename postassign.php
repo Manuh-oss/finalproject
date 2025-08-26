@@ -6,9 +6,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $code = $conn->real_escape_string($_POST['code']);
     $type = $conn->real_escape_string($_POST['type']);
     $id = $conn->real_escape_string($_POST['id']);
-    $directory = 'profileImage/';
 
     //file variables
+     $dir = 'profileImage/';
+     if(!is_dir($dir)){
+       if(mkdir($dir,0777,true)){
+              
+       }
+      }
+    $directory = 'profileImage/';  
     $filename = $_FILES['file']['name'];
     $tempname = $_FILES['file']['tmp_name'];
     $filepath = $directory . basename($tempname);

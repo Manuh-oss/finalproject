@@ -99,6 +99,7 @@ function postEnrollFOrm(){
      if(verified){
         const formData = new FormData(form);
         formData.append("id" , user.schoolId);
+        formData.append("user_id" , "");
         const xhr = new XMLHttpRequest();
         xhr.open('POST','enrol.php',true);
         xhr.onload = () => {
@@ -108,7 +109,11 @@ function postEnrollFOrm(){
               if(response.type === true){
                 if(response.message === "success"){
                     showSuccessMessage("student details added succesfully");
-                    window.location.href = `parent.html?admission=${admissionInput.value}&class=${classSelect.value}&stream=${streamSelect.value}`;
+                    setTimeout(() => {
+                      window.location.href = `parent.html?admission=${admissionInput.value}&class=${classSelect.value}&stream=${streamSelect.value}`;
+                    },2000)
+                }else{
+                   showErrorMessage("admisision number already exist");
                 }
               }else{
                   console.log(response.errorInfo);
@@ -117,6 +122,8 @@ function postEnrollFOrm(){
              }
           }catch(error){
               console.log("Posting Error", error);
+          }finally{
+            console.log(xhr.responseText);
           }
         }
         xhr.send(formData);

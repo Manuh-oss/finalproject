@@ -113,6 +113,12 @@
     background-color:#fdfdfd ; /* very light blue */
   }
 
+  .noresult h3{
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.5rem;
+  }
+
  @media (max-width:1025px) {
     .main-main{
         min-width: 100%;
@@ -138,7 +144,7 @@
         white-space: nowrap;
     }
     .noresult img{
-        height: 15rem;
-        width: 15rem;
+        height: 25rem;
+        width: 30rem;
     }
 }

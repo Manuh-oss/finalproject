@@ -4,70 +4,87 @@
   <title>Rainbow Font Awesome Icon</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-.gradient-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px;
-  background-color: white; /* White gaps show */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgba(0,0, 0, .3);
 }
 
-.child {
-  flex: 1;
-  height: 100px;
-  background-image: linear-gradient(90deg, #ff6a00, #ee0979);
-  background-size: 500% 100%; /* Spread across 5 children */
-  background-repeat: no-repeat;
-  border-radius: 8px;
+/* Loader styling */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0, 0, .3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.6s ease;
+    z-index: 9999;
 }
 
-.child:nth-child(1) { background-position: 0% 0; }
-.child:nth-child(2) { background-position: 25% 0; }
-.child:nth-child(3) { background-position: 50% 0; }
-.child:nth-child(4) { background-position: 75% 0; }
-.child:nth-child(5) { background-position: 100% 0; }
+.loader-img {
+    width: 120px;
+    animation: zoomPulse 1.5s infinite ease-in-out;
+}
 
+#loader p {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: #333;
+}
 
-
-
+/* Zoom + Pulse Animation */
+@keyframes zoomPulse {
+    0% {
+        transform: scale(0.9);
+        filter: brightness(95%);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(105%);
+    }
+    100% {
+        transform: scale(0.9);
+        filter: brightness(95%);
+    }
+}
 
 
   </style>
 </head>
 <body>
-<div id="drag" style="width:100px;height:100px;background:lightblue;position:absolute;cursor:grab;">
-  Drag Me
-</div>
+    <!-- Loader -->
+    <div id="loader">
+        <img src="images/images (4).png" alt="School Logo" class="loader-img">
+        <p>Loading your classroom...</p>
+    </div>
 
+    <!-- Page Content -->
+    <div id="content" style="display:none;">
+        <h1>Welcome to Our School</h1>
+        <p>Page content goes here...</p>
+    </div>
 
-<script>
-  const box = document.getElementById('drag');
+    <script>
+        // if (document.readyState !== "complete") {
+        //     document.getElementById("loader").style.display = "flex";
+        // }
 
-let offsetX, offsetY, isDragging = false;
-
-box.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  offsetX = e.clientX - box.offsetLeft;
-  offsetY = e.clientY - box.offsetTop;
-  box.style.cursor = 'grabbing';
-});
-
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) {
-    box.style.left = `${e.clientX - offsetX}px`;
-    box.style.top = `${e.clientY - offsetY}px`;
-  }
-});
-
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-  box.style.cursor = 'grab';
-});
-
-</script>
-
-
-
+        // window.addEventListener("load", function() {
+        //     const loader = document.getElementById("loader");
+        //     loader.style.opacity = "0";
+        //     setTimeout(() => {
+        //         loader.style.display = "none";
+        //         document.getElementById("content").style.display = "block";
+        //     }, 600); // matches fade-out duration
+        // });
+    </script>
 </body>
+
+
 </html>
 

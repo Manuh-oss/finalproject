@@ -28,6 +28,25 @@ function openSelectField() {
   }
 }
 
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
+
 allNavigationButtons.forEach((allNavigationButton) => {
   allNavigationButton.addEventListener("click", function () {
     allNavigationButtons.forEach((alnavbtn) => {
@@ -142,8 +161,8 @@ function displayStudents() {
          <td>${student.admission}</td>
          <td><div class="image"><img src="${profileImage}"/></div></td>
          <td>${student.firstname} ${student.middlename} ${student.lastname}</td>
-         <td>form${student.class}</td>
-         <td style="text-align:left;">${convertStream(student.stream)}</td>
+         <td>${student.class}</td>
+         <td style="text-align:left;">${(student.stream)}</td>
          <td style="text-align:left;">${student.gender}</td>
          <td style="text-align:left;">${getGenderInitial(
            initial
@@ -212,6 +231,7 @@ function editStudent(admission) {
                     <input type="text" name="firstname" id="" class="required" value="${
                       foundStudent.firstname
                     }">
+                    <input type='hidden' name='user_id' value='${foundStudent.id}'/>
                   </span>
                   <span>
                     <h3>middlename <sup>*</sup></h3>
@@ -286,58 +306,8 @@ function editStudent(admission) {
                   <h3>class & stream <sup>*</sup></h3>
                   <span>  
                     <select name="class" id="class" class="required">
-                      <option value="">--select class--</option>
-                      <option value="1" ${
-                        foundStudent.class === "1" ? "selected" : ""
-                      }>${
-        foundStudent.class === "1" ? "form" + foundStudent.class : "form1"
-      }</option>
-                      <option value="2" ${
-                        foundStudent.class === "2" ? "selected" : ""
-                      }>${
-        foundStudent.class === "2" ? "form" + foundStudent.class : "form2"
-      }</option>
-                      <option value="3" ${
-                        foundStudent.class === "3" ? "selected" : ""
-                      }>${
-        foundStudent.class === "3" ? "form" + foundStudent.class : "form3"
-      }</option>
-                      <option value="4" ${
-                        foundStudent.class === "4" ? "selected" : ""
-                      }>${
-        foundStudent.class === "4" ? "form" + foundStudent.class : "form4"
-      }</option>
                     </select>
-                    <select name="stream" id="stream" class="required">
-                      <option value="">--choose stream--</option>
-                      <option value="111" ${
-                        foundStudent.stream === "111" ? "selected" : ""
-                      }>${
-        foundStudent.stream === "111"
-          ? convertStream(foundStudent.stream)
-          : "green"
-      }</option>
-                      <option value="222" ${
-                        foundStudent.stream === "222" ? "selected" : ""
-                      }>${
-        foundStudent.stream === "222"
-          ? convertStream(foundStudent.stream)
-          : "blue"
-      }</option>
-                      <option value="333" ${
-                        foundStudent.stream === "333" ? "selected" : ""
-                      }>${
-        foundStudent.stream === "333"
-          ? convertStream(foundStudent.stream)
-          : "red"
-      }</option>
-                      <option value="444" ${
-                        foundStudent.stream === "444" ? "selected" : ""
-                      }>${
-        foundStudent.stream === "444"
-          ? convertStream(foundStudent.stream)
-          : "purple"
-      }</option>
+                    <select name="stream" id="stream" class="required">                 
                     </select>
                   </span>
                 </div>
@@ -356,7 +326,7 @@ function editStudent(admission) {
         </div>
 
          <div class="submit-button-box">
-          <button type="reset">reset</button>
+          <button type="button" class='go-back'>back</button>
           <button class="submit" type="button">submit</button>
         </div>
       `;
@@ -368,6 +338,63 @@ function editStudent(admission) {
       const profileImageSrc = editForm.querySelector(
         ".profile-image-container .image img"
       );
+
+      const classSelect = editForm.querySelector("#class")
+      const streamSelect = editForm.querySelector("#stream")
+
+      const backBtn = editForm.querySelector(".go-back");
+      backBtn.addEventListener("click" , () => {
+        editForm.remove();
+        Array.from(mainChildren).forEach(child => child.style.display = "flex");
+        main.style.border = "1px solid #d1d5db";
+        main.style.backgroundColor = "#ffffff";
+        main.parentElement.parentElement.style.backgroundColor = "#f8f9fb";
+        main.style.padding = "2rem";
+      })
+
+      loadSchoolData((schoolData) => {
+        
+        //class teacher detials added to the teacher user;
+        const schoolClases = schoolData.classes;
+        const defaultOption = document.createElement("option");
+        classSelect.innerHTML = "";
+        defaultOption.value = "";
+        defaultOption.textContent = "--select class--";
+        classSelect.appendChild(defaultOption);
+
+        schoolClases.forEach(clas => {
+          const option = document.createElement("option");
+          option.value = clas;
+          option.textContent = clas;
+          classSelect.appendChild(option)
+        })
+        
+        classSelect.value = foundStudent.class;
+        
+        //cllasteacher stream detials
+
+        classSelect.addEventListener("change" , () => {
+          showStreams(classSelect.value)
+        })
+          function showStreams(value){
+            const classStreams = schoolData.streams[value];
+            streamSelect.innerHTML = "";
+            defaultOption.value = "";
+            defaultOption.textContent = "--select stream--";
+            streamSelect.appendChild(defaultOption);
+
+            classStreams.forEach(clas => {
+              const option = document.createElement("option");
+              option.value = clas;
+              option.textContent = clas;
+              streamSelect.appendChild(option)
+            })
+          }
+  
+          showStreams(foundStudent.class)
+          streamSelect.value = foundStudent.stream;
+         
+      })
 
       inputFile.addEventListener("change", uploadProfilePhoto);
       submitForm.addEventListener("click", () => {
@@ -563,249 +590,19 @@ function editTeacher(tcode) {
                   <h3>subjects <sup>*</sup></h3>
                   <span>  
                     <select name="subject-one" id="subject-one" class="required">
-                      <option value="">--choose subject--</option>
-                      <option value="english" ${
-                        foundTeacher.subjectOne === "english" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "english"
-          ? foundTeacher.subjectOne
-          : "english"
-      }</option>
-                      <option value="kiswahili" ${
-                        foundTeacher.subjectOne === "kiswahili"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectOne === "kiswahili"
-          ? foundTeacher.subjectOne
-          : "kiswahili"
-      }</option>
-                      <option value="mathematics" ${
-                        foundTeacher.subjectOne === "mathematics"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectOne === "mathematics"
-          ? foundTeacher.subjectOne
-          : "mathematics"
-      }</option>
-                      <option value="chemistry" ${
-                        foundTeacher.subjectOne === "chemistry"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectOne === "chemistry"
-          ? foundTeacher.subjectOne
-          : "chemistry"
-      }</option>
-                      <option value="biology" ${
-                        foundTeacher.subjectOne === "biology" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "biology"
-          ? foundTeacher.subjectOne
-          : "biology"
-      }</option>
-                      <option value="physics" ${
-                        foundTeacher.subjectOne === "physics" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "physics"
-          ? foundTeacher.subjectOne
-          : "physics"
-      }</option>
-                      <option value="geography" ${
-                        foundTeacher.subjectOne === "geography"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectOne === "geography"
-          ? foundTeacher.subjectOne
-          : "geography"
-      }</option>
-                      <option value="history" ${
-                        foundTeacher.subjectOne === "history" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "history"
-          ? foundTeacher.subjectOne
-          : "history"
-      }</option>
-                      <option value="cre" ${
-                        foundTeacher.subjectOne === "cre" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "cre" ? foundTeacher.subjectOne : "cre"
-      }</option>
-                      <option value="business" ${
-                        foundTeacher.subjectOne === "business" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "business"
-          ? foundTeacher.subjectOne
-          : "business"
-      }</option>
-                      <option value="agriculture" ${
-                        foundTeacher.subjectOne === "agriculture"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectOne === "agriculture"
-          ? foundTeacher.subjectOne
-          : "agriculture"
-      }</option>
-                      <option value="french" ${
-                        foundTeacher.subjectOne === "french" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "french"
-          ? foundTeacher.subjectOne
-          : "french"
-      }</option>
-                      <option value="computer" ${
-                        foundTeacher.subjectOne === "computer" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectOne === "computer"
-          ? foundTeacher.subjectOne
-          : "computer"
-      }</option>
+                     
                     </select>
                     <select name="subject-two" id="subject-two" class="required">
-                      <option value="">--choose subject--</option>
-                      <option value="english" ${
-                        foundTeacher.subjectTwo === "english" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "english"
-          ? foundTeacher.subjectTwo
-          : "english"
-      }</option>
-                      <option value="kiswahili" ${
-                        foundTeacher.subjectTwo === "kiswahili"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectTwo === "kiswahili"
-          ? foundTeacher.subjectTwo
-          : "kiswahili"
-      }</option>
-                      <option value="mathematics" ${
-                        foundTeacher.subjectTwo === "mathematics"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectTwo === "mathematics"
-          ? foundTeacher.subjectTwo
-          : "mathematics"
-      }</option>
-                      <option value="chemistry" ${
-                        foundTeacher.subjectTwo === "chemistry"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectTwo === "chemistry"
-          ? foundTeacher.subjectTwo
-          : "chemistry"
-      }</option>
-                      <option value="biology" ${
-                        foundTeacher.subjectTwo === "biology" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "biology"
-          ? foundTeacher.subjectTwo
-          : "biology"
-      }</option>
-                      <option value="physics" ${
-                        foundTeacher.subjectTwo === "physics" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "physics"
-          ? foundTeacher.subjectTwo
-          : "physics"
-      }</option>
-                      <option value="geography" ${
-                        foundTeacher.subjectTwo === "geography"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectTwo === "geography"
-          ? foundTeacher.subjectTwo
-          : "geography"
-      }</option>
-                      <option value="history" ${
-                        foundTeacher.subjectTwo === "history" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "history"
-          ? foundTeacher.subjectTwo
-          : "history"
-      }</option>
-                      <option value="cre" ${
-                        foundTeacher.subjectTwo === "cre" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "cre" ? foundTeacher.subjectTwo : "cre"
-      }</option>
-                      <option value="business" ${
-                        foundTeacher.subjectTwo === "business" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "business"
-          ? foundTeacher.subjectTwo
-          : "business"
-      }</option>
-                      <option value="agriculture" ${
-                        foundTeacher.subjectTwo === "agriculture"
-                          ? "selected"
-                          : ""
-                      }>${
-        foundTeacher.subjectTwo === "agriculture"
-          ? foundTeacher.subjectTwo
-          : "agriculture"
-      }</option>
-                      <option value="french" ${
-                        foundTeacher.subjectTwo === "french" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "french"
-          ? foundTeacher.subjectTwo
-          : "french"
-      }</option>
-                      <option value="computer" ${
-                        foundTeacher.subjectTwo === "computer" ? "selected" : ""
-                      }>${
-        foundTeacher.subjectTwo === "computer"
-          ? foundTeacher.subjectTwo
-          : "computer"
-      }</option>
+                      
                     </select>
                   </span>
                   <h3>classteacher <sup>*</sup></h3>
                    <span>  
                     <select name="class" id="class">
-                      <option value="">--select class--</option>
-                      <option value="1" ${clas === "1" ? "selected" : ""}>${
-        clas === "1" ? "form" + clas : "form1"
-      }</option>
-                      <option value="2" ${clas === "2" ? "selected" : ""}>${
-        clas === "2" ? "form" + clas : "form2"
-      }</option>
-                      <option value="3" ${clas === "3" ? "selected" : ""}>${
-        clas === "3" ? "form" + clas : "form3"
-      }</option>
-                      <option value="4" ${clas === "4" ? "selected" : ""}>${
-        clas === "4" ? "form" + clas : "form4"
-      }</option>
+                   
                     </select>
                     <select name="stream" id="stream">
-                      <option value="">--choose stream--</option>
-                      <option value="111" ${
-                        stream === "111" ? "selected" : ""
-                      }>${
-        stream === "111" ? convertStream(stream) : "green"
-      }</option>
-                      <option value="222" ${
-                        stream === "222" ? "selected" : ""
-                      }>${
-        stream === "222" ? convertStream(stream) : "blue"
-      }</option>
-                      <option value="333" ${
-                        stream === "333" ? "selected" : ""
-                      }>${
-        stream === "333" ? convertStream(stream) : "red"
-      }</option>
-                      <option value="444" ${
-                        stream === "444" ? "selected" : ""
-                      }>${
-        stream === "444" ? convertStream(stream) : "purple"
-      }</option>
+                      
                     </select>
                   </span>
                 </div>
@@ -870,7 +667,7 @@ function editTeacher(tcode) {
         </div>
 
          <div class="submit-button-box">
-          <button type="reset">reset</button>
+          <button type="button" class='go-back'>back</button>
           <button class="submit" type="button">submit</button>
         </div>
       `;
@@ -884,7 +681,85 @@ function editTeacher(tcode) {
       const rank = editForm.querySelector("#rank");
       const departmentInput = editForm.querySelector("#department");
       const teacherCodeInput = editForm.querySelector("#teacher-code");
-      
+
+      const backBtn = editForm.querySelector(".go-back");
+      backBtn.addEventListener("click" , () => {
+        editForm.remove();
+        Array.from(mainChildren).forEach(child => child.style.display = "flex");
+        main.style.border = "1px solid #d1d5db";
+        main.style.backgroundColor = "#ffffff";
+        main.parentElement.parentElement.style.backgroundColor = "#f8f9fb";
+        main.style.padding = "2rem";
+      })
+
+      loadSchoolData((schoolData) => {
+        const schoolSubjects = schoolData.subjects;
+        [subjectOne,subjectTwo].forEach(select => select.innerHTML = "");
+        [subjectOne,subjectTwo].forEach((select , idx) => {
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "--select subject "+(idx + 1)+"--";
+          select.appendChild(defaultOption);
+
+          schoolSubjects.forEach((subj , index) => {
+            const option = document.createElement("option");
+            option.value = myDefaultSubjects[index];
+            option.textContent = subj;
+            console.log(option)
+            select.appendChild(option)
+          })
+        })
+        subjectOne.value = foundTeacher.subjectOne;
+        subjectTwo.value = foundTeacher.subjectTwo;
+        
+        //class teacher detials added to the teacher user;
+        const schoolClases = schoolData.classes;
+        const defaultOption = document.createElement("option");
+        classSelect.innerHTML = "";
+        defaultOption.value = "";
+        defaultOption.textContent = "--select class--";
+        classSelect.appendChild(defaultOption);
+
+        schoolClases.forEach(clas => {
+          const option = document.createElement("option");
+          option.value = clas;
+          option.textContent = clas;
+          classSelect.appendChild(option)
+        })
+        
+        const classTeacherDetails = foundTeacher.classTeacher.split("-");
+        if(classTeacherDetails.length > 0){
+          classSelect.value = classTeacherDetails[0];
+        }
+        
+        //cllasteacher stream detials
+
+        classSelect.addEventListener("change" , () => {
+          showStreams(classSelect.value)
+        })
+          function showStreams(value){
+            const classStreams = schoolData.streams[value];
+            streamSelect.innerHTML = "";
+            defaultOption.value = "";
+            defaultOption.textContent = "--select stream--";
+            streamSelect.appendChild(defaultOption);
+
+            classStreams.forEach(clas => {
+              const option = document.createElement("option");
+              option.value = clas;
+              option.textContent = clas;
+              streamSelect.appendChild(option)
+            })
+          }
+  
+        console.log(classTeacherDetails)
+          if(classTeacherDetails.length > 0){
+            showStreams(classTeacherDetails[0])
+            streamSelect.value = classTeacherDetails[1];
+          }
+         
+      })
+
       submitBtn.addEventListener("click" , () => {
         postStudentForm('tenrol.php',allReqiredInputs,editForm,classSelect.value,streamSelect.value,rank.value);
       })
@@ -1049,8 +924,8 @@ function postStudentForm(url,inputs,editForm,clas,stream,rank) {
       formData.append("class" , clas);
       formData.append("stream" , stream);
       formData.append("rank" , rank);
-      formData.append("id" , user.schoolId);
     }
+    formData.append("id" , user.schoolId);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url , true);
     xhr.onload = () => {
@@ -1138,3 +1013,4 @@ displayStudents();
 
 //event listeners
 allNavigationButtons[1].addEventListener("click", displayTeachers);
+allNavigationButtons[0].addEventListener("click", displayStudents);

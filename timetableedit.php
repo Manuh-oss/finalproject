@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $stream = $conn->real_escape_string($_POST['stream']);
     $id = $conn->real_escape_string($_POST['id']);
 
-    $sqlUpdate = "UPDATE `school_timetable` SET `$lesson` = '$value' WHERE `day`='$day' AND `class`='$class'AND`stream`='$stream'WHERE`school_id`='$id'";
+    $sqlUpdate = "UPDATE `school_timetable` SET `$lesson` = '$value' WHERE `day`='$day' AND `class`='$class'AND`stream`='$stream'AND`school_id`='$id'";
     if($conn->query($sqlUpdate) === true){
         $feedBack = [
             "message" => "update success",

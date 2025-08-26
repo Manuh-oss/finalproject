@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="aside.css" />
     <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
     <link rel="stylesheet" href="quiz.css" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    </style>
   </head>
   <body>
     <div class="error-message" id="error-message">
@@ -214,8 +217,8 @@
               <h1 class="heading">chemistry</h1>
               <ul></ul>
               <div class="noresult">
-                <img src="./subjects/noresultsix.jpeg" alt="" />
-                <h3>no results were found</h3>
+                <img width="300" height="300" src="./subjects/term.avif" alt="" />
+                <h3>please select class & subject to continue</h3>
               </div>
             </div>
           </form>
@@ -331,30 +334,34 @@
             </div>
           </div>
 
-          <div class="finished-box" style="display: none">
-            <div class="finished">
-            <h2>quiz completed</h2>
-            <ul>
-              <li><span>topic:</span> 1</li>
-              <li><span>score:</span> 2/5</li>
-              <li><span>remarks:</span>fair</li>
-              <li><span>date:</span> 15/6/2025</li>
-              <li>
-                quiz was done and results for 6219 were submitted succesfully
-              </li>
-            </ul>
-            <div class="button">
-              <button type="button" class="back">back</button>
-              <button type="button" class="restart">
-                <i class="fa-solid fa-history"></i> reattempt
-              </button>
+          <div class="finished-box" style="display: none;">
+            <div class="finished-div">
+               <div class="image">
+                  <img src="./subjects/done2.jpg">
+                  <h3>congrats on completing your quiz</h3>
+             </div>
+             <div class="text">
+                <h2>you scored</h2>
+                <h3>2/3</h3>
+                <h1>10%</h1>
+                <h4>quiz result was submitted succesfully</h4>
+             </div>
             </div>
-          </div>
+            <div class="btns">
+              <button type="button" class="restart">back</button>
+              <button type="button" class="reattempting">reattempt</button>
+            </div>
           </div>
         </div>
       </div>
+      <div class="progress-container removes" id="container">
+            <div class="box">
+              <div class="spinner"></div>
+              <p class="text">Uploading marks please wait...</p>
+            </div>
+          </div>
     </main>
     <script src="quiz.js"></script>
-    <script src="tittle.js"></script>
+    <script src="navbar.js"></script>
   </body>
 </html>

@@ -109,6 +109,35 @@ function loginTeacher(){
 studentLoginBtn.addEventListener("click", loginStudent);
 teacherLogin.addEventListener("click" , loginTeacher)
 
+function getSchool(){
+  const hostname = window.location.hostname;
+  const hostnameParts = hostname.split(".");
+  const subDomain = hostnameParts[0];
+  return subDomain
+}
+
+function getSetup(callback) {
+  const subDomain = getSchool();
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getsetup.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.find(s => s.domain.toLowerCase() === subDomain);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("setup error", error);
+    }
+  };
+  xhr.send();
+}
+getSetup((setup) => {
+  document.querySelector("#badge").setAttribute('src' , setup.badge);
+})
+
+
 function verifyInputs(pass, user) {
   let verified = true;
   [pass, user].forEach((input) => {
@@ -150,3 +179,4 @@ function showSuccessMessage(messages) {
 
   setTimeout(hideSuccessMessage, 5000);
 }
+

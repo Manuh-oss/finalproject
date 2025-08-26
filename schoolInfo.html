@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="aside.css" />
     <link rel="stylesheet" href="schoolinfo.css" />
     <link rel="stylesheet" href="fontawesome-free-6.7.2-web/css/all.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    </style>
   </head>
   <body>
     <div class="error-message" id="error-message">
@@ -172,6 +175,44 @@
                                 <option value="s">senior secondary</option>
                             </select>
                     </div>
+                </div>
+                <h2>school domain & email address</h2>
+                <div class="school-domain">
+                   <input type="text" placeholder="sub-domain name" class="domain required">
+                   <input type="email" placeholder="email adress" class="email required">
+                </div>
+                <h2>default main page setup</h2>
+                <div class="default-activities">
+                  <div class="educational-details">
+                    <span>
+                      <input type="text" placeholder="icon" class="icon required">
+                      <input type="text" placeholder="activity" class="activity required">
+                    </span>
+                     <span>
+                      <input type="text" placeholder="icon" class="icon required">
+                      <input type="text" placeholder="activity" class="activity required">
+                    </span>
+                     <span>
+                      <input type="text" placeholder="icon" class="icon required">
+                      <input type="text" placeholder="activity" class="activity required">
+                    </span>
+                  </div>
+                  <div class="school-add">
+                    <div class="time">
+                      <h2>opening time</h2>
+                      <span>
+                        <input type="text" placeholder="weekdays opening hours" id="weekdays" class="weekdays required">
+                        <input type="text" placeholder="weekend opening hours" id="weekend" class="weekend required">
+                      </span>
+                    </div>
+                    <div class="time">
+                      <h2>school phone</h2>
+                      <span>
+                        <input type="text" placeholder="phone number 1" id="phone1" class="phone2 required">
+                        <input type="text" placeholder="phone number 2" id="phone2" class="phone1 required">
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div class="submit-btn">
                     <button type="button" class="reset">reset</button>

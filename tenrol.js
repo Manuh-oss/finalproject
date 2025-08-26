@@ -15,6 +15,45 @@ const improvedSuccess = document.getElementById("success-message");
 const closePopup = document.querySelectorAll(".close-btn");
 
 
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
+
+loadSchoolData((schoolData) => {
+  const schoolSubjects = schoolData.subjects;
+  [subjectOne,subjectTwo].forEach(select => select.innerHTML = "");
+  [subjectOne,subjectTwo].forEach((select , idx) => {
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "--select subject "+(idx + 1)+"--";
+    select.appendChild(defaultOption);
+
+    schoolSubjects.forEach((subj , index) => {
+      const option = document.createElement("option");
+      option.value = myDefaultSubjects[index];
+      option.textContent = subj;
+      console.log(option)
+      select.appendChild(option)
+    })
+  })
+})
+
+
 //error handling functions
 function showErrorMessage(message) {
   improvedError.classList.add("show-error");
@@ -86,6 +125,10 @@ function getUser(callback) {
   xhr.send();
 }
 
+const urlData = new URLSearchParams(window.location.search)
+  const schoolId = urlData.get("school");
+  console.log(schoolId)
+
 //function to post quiz form
 function postSubmitForm(){
   getUser((user) => {
@@ -97,6 +140,7 @@ function postSubmitForm(){
   formData.append("teacher-code" , assingTeacherCode(department));
   const urlData = new URLSearchParams(window.location.search)
   const schoolId = urlData.get("school");
+  const domain = urlData.get("domain");
   if(schoolId){
    formData.append("rank" , "admin");
    formData.append("schoolId" , schoolId);
@@ -113,7 +157,9 @@ function postSubmitForm(){
         const response = JSON.parse(xhr.responseText);
         if(response.type === true){
           showSuccessMessage("teacher details added succesfully");
-          if(schoolId) window.location.href = "login.html";
+          if(schoolId){
+             window.open(`http://${domain}.myschools.local/school/login.html?id=${schoolId}`,"_blank").focus();
+          }
         }else{
           showErrorMessage("contact support");
           console.log(response.errorInfo); 
@@ -151,7 +197,11 @@ function verifyInputs(){
 //event listeners
 submitBtn.addEventListener("click" , function() {
    const verify = verifyInputs();
-   postSubmitForm()
+   if(verify){
+     postSubmitForm()
+   }else{
+    showErrorMessage("please fill in all required fields");
+   }
 })
 inputFile.addEventListener("change", fileHandler);
 removeFileBtn.addEventListener("click", removeFile);

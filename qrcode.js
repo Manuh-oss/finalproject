@@ -1,75 +1,229 @@
+const shortMonths = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
-const streams = ["111", "222", "333", "444"];
-const clases = ["1", "2", "3", "4"];
+const fullDays = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
-function convertStream(rawStream) {
-  switch (rawStream) {
-    case "111": return "Green";
-    case "222": return "Blue";
-    case "333": return "Red";
-    case "444": return "Purple";
-    default: return "Unknown";
-  }
-}
+const qrColors = [
+  "#004080", // Deep Blue
+  "#00796B", // Teal
+  "#D32F2F", // Strong Red
+  "#388E3C", // Forest Green
+  "#5D4037"  // Rich Brown
+];
 
-function getColorByStream(streamCode) {
-  switch (streamCode) {
-    case "111": return "#008000"; // Green
-    case "222": return "#0000ff"; // Blue
-    case "333": return "#cc0000"; // Red
-    case "444": return "#800080"; // Purple
-    default: return "#000000";
-  }
-}
-
-function generateStyledQRs() {
-  const container = document.querySelector(".qr-container");
-  container.innerHTML = "";
-
-  for (let c = 0; c < clases.length; c++) {
-    for (let s = 0; s < streams.length; s++) {
-      const color = getColorByStream(streams[s]);
-      const label = `Form ${clases[c]} ${convertStream(streams[s])}`;
-      const value = `${clases[c]}-${streams[s]}`;
-
-      const qrDiv = document.createElement("div");
-      qrDiv.className = "box";
-
-      const title = document.createElement("h3");
-      title.textContent = label;
-
-      const qrCode = new QRCodeStyling({
-        width: 160,
-        height: 160,
-        data: value,
-        dotsOptions: {
-          color: color,
-          type: "classy",
-        },
-        backgroundOptions: {
-          color: "#ffffff",
-        }
-      });
-
-      const qrCanvas = document.createElement("div");
-      qrCode.append(qrCanvas);
-
-      const downloadBtn = document.createElement("button");
-      downloadBtn.textContent = "Download";
-      downloadBtn.onclick = () => {
-        qrCode.download({
-          name: value,
-          extension: "png",
-        });
-      };
-
-      qrDiv.appendChild(title);
-      qrDiv.appendChild(qrCanvas);
-      qrDiv.appendChild(downloadBtn);
-      container.appendChild(qrDiv);
+function getUser(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "saved_user.php", true);
+  xhr.onload = () => {
+    if (xhr.status == 200) {
+      const response = JSON.parse(xhr.responseText);
+      callback(response);
     }
-  }
+  };
+  xhr.send();
 }
 
-generateStyledQRs();
+function getClassRegister(callback){
+   getUser((user) => {
+   const xhr = new XMLHttpRequest();
+   xhr.open('POST','getclassattendance.php',true);
+   xhr.onload = () => {
+    try{
+      if(xhr.status === 200){
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(t => t.schoolId === user.schoolId)
+        callback(thisSchool);
+      }
+    }catch(error){
+      console.log(xhr.responseText);
+    }
+   }
+   })
+}
 
+const sessionPeriods = {};
+const navBtns = Array.from(document.querySelectorAll(".options button"));
+
+const date = new Date();
+
+const addZero = new Intl.NumberFormat(undefined, { minimumIntegerDigits: 2 });
+document.querySelector(".today").textContent =
+  fullDays[date.getDay()] +
+  " " +
+  "|" +
+  " " +
+  date.getDate() +
+  " " +
+  shortMonths[date.getMonth()] +
+  "," +
+  " " +
+  date.getFullYear();
+document.querySelector(".now").textContent =
+  date.getHours() + ":" + addZero.format(date.getMinutes());
+
+
+
+
+//qr codes function start here
+const qrCodeBox = document.querySelector(".qr-codes-container");
+function showQrCodes(){
+ loadSchoolData((schoolData) => {
+   const school = schoolData.streams;
+   qrCodeBox.style.display = "flex";
+   const categorisedData = getCategory(school);
+   qrCodeBox.innerHTML = ""
+   
+   Object.entries(categorisedData).forEach(([category , categoryData]) => {
+     const categoryBox = document.createElement("div");
+     categoryBox.className = "category-box";
+     const h2 = document.createElement("h2");
+     h2.textContent = category;
+     categoryBox.appendChild(h2)
+
+     const classBody = document.createElement("div");
+     classBody.className = "body";
+
+     Object.entries(categoryData).forEach(([clas , streams]) => {
+      const classBox = document.createElement("div");
+      classBox.className = "class-box";
+      
+      const h3 = document.createElement("h3");
+      h3.textContent = clas;
+      classBox.appendChild(h3);
+
+      const streamBox = document.createElement("div");
+      streamBox.className = "streams";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "download";
+
+      streams.forEach(stream => {
+        const span = document.createElement("span");
+        const text = clas+"-"+stream;
+        const imgDiv = document.createElement("div");
+        imgDiv.className = "img";
+        generateQrCode(text,imgDiv);
+        const h3 = document.createElement("h3");
+        h3.textContent = stream;
+        span.appendChild(imgDiv);
+        span.appendChild(h3);
+
+        streamBox.appendChild(span);
+      })
+       
+       classBox.appendChild(streamBox);
+       classBox.appendChild(button);
+       classBody.appendChild(classBox);
+       categoryBox.appendChild(classBody);
+
+       button.addEventListener("click" , (e) => {
+         e.stopPropagation();
+         downloadClassQRCodes(classBox, clas)
+       })
+     })
+      qrCodeBox.appendChild(categoryBox);
+   })
+ })
+}
+
+function downloadClassQRCodes(classElement, className) {
+  const canvases = classElement.querySelectorAll("canvas");
+  const streams = Array.from(classElement.querySelectorAll("h3"))
+                        .map(h3 => h3.textContent.trim());
+
+  canvases.forEach((canvas, index) => {
+    const dataURL = canvas.toDataURL("image/png");
+
+    const a = document.createElement("a");
+    a.href = dataURL;
+    a.download = `${className}_${streams[index]}_QrCode.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+}
+
+
+function getCategory(data){
+  const categorisedData = {};
+  Object.entries(data).forEach(([clas,streams]) => {
+     if(!categorisedData[getCategories(clas)]) categorisedData[getCategories(clas)] = {};
+     if(!categorisedData[getCategories(clas)][clas]) categorisedData[getCategories(clas)][clas] = [];
+
+     streams.forEach(stream => {
+      categorisedData[getCategories(clas)][clas].push(stream);
+     })
+
+  })
+  return categorisedData;
+}
+
+function getCategories(clas) {
+  const formattedKey = clas.replace(/\s+/g, "").toLowerCase();
+  const streamCategories = {
+    playgroup: "pre-primary",
+    pp1: "pre-primary",
+    pp2: "pre-primary",
+    grade1: "primary",
+    grade2: "primary",
+    grade3: "primary",
+    grade4: "primary",
+    grade5: "primary",
+    grade6: "primary",
+    grade7: "junior secondary",
+    grade8: "junior secondary",
+    grade9: "junior secondary",
+    grade10: "senior secondary",
+    grade11: "senior secondary",
+    grade12: "senior secondary",
+  };
+
+  return streamCategories[formattedKey] || "uncategorised";
+}
+
+function generateQrCode(text,html){
+  const random = Math.floor(Math.random() * qrColors.length);
+  const qrCode = new QRCodeStyling({
+    width : 200,
+    height : 200,
+    data : text,
+    dotsOptions: {
+        color: qrColors[random],
+        type: "extra-rounded" 
+    },
+    backgroundOptions: {
+      color: "#ffffff"
+    },
+    imageOptions: {
+      crossOrigin: "anonymous",
+      margin: 5
+    }
+  });
+   
+  html.innerHTML = "";
+  qrCode.append(html);
+}
+
+//event listeners
+navBtns[2].addEventListener("click" , showQrCodes);

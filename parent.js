@@ -20,8 +20,43 @@ function getAdmissionNumber(){
     const urlData = new URLSearchParams(window.location.href);
     const admissionNumber = urlData.get("admission");
     admission = admissionNumber;
-    classSelect.value = urlData.get("class");
-    streamSelect.value = urlData.get("stream");b
+    loadSchoolData((schoolData) => {
+      const schoolClasses = schoolData.classes;
+      const schoolStreams = schoolData.streams;
+
+      classSelect.innerHTML = "";
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "--select class--";
+      classSelect.appendChild(defaultOption);
+
+      schoolClasses.forEach(clas => {
+        const option = document.createElement("option");
+        option.value = clas;
+        option.textContent = clas;
+        classSelect.appendChild(option);
+      })
+
+      classSelect.value = urlData.get("class");
+
+       function showStreams(value){
+         const classStreams = schoolData.streams[value];
+         streamSelect.innerHTML = "";
+         defaultOption.value = "";
+         defaultOption.textContent = "--select stream--";
+         streamSelect.appendChild(defaultOption);
+         classStreams.forEach(clas => {
+         const option = document.createElement("option");
+              option.value = clas;
+              option.textContent = clas;
+              streamSelect.appendChild(option)
+         })
+       }
+  
+          showStreams(urlData.get("class"))
+          streamSelect.value = urlData.get("stream");
+
+    })
 }
 
 function verifyInputs() {
@@ -82,11 +117,14 @@ function postEnrollFOrm(){
   getUser((user) => {
     const verified = verifyInputs();
      if(verified){
+      const urlData = new URLSearchParams(window.location.search);
+      const admissionNumber = urlData.get("admission");
         const formData = new FormData(form);
         const xhr = new XMLHttpRequest();
         xhr.open('POST','parent.php',true);
-        formData.append("admission" , admission);
+        formData.append("admission" , admissionNumber);
         formData.append("id" , user.schoolId);
+        console.log(admissionNumber)
         xhr.onload = () => {
           try{
              if(xhr.status === 200){
@@ -105,7 +143,7 @@ function postEnrollFOrm(){
               console.log("Posting Error", error);
           }
         }
-        xhr.send(formData);
+       xhr.send(formData);
      } else{
        showErrorMessage("⚠️ Please fill in all required fields.")
      }   

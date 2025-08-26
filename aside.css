@@ -24,6 +24,8 @@ main {
   text-transform: capitalize;
   text-decoration: none;
   margin: 0;
+  font-family: "Ubuntu", sans-serif;
+  font-style: normal;
 }
 *::-webkit-scrollbar {
   display: none;
@@ -50,6 +52,70 @@ html {
   --orange: #ffa726;
   --dark-text-two: #333;
   --dark-text-one: #222;
+}
+
+.loading-page{
+  position: fixed;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition:opacity .6s linear,transform .6s linear;
+}
+
+.loading-page .school{
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.loading-page .school img{
+  height: 12rem;
+  width: 12rem;
+  animation: zoomin 2s infinite ease-in-out;
+  animation-delay: 1s;
+}
+
+.loading-page .school h3{
+  display: flex;
+  width: 26rem;
+}
+
+.loading-page .school i{
+  width:0;
+  animation: widthz 2s infinite linear;
+  overflow: hidden;
+}
+
+@keyframes widthz {
+  0%{
+    width: 0;
+  }
+  100%{
+    width: 2rem;
+  }
+}
+
+
+@keyframes zoomin {
+  0%{
+    transform: scale(0.9);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(0.9);
+  }
+}
+
+.loading-page .school h3{
+  font-size: 1.4rem;
+  font-weight: 400;
 }
 
 aside {
@@ -548,6 +614,59 @@ aside {
   top: 30px;
   opacity: 1;
   visibility: visible;
+}
+
+.progress-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 99999;
+  color: #eee;
+
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.removes{
+    display: none;
+}
+
+.progress-container .spinner {
+  height: 10rem;
+  width: 10rem;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  border-top: 0.2rem solid #eee;
+  animation: spin 0.8s linear infinite;
+}
+
+.progress-container .box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.progress-container .box p {
+  text-transform: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1100px) {

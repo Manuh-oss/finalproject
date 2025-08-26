@@ -19,6 +19,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])){
    // 4. profile image submittion
    $filename = $_FILES['profile-image']['name'];
    $fileTemplate = $_FILES['profile-image']['tmp_name'];
+   $dir = 'parentsProfile/';
+     if(!is_dir($dir)){
+       if(mkdir($dir,0777,true)){
+              
+       }
+      }
    $uploadDirectory = 'parentsProfile/';
    $uploadPath = $uploadDirectory . basename($filename);
    $feedback = "";

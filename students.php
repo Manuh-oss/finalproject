@@ -35,7 +35,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
        "agriculture" => $row['agriculture_selection'],
        "computer" => $row['computer_selection'],
        "french" => $row['french_selection'],
+       "subject14" => $row['subject14_selection'],
+       "subject15" => $row['subject15_selection'],
+       "subject16" => $row['subject16_selection'],
        "schoolId" => $row['school_id'],
+       "mean" => "",
       ];
    }
 

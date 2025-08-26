@@ -14,10 +14,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if($result){
         $countNotes = mysqli_num_rows($result);
         if($countNotes > 0){
-          $sqlUpdate = "UPDATE `notes` SET `paragraph`='$notes',`class`='$class',`subject`='$subject',`teacherCode`='$teacherCode',`topic`='$topic' WHERE `class`= '$class' AND `subject` = '$subject' AND `topic` = '$topic' AND `teacherCode` = '$teacherCode'";
+          $sqlUpdate = "UPDATE `notes` SET `paragraph`='$notes',`class`='$class',`subject`='$subject',`teacherCode`='$teacherCode',`topic`='$topic' WHERE `class`= '$class' AND `subject` = '$subject' AND `topic` = '$topic' AND `teacherCode` = '$teacherCode'AND`school_id`='$id'";
           if($conn->query($sqlUpdate) === TRUE){
             $feedBack = [
                 "message" => "updated succesfully",
+                "id" => $id,
                 "type" => true
             ];
           }else{
@@ -31,6 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if($conn->query($sqlInsert) === TRUE){
                 $feedBack = [
                     "message" => "insertion succesfully",
+                    "id" => $id,
                     "type" => true
                 ];
             }else{

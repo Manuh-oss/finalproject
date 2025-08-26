@@ -1,83 +1,3 @@
-function getStudents(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "students.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-        callback(response);
-      }
-    } catch (error) {
-      console.log("student error", error);
-    }
-  };
-  xhr.send();
-}
-
-function getTeachers(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "teachers.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-        callback(response);
-      }
-    } catch (error) {
-      console.log("teacher error", error);
-    }
-  };
-  xhr.send();
-}
-
-function getParents(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "parents.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        callback(response);
-      }
-    } catch (error) {
-      console.log("parent error", error);
-    }
-  };
-  xhr.send();
-}
-
-function getSetup(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "getsetup.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        callback(response);
-      }
-    } catch (error) {
-      console.log("setup error", error);
-    }
-  };
-  xhr.send();
-}
-
-function getSliders(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "getSlidesho.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        callback(response);
-      }
-    } catch (error) {
-      console.log("slideshow error", error);
-    }
-  };
-  xhr.send();
-}
-
 function getUser(callback) {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "saved_user.php", true);
@@ -93,6 +13,102 @@ function getUser(callback) {
   };
   xhr.send();
 }
+
+function getStudents(callback) {
+  getUser((user) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "students.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("student error", error);
+    }
+  };
+  xhr.send();
+  })
+}
+
+function getTeachers(callback) {
+  getUser((user) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "teachers.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("teacher error", error);
+    }
+  };
+  xhr.send();
+  })
+}
+
+function getParents(callback) {
+  getUser((user) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "parents.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("parent error", error);
+    }
+  };
+  xhr.send();
+  })
+}
+
+function getSetup(callback) {
+  getUser((user) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getsetup.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("setup error", error);
+    }
+  };
+  xhr.send();
+  })
+}
+
+function getSliders(callback) {
+  getUser((user) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "getSlidesho.php", true);
+  xhr.onload = () => {
+    try {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
+        callback(thisSchool);
+      }
+    } catch (error) {
+      console.log("slideshow error", error);
+    }
+  };
+  xhr.send();
+  })
+}
+
 
 const schoolInfoBox = document.querySelector(".school");
 const badge = schoolInfoBox.querySelector(".badge img");
@@ -204,14 +220,14 @@ document.addEventListener("DOMContentLoaded", () => {
   getParents((teachers) => {
     getUser((user) => {
        const allteachers = teachers.filter(s => s.schoolId === user.schoolId)
-       teacherCount.textContent = allteachers.length;
+       parentCount.textContent = allteachers.length;
     })
   });
 
   getTeachers((parents) => {
     getUser((user) => {
        const allparents = parents.filter(s => s.schoolId === user.schoolId)
-       parentCount.textContent = allparents.length;
+       teacherCount.textContent = allparents.length;
     })
   });
 
@@ -614,7 +630,7 @@ function getClassCategory(category) {
 }
 
 function getClassCategories(category) {
-  switch (category) {
+  switch (category.toLowerCase()) {
     case "highschool":
       return "h";
     case "preprimary":
@@ -625,8 +641,11 @@ function getClassCategories(category) {
       return "j";
     case "senior":
       return "s";
+    default:
+      return "u";
   }
 }
+
 
 function getLoadedClassCategories(category) {
   switch (category) {
@@ -645,6 +664,7 @@ function getLoadedClassCategories(category) {
 
 function displayNewStystem() {
   classSpans = [];
+  updateSubjects()
   const newSystem = {
     preprimary: ["playgroup", "pp1", "pp2"],
     primary: ["grade 1", "grade 2", "grade 3", "grade 4", "grade 5", "grade 6"],
@@ -654,7 +674,7 @@ function displayNewStystem() {
   };
 
   classContainer.querySelector(".clases-div").innerHTML = "";
-
+  streamSpans = [];
   Object.entries(newSystem).forEach(([category, clases]) => {
     const categoryBox = document.createElement("div");
     categoryBox.className = "category";
@@ -673,34 +693,49 @@ function displayNewStystem() {
       span.style.backgroundColor = `${
         colors[Math.floor(Math.random() * colors.length)]
       }`;
-      span.dataset.text = "";
-      span.dataset.text =
+      try{
+        span.dataset.text =
         clas + "/" + newSystem["type"] + "/" + getClassCategories(category);
-      console.log(span.dataset.text);
+      }catch(error){
+        console.error("dataset error for category:", category, "→", error);
+      }
+
       span.innerHTML = `
                   <i class="fa fa-pen"></i>
                   <i class="fa-solid fa-chalkboard"></i>
                   <h3>${clas}</h3>
                 `;
-      classSpans.push(span);          
+      try{
+        classSpans.push(span); 
+      }catch(error){
+        console.log("error pushing" , error);
+      }         
       categoryBody.appendChild(span);
-    
-      span.addEventListener("click", (e) => {
+      
+
+      //funtion to edit the new system clases
+      const editIcon = span.querySelector(".fa-pen");
+      editIcon.addEventListener("click" , (e) => {
         e.stopPropagation();
+        if(span.classList.contains("editmode")) return;
+        editSubject(span);
+      })
 
-        if (span.classList.contains("editmode")) return;
+      //function to remove new system class
 
-        const editIcon = span.querySelector(".fa-pen");
-        if (!editIcon) return;
-        editIcon.addEventListener("click", (e) => {
-          e.stopPropagation();
-          e.preventDefault();
+      span.addEventListener("dblclick" , () => {
+        span.style.transform = "translateY(100%) scale(0.5)";
 
-          editSubject(span);
-        });
-      });
+        setTimeout(() => {
+          span.style.display = "none";
+          const index = classSpans.indexOf(span);
+          classSpans.splice(index, 1);
+          updateSubjects();
+        }, 1000);
+      })
+
     });
-    streamSpans = [];
+
     categoryBox.appendChild(categoryBody);
     classContainer.querySelector(".clases-div").appendChild(categoryBox);
     for(let x = 0; x < 4; x++){
@@ -713,18 +748,11 @@ function displayNewStystem() {
 }
 
 function displayClassNumbers(array) {
-  if (array.length >= 10) {
+    console.log("class",array)
     const body = classLink.querySelector(".body");
     body.innerHTML = `
-           <i class="fa fa-1"></i>
-           <i class="fa fa-${array.length - 10}"></i>
-        `;
-  } else {
-    const body = classLink.querySelector(".body");
-    body.innerHTML = `
-           <i class="fa fa-${array.length}"></i>
-        `;
-  }
+       <i>${array.length}</i>
+    `;
 }
 
 //stream functions start here
@@ -736,7 +764,7 @@ function loadDefaultStreams() {
     const thisSchool = schoolSetups.find((s) => s.schoolId === user.schoolId);
     if (thisSchool) {
       streamContainer.innerHTML = "";
-      const clases = thisSchool.clases;
+      const clases = thisSchool.clases; //get the clases first
       const classLayout = getClassLayout(clases);
       const defaultStreams = thisSchool.streams.split("-");
       const h1 = document.createElement("h1");
@@ -784,6 +812,18 @@ function loadDefaultStreams() {
                         <h4>${defaultStreams[x]}</h4>
                     `;
             streams.appendChild(innerSpan);
+
+            innerSpan.addEventListener("dblclick" , () => {
+                innerSpan.style.transform = "translateY(100%) scale(0.5)";
+
+                setTimeout(() => {
+                  innerSpan.style.display = "none";
+                  const dropped = defaultStreams[x];
+                  const newStream = defaultStreams.filter(stream => stream !== dropped);
+                  span.dataset.text = clas + ":" + newStream.join("/");
+                  updateSubjects()
+                }, 600)
+              })
           }
           span.dataset.text = "";
           span.dataset.text = clas + ":" + defaultStreams.join("/");
@@ -849,6 +889,8 @@ function loadSubmitedStreams() {
 
           const streamsDiv = document.createElement("div");
           streamsDiv.className = "streams";
+          
+          span.dataset.text = clas + ":" + streams.join("/");
 
           streams.forEach((stream) => {
             const innerSpan = document.createElement("span");
@@ -857,9 +899,19 @@ function loadSubmitedStreams() {
                         <h4>${stream}</h4>
                     `;
             streamsDiv.appendChild(innerSpan);
-          });
 
-          span.dataset.text = clas + ":" + streams.join("/");
+             innerSpan.addEventListener("dblclick" , () => {
+                innerSpan.style.transform = "translateY(100%) scale(0.5)";
+
+                setTimeout(() => {
+                  innerSpan.style.display = "none";
+                  const index = streams.indexOf(stream);
+                  const dropped = streams.splice(index , 1);
+                  span.dataset.text = clas + ":" + streams.join("/"); 
+                  updateSubjects()
+                }, 600)
+              })
+          });
 
           const addSpan = document.createElement("span");
           addSpan.className = "subject";
@@ -1553,11 +1605,29 @@ mode.addEventListener("click", (e) => {
     mode.classList.remove("fa-toggle-off");
     mode.classList.add("fa-toggle-on");
     btn.style.display = "flex";
+    console.log("displaying new system")
     displayNewStystem();
   } else {
     mode.classList.add("fa-toggle-off");
     mode.classList.remove("fa-toggle-on");
     btn.style.display = "flex";
+    console.log("displaying old system")
+    
+    classSpans = [];
+    streamSpans = [];
+
+    const defaultStreams = ["green","blue","red","purple"];
+
+    for(let x = 0; x < 4 ; x++){
+      const span = document.createElement("span");
+      span.dataset.text = `form ${x+1}/o/h`;
+      const span2 = document.createElement("span");
+      span2.dataset.text = defaultStreams[x];
+      classSpans.push(span);
+      streamSpans.push(span2);
+    }
+    
+    updateSubjects();
     loadSubmitedClases();
   }
 });
@@ -1858,11 +1928,12 @@ function verifyInputFields(array){
 }
 
 function postSliderChanges(h2,description,rank,type,image,id = null){
+  getUser((user) => {
   const sliderData = new FormData();
   sliderData.append("image", image);
   sliderData.append("h2", h2);
   sliderData.append("p" , description);
-  sliderData.append("school_id" , "1");
+  sliderData.append("school_id" , user.schoolId);
   sliderData.append("rank" , rank);
   sliderData.append("type" , type);
   sliderData.append("id" , id || "");
@@ -1892,7 +1963,7 @@ function postSliderChanges(h2,description,rank,type,image,id = null){
     }
   };
   xhr.send(sliderData);
-
+  })
 }
 
 let selectedImage = null;
@@ -2143,4 +2214,200 @@ function displaySchoolLinks(){
   })
 }
 
-displaySchoolLinks()
+displaySchoolLinks();
+
+//term update functions
+const termContBox = document.querySelector(".term-progress-cont");
+const termBtn = document.querySelector(".term-student-upgrade .term");
+const submitTerm = termContBox.querySelector(".save")
+const termBack = termContBox.querySelector(".close")
+const start = termContBox.querySelector("#start-date");
+const end = termContBox.querySelector("#end-date");
+const term = termContBox.querySelector("#term");
+
+function validateTermInputs(array){
+  let allFilled = true;
+  array.forEach(input => input.classList.remove("errors"));
+  array.forEach(input => {
+    if(input.value === ""){
+      allFilled = false;
+      input.classList.add("errors");
+    }
+  })
+
+  if(allFilled){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function setDateFromString(dateStr) {
+    const parts = dateStr.split("/"); 
+    const day = parts[0];
+    const month = parts[1];
+    const year = parts[2];
+    const formatted = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    return formatted;
+}
+
+function getTotalDays(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const diffTime = end - start;
+
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+}
+
+function formatDate(inputValue) {
+  const date = new Date(inputValue);
+  if (isNaN(date)) return ""; // invalid date
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = String(date.getFullYear()); // only last 2 digits
+
+  return `${day}/${month}/${year}`;
+}
+
+
+function startTerm(){
+  getSetup((setups) => {
+    //get the html inputs
+    const daysText = termContBox.querySelector(".footer h2");
+    const termText = termContBox.querySelector("h1 span");
+    const savedTerm = setups[0].term.split("-");
+    console.log(setups)
+    console.log(savedTerm)
+    termText.textContent = savedTerm[0];
+    term.value = savedTerm[0];
+    start.value = setDateFromString(savedTerm[1]);
+    end.value = setDateFromString(savedTerm[2]);
+
+    let daysBtn = getTotalDays(setDateFromString(savedTerm[1]),setDateFromString(savedTerm[2]));
+    daysText.innerHTML = `${daysBtn} <span>days</span>`;
+
+    start.addEventListener("change" , (e) => {
+      e.preventDefault();
+      daysBtn = getTotalDays(start.value,end.value);
+      daysText.innerHTML = `${daysBtn} <span>days</span>`;
+    })
+
+    end.addEventListener("change" , (e) => {
+      e.preventDefault();
+      daysBtn = getTotalDays(start.value,end.value);
+      daysText.innerHTML = `${daysBtn} <span>days</span>`;
+    })
+
+  })
+}
+
+termBtn.addEventListener("click" , (e) => {
+  e.stopPropagation();
+
+  termContBox.style.display = "flex";
+  requestAnimationFrame(() => {
+     termContBox.style.transform = "scale(1)";
+     termContBox.style.opacity = "1";
+  })
+  startTerm()
+})
+
+termBack.addEventListener("click" , (e) => {
+  e.stopPropagation();
+
+  requestAnimationFrame(() => {
+     termContBox.style.transform = "scale(.5)";
+     termContBox.style.opacity = "0";
+  })
+
+  setTimeout(() => {
+    termContBox.style.display = "none";
+  },1000)
+})
+
+submitTerm.addEventListener("click" , () => {
+  const verified = validateTermInputs([term,start,end]);
+  if(verified){
+    submitTerm.disabled = true
+    termBack.disabled = true;
+    postTermChanges();
+  }
+})
+
+function normalizeDate(dateStr) {
+  // dateStr in format DD/MM/YYYY
+  const [day, month, year] = dateStr.split("/").map(Number); 
+  return `${day}/${month}/${year}`;
+}
+
+// Example
+console.log(normalizeDate("25/08/2025")); // 25/8/2025
+console.log(normalizeDate("05/09/2025")); // 5/9/2025
+
+
+function postTermChanges() {
+  getSetup((setup) => {
+    const formattedStart = formatDate(start.value);
+    const formattedEnd = formatDate(end.value);
+
+    const array = [formattedStart,formattedEnd].map(s => normalizeDate(s));
+    const arrayText = ["opening day","closing day"];
+    const arrayDesc = [
+      `The new school ${term.value} begins today. Students should report on time, ready to learn and participate actively.`,
+      `The official last day of the school ${term.value} when all academic activities conclude, students receive their progress reports, and the school breaks for holiday.`
+    ]
+
+    const valueArray = [term.value, formattedStart, formattedEnd];
+    const actualValue = valueArray.join("-");
+
+    const data = new FormData();
+    data.append("term", actualValue);
+    data.append("id" , setup[0].schoolId);
+
+    fetch("termupgrade.php" , {
+      method : "POST",
+      body : data
+    })
+    .then(r => r.json())
+    .then(response => console.log(response))
+    .catch(error => console.log("term posting error" , error));
+
+    for(let x = 0; x < 2; x++){
+      postTermEvent(array[x],arrayText[x],arrayDesc[x]);
+    }
+  });
+}
+
+function postTermEvent(date,text,term){
+  getUser((user) => {
+   const data = new FormData();
+   data.append("event-tittle" , text);
+   data.append("event-date" , date);
+   data.append("from" , "");
+   data.append("to" , "");
+   data.append("category" , "educative");
+   data.append("destination" , "all");
+   data.append("id" , user.schoolId);
+   data.append("event-description" , term);
+   data.append("user" , user.code);
+
+   fetch("eventsubmittion.php" , {
+    method : 'POST',
+    body : data
+   })
+   .then(r => r.json())
+   .then(result => {
+       if(result.type){
+        alert("changes saved");
+       }
+    })
+   .catch(error => console.log("event error" , error));
+   submitTerm.disabled = false;
+   termBack.disabled = false;
+   })
+}
+

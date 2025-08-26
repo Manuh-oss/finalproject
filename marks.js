@@ -16,6 +16,8 @@ const form = document.querySelector(".means");
 const submitBtn = document.querySelector("#submit-btn");
 const backBtn = document.querySelector(".back");
 let subject;
+let marksInput = [];
+let admissionInputs = [];
 
 const progressContainer = document.getElementById("container");
 
@@ -42,497 +44,689 @@ const subjects = [
   "french",
 ];
 
-const colors = [
-  "#AEDFF7",
-  "#F4D19B",
-  "#CFF2E1",
-  "#B2EBF2",
-  "#D1F2A5",
-  "#B0C4DE",
-  "#DDECC9",
-  "#E6CFC1",
-  "#E4DEF3",
-  "#F9E7C3",
-  "#D0E6B3",
-  "#F8C8DC",
-  "#A7FOF9",
-];
-
-const comparingData = [
+const myDefaultSubjects = [
   "english",
   "kiswahili",
-  "chemistry",
   "mathematics",
+  "chemistry",
   "biology",
   "physics",
   "geography",
-  "cre",
   "history",
-  "agriculture",
-  "french",
-  "computer",
+  "cre",
   "business",
-  "mean",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
 ];
 
-//this sets a tranition delay to every child
-for (let x = 0; x < children.length; x++) {
-  children[x].style.transitionDelay = `${delay * x}` + "s";
-  children[x].style.backgroundColor = colors[x];
-  children[x].style.border = "none";
-  children[x].textContent = children[x].querySelector(".text").textContent;
+const colors = [
+  "#AEDFF7", // light sky blue
+  "#F4D19B", // light orange
+  "#CFF2E1", // pale mint green
+  "#B2EBF2", // pale cyan
+  "#D1F2A5", // light lime green
+  "#B0C4DE", // light steel blue
+  "#DDECC9", // pale olive green
+  "#E6CFC1", // pale peach
+  "#E4DEF3", // pale lavender
+  "#F9E7C3", // pale gold
+  "#D0E6B3", // soft olive green
+  "#F8C8DC", // pale pink
+  "#B0C4DE", // light steel blue (duplicate)
+  "#C9E6E9", // pastel cyan
+  "#F7DBB4", // creamy peach
+  "#E0F7D7", // very pale green
+  "#D2EBF7", // baby blue
+  "#E8F4E2", // soft sage green
+  "#F0E5D7", // dusty beige
+  "#E2D8F2", // soft lilac
+];
+
+//ajax functions
+
+async function getUser() {
+  try {
+    const response = await fetch("saved_user.php", {
+      method: "GET",
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("login error", error);
+  }
 }
 
-//this adds opacity one and a scle of i to ever box when the page reloads
-window.addEventListener("load", function () {
-  Array.from(children).forEach((element) => {
-    element.style.opacity = "1";
-    element.style.transform = "scale(1)";
-  });
-});
-
-function getUser(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "saved_user.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        callback(response);
-      }
-    } catch (error) {
-      console.log("login error", error);
-    }
-  };
-  xhr.send();
+//function to get teachers
+async function getTeachers() {
+  const user = await getUser();
+  showLoader("fetching teachers,please wait...");
+  try {
+    const response = await fetch("teachers.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((t) => t.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("teachers error", error);
+  } finally {
+    removeLoader();
+  }
 }
 
-function getStudents(callback) {
-  getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "students.php", true);
-  xhr.onload = () => {
-    try{
-     if (xhr.status === 200) {
-       const response = JSON.parse(xhr.responseText);
-       const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-       callback(thisSchool);
-      }
-    }catch(error){
-      console.log("student error",error);
-    }
-  };
-  xhr.send();
-  })
+//function to get teachers
+async function getStudents() {
+  const user = await getUser();
+  showLoader("fetching student details...");
+  try {
+    const response = await fetch("students.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((s) => s.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("teachers error", error);
+  } finally {
+    removeLoader();
+  }
 }
 
-function getResults(callback) {
-  getUser((user) => {
+//function to get teacher lessons
+async function getLessons() {
+  const user = await getUser();
+  showLoader("fetching teacher lessons...");
+  try {
+    const response = await fetch("lesson.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((t) => t.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("lessons error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+//function to get marks
+async function getMarks() {
+  showLoader("fetching student marks...");
+  const user = await getUser();
   const data = new FormData();
   data.append("class", "");
-  data.append("term", "");
   data.append("exam", "");
+  data.append("term", "");
   data.append("id", "");
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "result.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("result error", error);
-    }
-  };
-  xhr.send(data);
-  })
+  try {
+    const response = await fetch("result.php", {
+      method: "POST",
+      body: data,
+    });
+    const result = await response.json();
+    const schoolResult = result.filter((r) => r.schoolId === user.schoolId);
+    return schoolResult;
+  } catch (error) {
+    console.log("marks error", error);
+  } finally {
+    removeLoader();
+  }
 }
 
-//function to validate the user subject choosen
-function validateTeacher(clas, subject, stream, code, callback) {
-  getUser((user) => {
+async function getSetup() {
+  showLoader("fetching school details...");
+  try {
+    const user = await getUser();
+    const response = await fetch("getsetup.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((s) => s.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("setup error", error);
+  } finally {
+    removeLoader();
+  }
+}
+
+async function updateSelects() {
+  const setup = await getSetup();
+  if (setup.length === 0) return;
+  const schoolClases = getClass(setup[0].clases);
+  const schoolStreams = getStream(setup[0].streams);
+
+  classSelect.innerHTML = "";
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "--select class--";
+  classSelect.appendChild(defaultOption);
+
+  schoolClases.forEach((clas) => {
+    const option = document.createElement("option");
+    option.value = clas;
+    option.textContent = clas;
+    classSelect.appendChild(option);
+  });
+
+  classSelect.addEventListener("change", () => {
+    const classStreams = schoolStreams[classSelect.value];
+    streamSelect.innerHTML = "";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "--select stream--";
+    streamSelect.appendChild(defaultOption);
+
+    classStreams.forEach((clas) => {
+      const option = document.createElement("option");
+      option.value = clas;
+      option.textContent = clas;
+      streamSelect.appendChild(option);
+    });
+  });
+}
+
+//function upload marks
+async function uploadMarks() {
+  showLoader("uploading marks, please wait...");
+  const user = await getUser();
   const data = new FormData();
-  data.append("class", clas);
-  data.append("subject", subject);
-  data.append("stream", stream);
-  data.append("tcode", code);
-  data.append("id" , user.schoolId)
+  let subjectz;
+  if (subject === "business") subjectz = "businessstudies";
+  if (subject !== "business") subjectz = subject;
+  data.append("subject", subjectz);
+  data.append("class", classSelect.value);
+  data.append("stream", streamSelect.value);
+  data.append("term", termSelect.value);
+  data.append("exam", examSelect.value);
+  data.append("id", user.schoolId);
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "validate.php", true);
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
-    }
-  };
-  xhr.send(data);
-  })
+  marksInput.forEach((student) => {
+    data.append("marks[]", student.mark);
+    data.append("admissions[]", student.admission);
+  });
+
+  try {
+    const response = await fetch("upload.php", {
+      method: "POST",
+      body: data,
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("upload error", error);
+  }
 }
 
-function verifySelects() {
-  let allIsfiled = true;
-  [classSelect, streamSelect].forEach((select) => {
-    if (select.value === "") {
-      allIsfiled = false;
+//function to upload means
+
+async function postMeans(array) {
+  showLoader("updating means, please wait...");
+  const meanData = new FormData();
+  array.forEach((student) => {
+    meanData.append("mean[]", student.mean);
+    meanData.append("admission[]", student.admission);
+    meanData.append("id[]", student.id);
+    meanData.append("total[]", student.total);
+    meanData.append("grade[]", student.grade);
+  });
+
+  meanData.append("class" , classSelect.value);
+  meanData.append("stream" , streamSelect.value);
+  meanData.append("term" , termSelect.value);
+  meanData.append("exam" , examSelect.value);
+
+  try {
+    const response = await fetch("totals.php", {
+      method: "POST",
+      body: meanData,
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("mean error", error);
+  }
+}
+
+//function t0 post positions
+async function postPositions(array) {
+  showLoader("assigning positions,please wait...");
+  const user = await getUser();
+  const data = new FormData();
+  array.forEach((object) => {
+    for (const key in object) {
+      if (key !== "id" && key !== "admission" && key !== "streamPosition") {
+        data.append("position[]", object[key]);      // subject position
+        data.append("subject[]", key);               // subject name
+        data.append("admission[]", object.admission);
+        data.append("id[]", object.id);
+        data.append("streamPosition[]", object.streamPosition);
+      }
     }
   });
 
-  if (allIsfiled) {
+  try {
+    const response = fetch("position.php", {
+      method: "POST",
+      body: data,
+    });
+    const result = (await response).json();
+    return result;
+  } catch (error) {
+    console.log("error assigning positions", error);
+  } finally {
+    removeLoader();
+  }
+}
+//main functions
+
+//function to load submitted subjects
+document.addEventListener("DOMContentLoaded", async () => {
+  const schoolSubjects = await mySubjects();
+  if (schoolSubjects.length > 0) {
+    verifyBox.innerHTML = "";
+
+    for (let x = 0; x < schoolSubjects.length; x++) {
+      const div = document.createElement("div");
+      div.className = "subject-grid";
+      div.textContent = schoolSubjects[x];
+
+      //styles for each div
+      div.style.backgroundColor = colors[x];
+      div.style.transitionDelay = `${delay * x}s`;
+      div.style.opacity = "0";
+      div.style.transform = "scale(0.8)";
+
+      verifyBox.appendChild(div);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          div.style.opacity = "1";
+          div.style.transform = "scale(1)";
+        });
+      });
+
+      div.addEventListener("click", async () => {
+        const defaultSubject = myDefaultSubjects[x];
+        const verified = await verifyTeacher(defaultSubject);
+        const filled = verifySelects([classSelect, streamSelect]);
+        if (!filled) showErrorMessage("please fill out all required fields!");
+        if (!filled) return;
+        if (verified) {
+          showSuccessMessage("access granted");
+          subject = defaultSubject;
+
+          hideSubject();
+          selectBox.style.display = "none";
+          displayStudents();
+        } else {
+          showErrorMessage("access denied");
+        }
+      });
+    }
+  } else {
+    showErrorMessage("no subject found for our school");
+  }
+});
+
+async function verifyTeacher(subject) {
+  const user = await getUser();
+  const allLessons = await getLessons();
+
+  const subjectTeacherCode = allLessons
+    .filter((t) => {
+      return (
+        normalise(t.class) === normalise(classSelect.value) &&
+        normalise(t.stream) === normalise(streamSelect.value) &&
+        normalise(t.subject) === normalise(subject)
+      );
+    })
+    .map((t) => t.teacherCode);
+
+  if (user.code === subjectTeacherCode[0]) {
     return true;
   } else {
     return false;
   }
 }
 
-/* marks function stat here validation posting all that shit */
+async function displayStudents() {
+  const allMarks = await getMarks();
+  const allStudents = await getStudents();
+  const myStudentsMarks = allMarks
+    .filter((s) => {
+      const classMatch = normalise(s.class) === normalise(classSelect.value);
+      const streamMatch = normalise(s.stream) === normalise(streamSelect.value);
 
-function checkUser() {
-  if (subject) {
-    getUser((user) => {
-      if (user.from !== "teacher") {
-        showErrorMessage("user is no teacher");
-        return;
-      } else {
-        validateTeacher(
-          classSelect.value,
-          subject,
-          streamSelect.value,
-          user.code,
-          (validated) => {
-            if (validated.type) {
-              showSuccessMessage("access granted");
-              hideSubject();
-              selectBox.style.display = "none";
-              displayStudent();
-            } else {
-              showErrorMessage("access denied");
-            }
-          }
-        );
-      }
-    });
-  } else {
-    showErrorMessage("subject is null");
-  }
-}
-
-function displayStudent() {
-  getResults((studentsResults) => {
-    getStudents((students) => {
-      const selectedTerm = termSelect.value || "2";
       const selectedExam = examSelect.value || "22";
-      const thisExamResults = studentsResults.filter((result) => {
-        return (
-          result.class === classSelect.value &&
-          result.stream === streamSelect.value &&
-          result.term === selectedTerm &&
-          result.exam === selectedExam
-        );
-      });
+      const selectedTerm = termSelect.value || "2";
 
-      thisExamResults.sort((a, b) => Number(a.admission) - Number(b.admission));
+      const examMatch = normalise(s.exam) === normalise(selectedExam);
+      const termMatch = normalise(s.term) === normalise(selectedTerm);
 
-      const noresult = document.querySelector(".noresult");
-      const table = document.querySelector(".table table tbody");
-      const Cont = document.querySelector(".table");
+      return classMatch && streamMatch && examMatch && termMatch;
+    })
+    .sort((a, b) => Number(a.admission) - Number(b.admission));
 
-      if (thisExamResults.length > 0) {
-        if (noresult) noresult.style.display = "none";
-        document.querySelector(".subject-tittle").textContent = subject;
-        table.innerHTML = "";
+  const tbody = marksTable.querySelector("tbody");
+  const noresult = document.querySelector(".noresult");
 
-        thisExamResults.forEach((result) => {
-          const studentDetails = students.find(
-            (s) => s.admission === result.admission
-          );
+  tbody.innerHTML = "";
+  if (noresult) {
+    noresult.style.display = "none";
+  }
 
-          if (studentDetails) {
-            if (studentDetails[subject] !== "not-selected") {
-              const tr = document.createElement("tr");
-              const name =
-                studentDetails.firstname +
-                " " +
-                studentDetails.middlename +
-                " " +
-                studentDetails.lastname;
-              tr.innerHTML = `
-                 <td>${studentDetails.admission}</td>
-                 <td>${name}</td>
-                 <td class="remove">${studentDetails.class}</td>
-                 <td class="remove">${(studentDetails.stream)}</td>
-                 <td class="remove">${studentDetails.gender}</td>
-                 <td><input type='text' value='${
-                   result[subject]
-                 }' class='marks-input'/></td>
-                 <input type='hidden' value='${
-                   studentDetails.admission
-                 }' class='admissions'/>
-               `;
-              table.appendChild(tr);
-            }
-          }
+  if (myStudentsMarks.length > 0) {
+    //if found student marks data
+    for (let x = 0; x < myStudentsMarks.length; x++) {
+      const studentMark = myStudentsMarks[x];
+      const tr = document.createElement("tr");
+      const student = allStudents.find(
+        (s) =>
+          s.admission === studentMark.admission && s[subject] !== "not-selected"
+      );
+      //default tr styles
+      tr.style.opacity = "0";
+      tr.style.transform = "scale(.7)";
+      tr.style.transition = "opacity .6s linear,transform .6s linear";
+      tr.style.transitionDelay = `${delay * x}s`;
+
+      if (student) {
+        const name = `${student.firstname} ${student.middlename} ${student.lastname}`;
+        tr.innerHTML = `
+        <td>${student.admission}</td>
+        <td>${name}</td>
+        <td class="remove">${student.class}</td>
+        <td class="remove">${student.stream}</td>
+        <td class="remove">${student.gender}</td>
+        <td>
+           <input type='text' value='${studentMark[subject]}'class='marks-input'/>
+        </td>
+        <input type='hidden'
+               value='${student.admission}'
+               class='admissions'/>
+        `;
+
+        tbody.appendChild(tr);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            tr.style.opacity = "1";
+            tr.style.transform = "scale(1)";
+          });
         });
-      } else {
-        if (noresult) noresult.style.display = "flex";
-        if (table) table.innerHTML = "";
       }
+    }
 
-      const marksInput = table.querySelectorAll(".marks-input");
-      marks = marksInput;
-      admissions = table.querySelectorAll(".admissions");
-      marksInput.forEach((input) => {
-        input.addEventListener("input", (e) => {
-          if (e.target.value > 99 || e.target.value < 0) {
-            input.value = 0;
-            showErrorMessage("error noted and corected");
-          }
-        });
+    const marksvalues = Array.from(tbody.querySelectorAll(".marks-input"));
+    const studentsData = Array.from(tbody.querySelectorAll("tr")).map((row) => {
+      return {
+        mark: row.querySelector(".marks-input")?.value || "",
+        admission: row.querySelector(".admissions")?.value || "",
+      };
+    });
+
+    marksInput = studentsData;
+
+    marksvalues.forEach((input, index) => {
+      input.addEventListener("input", (e) => {
+        const value = Number(e.target.value);
+        if (isNaN(value) || value < 0 || value > 100) {
+          input.value = "";
+          showErrorMessage("Please enter a number between 0 and 100.");
+        } else {
+          marksInput[index].mark = value;
+          console.log(marksInput[index]);
+        }
       });
     });
-  });
-}
-
-function uploadMarks() {
-  getUser((user) => {
-  const data = new FormData();
-
-  if (marks.length > 0 && admissions.length > 0) {
-    marks.forEach((m) => data.append("marks[]", m.value));
-    admissions.forEach((a) => data.append("admissions[]", a.value));
-    let subjectz;
-    if (subject === "business") subjectz = "businessstudies";
-    if (subject !== "business") subjectz = subject;
-    data.append("subject", subjectz);
-    data.append("class", classSelect.value);
-    data.append("stream", streamSelect.value);
-    data.append("term", termSelect.value);
-    data.append("exam", examSelect.value);
-    data.append("id", user.schoolId);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "upload.php", true);
-
-    progressContainer.classList.remove("removes");
-    progressContainer.classList.add("active");
-    progressContainer.querySelector("p").textContent =
-      "Uploading marks, please wait...";
-
-    xhr.onload = () => {
-      try {
-        if (xhr.status == 200) {
-          const response = JSON.parse(xhr.responseText);
-          if (response[0].type) {
-            assignMeans();
-          }
-        }
-      } catch (error) {
-        console.log("Upload error", error);
-      } finally {
-        console.log(xhr.responseText);
-      }
-    };
-    xhr.send(data);
   } else {
-    console.log("marks and admission empty");
+    //else if not found
+    noresult.style.display = "flex";
+    if (tbody) tbody.innerHTML = "";
   }
-  })
 }
 
-function assignMeans() {
-  getResults((results) => {
-    getStudents((students) => {
-      progressContainer.classList.remove("remove");
-      progressContainer.classList.add("active");
-      progressContainer.querySelector("p").textContent =
-        "Updating means, please wait...";
+//function to calculate mean
+async function getMeans() {
+  let meanArray = [];
+  const allResults = await getMarks();
+  const selectedExam = examSelect.value || "22";
+  const selectedTerm = termSelect.value || "2";
 
-      setTimeout(() => {
-        results.forEach((result) => {
-          const studentDetails = students.find(
-            (s) => s.admission === result.admission
-          );
-          if (!studentDetails) return;
-          const subjectTaken = subjects.filter(
-            (s) => studentDetails[s] !== "not-selected"
-          );
-          if (subjectTaken.length === 0) return;
-          const totals = subjectTaken.reduce(
-            (a, b) => a + Number(result[b]),
-            0
-          );
-          const mean = totals / subjectTaken.length;
-
-          const data = {
-            mean: mean.toFixed(3),
-            total: totals,
-            grade: getGrades(mean),
-            class: result.class,
-            stream: result.stream,
-            exam: result.exam,
-            term: result.term,
-            admission: studentDetails.admission,
-          };
-
-          postMeanForm(data);
-        });
-
-        assignPositions(); // continue
-      }, 3000);
-    });
+  const classResults = allResults.filter((mark) => {
+    const classMatch = normalise(mark.class) === normalise(classSelect.value);
+    const examMatch = normalise(mark.exam) === normalise(selectedExam);
+    const termMatch = normalise(mark.term) === normalise(selectedTerm);
+    return classMatch && examMatch && termMatch;
   });
-}
 
-function postMeanForm(data) {
-  getUser((user) => {
-  const meanData = new FormData();
-  meanData.append("class", data.class);
-  meanData.append("stream", data.stream);
-  meanData.append("exam", data.exam);
-  meanData.append("term", data.term);
-  meanData.append("admission", data.admission);
-  meanData.append("mean", data.mean);
-  meanData.append("total", data.total);
-  meanData.append("grade", data.grade);
-  meanData.append("id", user.schoolId);
+  const students = await getStudents();
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "totals.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-      }
-    } catch (error) {
-      console.log("Mean upload error", error);
+  for (const result of classResults) {
+    const student = students.find((s) => s.admission === result.admission); //fetch his/her details
+    const mySubjects = myDefaultSubjects.filter((subj) => {
+      return student[subj] !== "not-selected";
+    }); //filter out the unwanted or dropped subjects
+    //loop through each subject geting the result from result variable and adding them toether to find the total
+    const totalMarks = mySubjects.reduce(
+      (total, subj) => total + Number(result[subj]),
+      0
+    );
+    //get mean my diving the toal by the total subjects done
+    const mean = totalMarks / mySubjects.length;
+
+    const data = {
+      mean: mean.toFixed(3),
+      total: totalMarks,
+      grade: getGrades(mean),
+      id: result.id,
+      admission: student.admission,
+    };
+
+    if (
+      !meanArray.some(
+        (s) => s.mean === data.mean && s.admission === data.admission
+      )
+    ) {
+      meanArray.push(data);
     }
-  };
-  xhr.send(meanData);
-  })
+  }
+  return meanArray;
 }
 
-let classPositions = [];
+//function to assign positions
+async function assignPositions() {
+  let positionArray = [];
+  const allResults = await getMarks();
+  const allStudents = await getStudents();
+  const selectedExam = examSelect.value || "22";
+  const selectedTerm = termSelect.value || "2";
+  //get the calss array
+  const classResults = allResults.filter((mark) => {
+    const classMatch = normalise(mark.class) === normalise(classSelect.value);
+    const examMatch = normalise(mark.exam) === normalise(selectedExam);
+    const termMatch = normalise(mark.term) === normalise(selectedTerm);
+    return classMatch && examMatch && termMatch;
+  });
+  //get stream array
+  const streamResults = allResults.filter((mark) => {
+    const classMatch = normalise(mark.class) === normalise(classSelect.value);
+    const streamMatch =
+      normalise(mark.stream) === normalise(streamSelect.value);
+    const examMatch = normalise(mark.exam) === normalise(selectedExam);
+    const termMatch = normalise(mark.term) === normalise(selectedTerm);
+    return classMatch && examMatch && termMatch && streamMatch;
+  }).map(s => { 
+    return {
+        mean : s.mean,
+        admission : s.admission
+    }
+  });
+  
+  const comparingData = myDefaultSubjects;
+  comparingData.push("mean");
+  const studentData = {};
+  //this gets stream result
+  const sortedStreamResult = streamResults
+  .map(res => {
+     return {
+      mark : res.mean,
+      id : res.id,
+      admission : res.admission
+     }    
+   })
+  .sort((a,b) => b.mark - a.mark); 
 
-function assignPositions() {
-  getResults((results) => {
-    getStudents((students) => {
-      // ✅ Show "Assigning positions"
-      progressContainer.classList.remove("remove");
-      progressContainer.classList.add("active");
-      progressContainer.querySelector("p").textContent =
-        "Assigning positions, please wait...";
-
-      setTimeout(() => {
-        const classArray = databaseClases;
-        for (let x = 1; x < classArray.length; x++) {
-          const thisClassValue = results.filter(
-            (res) =>
-              res.class === classArray[x].toString() &&
-              res.exam === examSelect.value &&
-              res.term === termSelect.value
-          );
-
-          for (let r = 0; r < comparingData.length; r++) {
-            let subject = comparingData[r];
-            thisClassValue.sort(
-              (a, b) => Number(b[subject]) - Number(a[subject])
-            );
-            let currentPosition = 1;
-            let currentRank = 1;
-            let previousMean = null;
-
-            for (let i = 0; i < thisClassValue.length; i++) {
-              const studentDetails = students.find(
-                (student) => student.admission === thisClassValue[i].admission
-              );
-              if (!studentDetails) continue;
-
-              if (
-                studentDetails[subject] !== "not-selected" ||
-                subject === "mean"
-              ) {
-                const student = Number(thisClassValue[i][subject]);
-                if (student) {
-                  if (previousMean !== null && student !== previousMean) {
-                    currentRank = currentPosition;
-                  }
-                  currentPosition++;
-                  previousMean = student;
-
-                  postStudentPositions({
-                    admission: studentDetails.admission,
-                    subject,
-                    position: currentRank,
-                    class: thisClassValue[i].class,
-                    term: thisClassValue[i].term,
-                    exam: thisClassValue[i].exam,
-                    stream: thisClassValue[i].stream,
-                  });
-                }
-              }
-            }
+   for(const data of comparingData){
+    //this stores sorted class result
+      const sortedClassResult = classResults
+        .map(res => {
+          const student = allStudents.find(s => res.admission === s.admission);
+          if(student && student[data] !== "not-selected"){
+             return {
+               mark : res[data],
+               admission : student.admission,
+               subject : data,
+               id : res.id
+             }
           }
-        }
+          return null
+        })
+        .filter(Boolean)
+        .sort((a,b) => b.mark - a.mark);
 
-        progressContainer.classList.add("remove");
-        progressContainer.classList.remove("active");
-        showSuccessMessage("marks updated sucessfully  ");
-      }, 2000);
-    });
+         let currentRank = 1;
+         let currentPosition = 1;
+         let previousMean = null;
+
+         for(const position of sortedClassResult){
+           if(position && position.mark){
+             if(previousMean !== null && previousMean === position.mark){
+
+             }else{
+              currentRank = currentPosition;
+             }
+
+             currentPosition++;
+             previousMean = position.mark;
+
+             if(!studentData[position.admission]) studentData[position.admission] = {};
+             studentData[position.admission][data] = currentRank;
+             studentData[position.admission]["id"] = position.id;
+             studentData[position.admission]["admission"] = position.admission;
+           }
+         }
+
+   }
+
+   let currentRank = 1;
+   let currentPosition = 1;
+   let previousMark = 1;
+   for(const position of sortedStreamResult){
+     if(position && position.mark){
+       if(previousMark !== null && position.mark === previousMark){
+
+       }else{
+        currentRank = currentPosition;
+       }
+
+       currentPosition++;
+       previousMark = position.mark;
+
+       studentData[position.admission].streamPosition = currentRank;
+     }
+   }
+   
+   Object.entries(studentData).forEach(([admis,data]) => {
+     if(!positionArray.some(s => s.admission === admis)){
+       positionArray.push(data);
+     }
+   })
+
+  return positionArray;
+}
+
+//accesory functions
+
+async function mySubjects() {
+  const setup = await getSetup();
+  if (setup.length === 0) return;
+  const schoolSubjects = getSubject(setup[0].subjects);
+
+  return schoolSubjects;
+}
+
+function getSubject(rawSubjects) {
+  const rawstreamArray = rawSubjects.split("-");
+  const streamArray = rawstreamArray.map((s) => {
+    const [classes] = s.split("/");
+    return classes;
   });
+  return streamArray;
 }
 
-function postStudentPositions(data) {
-  getUser((user) => {
-  const positionData = new FormData();
-  positionData.append("class", data.class);
-  positionData.append("stream", data.stream);
-  positionData.append("exam", data.exam);
-  positionData.append("term", data.term);
-  positionData.append("admission", data.admission);
-  positionData.append("subject", data.subject);
-  positionData.append("position", data.position);
-  positionData.append("id", user.schoolId);
+function getStream(rawStreams) {
+  let result = {};
+  const rawstreamArray = rawStreams.split("-");
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "totals.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status == 200) {
-        const response = JSON.parse(xhr.responseText);
-      }
-    } catch (error) {
-      console.log("Mean upload error", error);
+  rawstreamArray.forEach((stream) => {
+    const parts = stream.split(":");
+    if (parts.length === 2) {
+      const [clas, streams] = parts;
+      result[clas] = streams.split("/");
     }
-  };
-  xhr.send(positionData);
-  })
+  });
+
+  return result;
 }
 
-//function to hise subject container
-function hideSubject() {
-  verifyBox.style.display = "none";
-  selectBox.style.display = "none";
-  marksTable.style.display = "flex";
-  centralised.style.display = "none";
+function getClass(rawClases) {
+  const rawclasesArray = rawClases.split("-");
+  const classArray = rawclasesArray.map((s) => {
+    const [classes] = s.split("/");
+    return classes;
+  });
+  return classArray;
 }
 
-function convertStream(rawStream) {
-  switch (rawStream) {
-    case "111":
-      return "green";
-    case "222":
-      return "blue";
-    case "333":
-      return "red";
-    case "444":
-      return "purple";
-    default:
-      return "unknown";
+function normalise(string) {
+  return string.toLowerCase().trim().replace(" ", "");
+}
+
+function verifySelects(array) {
+  let allFilled = true;
+  array.forEach((select) => select.classList.remove("errors"));
+  array.forEach((select) => {
+    if (select.value == -"") {
+      select.classList.add("errors");
+      allFilled = false;
+    }
+  });
+
+  if (allFilled) {
+    return true;
+  } else {
+    return false;
   }
+}
+
+function showLoader(message) {
+  progressContainer.classList.remove("removes");
+  progressContainer.classList.add("active");
+  const messageText = progressContainer.querySelector(".text");
+  messageText.textContent = message;
+}
+
+function removeLoader() {
+  progressContainer.classList.add("removes");
+  progressContainer.classList.remove("active");
 }
 
 function getGrades(marks) {
@@ -568,19 +762,15 @@ function getGrades(marks) {
   return grade;
 }
 
-function shoProgressContainer(type, message) {
-  if (type) {
-    progressContainer.classList.add("active");
-    const p = progressContainer.querySelector("p");
-    p.textContent = message || "loading...";
-    console.log("showing");
-  } else {
-    progressContainer.classList.remove("active");
-    console.log("not showing");
-  }
+//function to hise subject container
+function hideSubject() {
+  verifyBox.style.display = "none";
+  selectBox.style.display = "none";
+  marksTable.style.display = "flex";
+  centralised.style.display = "none";
 }
 
-//error functions start here
+//error functions
 function showErrorMessage(message) {
   improvedError.classList.add("show-error");
   improvedError.querySelector("#error-text").textContent =
@@ -607,27 +797,28 @@ function showSuccessMessage(messages) {
   setTimeout(hideSuccessMessage, 5000);
 }
 
+//function class
+
+updateSelects();
+
 //event listeners
-subjectDivs.forEach((child) => {
-  child.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const filled = verifySelects();
-    if (filled) {
-      const text = child.textContent || null;
-      subject = text;
-      console.log(subject);
-      checkUser();
-    } else {
-      showErrorMessage("please select class & stream");
+submitBtn.addEventListener("click", async () => {
+  try{
+    const result = await uploadMarks();
+    if (result.type) {
+      const meansArray = await getMeans();
+      const positionArray = await assignPositions();
+      console.log(await postMeans(meansArray));
+      await postPositions(positionArray); 
     }
-  });
+  }catch(error){
+    console.log("submiting error" , error);
+  }
 });
 
-termSelect.addEventListener("change", displayStudent);
-examSelect.addEventListener("change", displayStudent);
+termSelect.addEventListener("change" , displayStudents)
+examSelect.addEventListener("change" , displayStudents)
 
-submitBtn.addEventListener("click", uploadMarks);
-backBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
+backBtn.addEventListener("click" , () => {
   window.location.reload();
-});
+})

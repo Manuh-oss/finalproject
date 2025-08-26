@@ -288,20 +288,24 @@ main .logo img {
 @media (max-width:768px) {
   .login-container .box{
     display: flex;
-    flex-direction: column-reverse;
     height: 100%;
     justify-content: center;
   }
   .login-container .box .left{
     max-height: 40%;
+    display: none;
   }
   .login-container .box .right{
-    max-height: 40%;
+    height: 100%;
     width: 100%;
+    border-left: none;
   }
   main .logo{
     height: 5rem;
     width: 5rem;
+  }
+  .right .login-box {
+    justify-content: center;
   }
   .login-container .box .left h1{
     font-size: 4rem;
@@ -311,6 +315,9 @@ main .logo img {
     height: fit-content;
     display: flex;
     align-items: center;
+  }
+  .verify{
+    justify-content: center;
   }
 }
 
@@ -325,8 +332,12 @@ main .logo img {
   .login-container .box .right{
     flex-grow: 1;
     align-items: flex-end;
+    height: 100%;
   }
   .right .login-box {
-    justify-content: flex-end;
+    justify-content: center;
+  }
+  .verify .inputs input{
+    height: 5rem;
   }
 }

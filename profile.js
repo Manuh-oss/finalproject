@@ -18,6 +18,26 @@ displinaryBox.style.display = "none";
 approvalBox.style.display = "none";
 profileBox.style.minWidth = "100%";
 profileBox.style.display = "flex";
+
+const myDefaultSubjects = [
+  "english",
+  "kiswahili",
+  "mathematics",
+  "chemistry",
+  "biology",
+  "physics",
+  "geography",
+  "history",
+  "cre",
+  "business",
+  "agriculture",
+  "computer",
+  "french",
+  "subject14",
+  "subject15",
+  "subject16",
+];
+
 //this function gets the current loged in user
 function getUser(callback){
     const xhr = new XMLHttpRequest();
@@ -110,10 +130,11 @@ console.log(children)
 //function diplay student
 
 function displayStudent(student , record){
-    const subjects = ['english','mathematics','kiswahili','chemistry','biology','physics','geography','history','cre','business','agriculture','computer','french'];
     const tbodies = approvalBox.querySelector("tbody")
     tbody.innerHTML = "";
+    loadSchoolData((schoolData) => {
     getParentDetails((parent) => {
+        const schoolSubjects = schoolData.subjects
         tbody.innerHTML = "";
         const profileImage = student.profileImage || "./teachers/profileimage.png";
         const noresult = displinaryBox.querySelector(".no-result");
@@ -168,17 +189,18 @@ function displayStudent(student , record){
          noresult.style.display = "flex";
        }
 
-       for(let x =0; x < subjects.length; x++){
+       for(let x =0; x < schoolSubjects.length; x++){
         const trs = document.createElement("tr");
+        const approval = checkApproval(student[myDefaultSubjects[x]])
         trs.innerHTML = `
            <td>${x+1}</td>
-           <td>${subjects[x]}</td>
-           <td>${getDepartments(subjects[x])}</td>
-           <td><span>${checkApproval(student[subjects[x]])}</span></td>
+           <td>${schoolSubjects[x]}</td>
+           <td>${getDepartments(myDefaultSubjects[x])}</td>
+           <td><span style='background-color:${approval.style};'>${approval.val}</span></td>
         `;
         tbodies.appendChild(trs);
        }
-
+     })
     })
 }
 
@@ -251,12 +273,21 @@ function checkApproval(value){
   let approval;
   if(value){
     if(value === "selected" || value === ""){
-        approval = "approved";
+        approval = {
+          val : "approved",
+          style : "green"
+        };
       }else if(value === "not-selected"){
-        approval = "dropped";
+         approval = {
+          val : "dropped",
+          style : "red"
+        };
       }
   }else{
-    approval = "approved"
+     approval = {
+          val : "approved",
+          style : "green"
+        };
   }
   return approval;
 }
@@ -280,6 +311,8 @@ function getDepartments(value){
     department = "humanity";
     } else if (technicalSubjects.includes(subject)) {
     department = "technicals";
+    }else{
+      department = "technicals"
     }
     return department;
 }

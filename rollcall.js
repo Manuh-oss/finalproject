@@ -67,6 +67,7 @@ function getResults(callback) {
   data.append("class", "");
   data.append("term", "");
   data.append("exam", "");
+  data.append("id", "");
 
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "result.php", true);

@@ -84,6 +84,7 @@ function getSetup(callback) {
     try {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
+        console.log("response" , response)
         callback(response);
       }
     } catch (error) {
@@ -157,7 +158,9 @@ function closeNav(){
   navigation.style.visibility = "hidden";
 }
 
+
 document.addEventListener("DOMContentLoaded" , () => {
+  if(!openNav) return
     openNav.addEventListener("click" , () => {
       const icon = openNav.querySelector("i");
       if(icon){
@@ -308,6 +311,9 @@ const adminNav =  `
 </div>           
 `;
 
+const url = new URLSearchParams(window.location.search);
+const idofschool = url.get("school");
+
 function updateSideNav(){
   getUser((user) => {
     if(user.from === "teacher"){
@@ -316,6 +322,8 @@ function updateSideNav(){
       body.innerHTML = studentSidenav;
     }else if(user.from === "admin"){
       body.innerHTML = adminNav;
+    }else if(idofschool === null) {
+      window.location.href = "main.html";
     }
   })
 }
@@ -326,6 +334,7 @@ updateSideNav();
 
 let databaseClases;
 let databaseStream;
+
 getUser((user) => {
 getSetup((schoolSetups) => {
   const thisSchool = schoolSetups.find(s => s.schoolId === user.schoolId);
@@ -412,3 +421,87 @@ function getStreams(rawStreams) {
 
   return result;
 }
+
+
+function loadSchoolData(callback) {
+  // If it's already loaded globally, use it directly
+  if (window.schoolData) {
+    callback(window.schoolData);
+    return;
+  }
+
+  // Otherwise fetch fresh
+  getUser((user) => {
+    getSetup((schoolSetups) => {
+      const thisSchool = schoolSetups.find(s => s.schoolId === user.schoolId);
+
+      if (thisSchool) {
+        const clases = getClases(thisSchool.clases);
+        const subjects = getSubjects(thisSchool.subjects);
+        const streams = getStreams(thisSchool.streams);
+
+        const schoolData = {
+          classes: clases,
+          subjects: subjects,
+          streams: streams
+        };
+
+        window.schoolData = schoolData; // store globally
+        callback(schoolData);
+      } else {
+        console.log("School not found for user.");
+      }
+    });
+  });
+}
+
+function showLoader() {
+  getSetup((setups) => {
+    getUser((user) => {
+      const thisSchool = setups.find(s => s.schoolId === user.schoolId);
+      const loader = document.createElement("div");
+      loader.className = "loading-page";
+
+      const school = document.createElement("div");
+      school.className = "school";
+
+      const img = document.createElement("img");
+      img.src = thisSchool.badge;
+
+      const h3 = document.createElement("h3");
+      h3.innerHTML = "Preparing your learning environment… <i class='fa-solid fa-wave-square'></i>";
+
+      school.appendChild(img);
+      school.appendChild(h3);
+      loader.appendChild(school);
+
+      loader.style.opacity = "0";
+      loader.style.transform = "scale(0.5)";
+      document.body.appendChild(loader);
+
+      requestAnimationFrame(() => {
+        loader.style.opacity = "1";
+        loader.style.transform = "scale(1)";
+      });
+
+      console.log("am showing loader");
+
+      const hideLoader = () => {
+        console.log("already loaded");
+        loader.style.opacity = "0";
+        loader.style.transform = "scale(0.5)";
+        setTimeout(() => loader.remove(), 400);
+      };
+
+      if (document.readyState === "complete") {
+        hideLoader(); // Page already loaded
+      } else {
+        window.addEventListener("load", hideLoader);
+      }
+    });
+  });
+}
+
+showLoader();
+
+

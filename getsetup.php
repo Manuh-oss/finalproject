@@ -16,10 +16,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "streams" => $row['streams'],
                 "layout" => $row['layout'],
                 "adress" => $row['school_address'],
+                "domain" => $row['subdomain'],
+                "term" => $row['term'],
                 "badge" => $row['school_badge']
             ];
-            echo json_encode($feedback);
         }
+          echo json_encode($feedback);
 
     }else{
         echo json_encode([

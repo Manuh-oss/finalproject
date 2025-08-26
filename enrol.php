@@ -18,21 +18,28 @@ include("connection2.php");
      $email = $conn->real_escape_string($_POST['email']);
      $address = $conn->real_escape_string($_POST['address']);
      $id = $conn->real_escape_string($_POST['id']);
+     $userId = $conn->real_escape_string($_POST['user_id']);
      //4. image submittion
     // include("directory.php");
      $file = $_FILES['profile-image']['name'];
      $fileTemplateName = $_FILES['profile-image']['tmp_name'];
+     $dir = 'profileImages/';
+     if(!is_dir($dir)){
+       if(mkdir($dir,0777,true)){
+              
+       }
+      }
      $uploadDirectory = 'profileImages/';
      $uploadPath = $uploadDirectory . basename($file);
 
      if(!empty($file)){
         if(move_uploaded_file($fileTemplateName , $uploadPath)){
           //check if student exist
-          $sqlCheck = "SELECT * FROM `main` WHERE `admission` = '$admission'AND`school_id`='$id'";
+          $sqlCheck = "SELECT * FROM `main` WHERE `Student_id` = '$userId' AND `school_id`='$id' OR `admission`='$admission'";
           $checkResult = $conn->query($sqlCheck);
           $countStudents = mysqli_num_rows($checkResult);
           if($countStudents > 0){
-            $sqlUpdate = "UPDATE `main` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`email`='$email',`admission`='$admission',`dateofbirth`='$dateOfBirth',`class`='$class',`stream`='$stream',`gender`='$gender',`profileImage_name`='$file',`profileImage_path`='$uploadPath',`student_location`='$location',`student_address`='$address' WHERE `admission` = '$admission'";
+            $sqlUpdate = "UPDATE `main` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`email`='$email',`admission`='$admission',`dateofbirth`='$dateOfBirth',`class`='$class',`stream`='$stream',`gender`='$gender',`profileImage_name`='$file',`profileImage_path`='$uploadPath',`student_location`='$location',`student_address`='$address' WHERE `Student_id` = '$userId' AND `school_id`='$id'";
 
                 if($conn->query($sqlUpdate) === TRUE){          
                   $feedback = [
@@ -75,12 +82,12 @@ include("connection2.php");
         }    
      }else{
       
-      $sqlCheck = "SELECT * FROM `main` WHERE `admission` = '$admission'AND`school_id`='$id'";
+      $sqlCheck = "SELECT * FROM `main` WHERE `Student_id` = '$userId' AND `school_id`='$id' OR `admission`='$admission'";
       $checkResult = $conn->query($sqlCheck);
       $countStudents = mysqli_num_rows($checkResult);
 
       if($countStudents > 0){
-        $sqlUpdate = "UPDATE `main` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`email`='$email',`admission`='$admission',`dateofbirth`='$dateOfBirth',`class`='$class',`stream`='$stream',`gender`='$gender',`student_location`='$location',`student_address`='$address' WHERE `admission` = '$admission'";
+        $sqlUpdate = "UPDATE `main` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`othername`='$othername',`email`='$email',`admission`='$admission',`dateofbirth`='$dateOfBirth',`class`='$class',`stream`='$stream',`gender`='$gender',`student_location`='$location',`student_address`='$address' WHERE `Student_id` = '$userId' AND `school_id`='$id'";
 
           if($conn->query($sqlUpdate) === TRUE){          
             $feedback = [

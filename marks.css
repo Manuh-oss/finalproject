@@ -60,11 +60,13 @@
 .marks-table table tbody tr:nth-child(even) {
   background-color: var(--soft-white);
   border-bottom: 1px dotted #2d3e50;
+  transition: opacity .5s linear,transform .5s linear;
 }
 
 .marks-table table tbody tr:nth-child(odd) {
   background-color: var(--light-gray);
   border-bottom: 1px dotted #2d3e50;
+  transition: opacity .5s linear,transform .5s linear;
 }
 
 .marks-table table tbody tr td {

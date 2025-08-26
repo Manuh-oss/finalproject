@@ -1,5 +1,7 @@
 const statisticalReport = document.querySelector(".statistic-report");
-const subjects = [
+const progressContainer = document.getElementById("container");
+
+const myDefaultSubjects = [
   "english",
   "kiswahili",
   "mathematics",
@@ -13,328 +15,405 @@ const subjects = [
   "agriculture",
   "computer",
   "french",
+  "subject14",
+  "subject15",
+  "subject16",
 ];
-
-subjects.sort();
 
 let n;
 const streams = ["111", "333", "222", "444"];
 const classes = ["1", "2", "3", "4"];
 
 //function section start here
-function getUser(callback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "saved_user.php", true);
-  xhr.onload = () => {
-    try{
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      callback(response);
-    }
-    }catch(error){
-      console.log("login error",error)
-    }
-  };
-  xhr.send();
+async function getUser() {
+  try {
+    const response = await fetch("saved_user.php", {
+      method: "GET",
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("login error", error);
+  }
 }
 
-function getStudents(callback) {
-  getUser((user) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "students.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Student Error", error);
-    }
-  };
-  xhr.send();
-  })
+async function getStudents() {
+  const user = await getUser();
+  showLoader("fetching student details...");
+  try {
+    const response = await fetch("students.php", {
+      method: "POST",
+    });
+    const result = await response.json();
+    const thisSchool = result.filter((s) => s.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("teachers error", error);
+  } finally {
+    removeLoader();
+  }
 }
 
+async function getMarks() {
+  showLoader("fetching student marks...");
+  const user = await getUser();
+  const data = new FormData();
+  data.append("class", "");
+  data.append("exam", "");
+  data.append("term", "");
+  data.append("id", "");
 
-function getMarks(callback) {
-  getUser((user) => {
-  const form = new FormData();
-  form.append("class", "");
-  form.append("term", "");
-  form.append("exam", "");
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "result.php", true);
-  xhr.onload = () => {
-    try {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        const thisSchool = response.filter(s => s.schoolId === user.schoolId);
-        callback(thisSchool);
-      }
-    } catch (error) {
-      console.log("Resultt Error", error);
-    }
-  };
-  xhr.send(form);
-  })
+  try {
+    const response = await fetch("result.php", {
+      method: "POST",
+      body: data,
+    });
+    const result = await response.json();
+    const schoolResult = result.filter((r) => r.schoolId === user.schoolId);
+    return schoolResult;
+  } catch (error) {
+    console.log("marks error", error);
+  } finally {
+    removeLoader();
+  }
 }
 
-const data = JSON.parse(localStorage.getItem("data"))
+const data = JSON.parse(localStorage.getItem("data"));
 
-function mainFunction(){
-  if(data.marks.length > 0){
-    
-    getSubjectTotalMeans(data.marks, (chartData) => {
-      displaySubjectsChart(chartData);
+async function getSetup() {
+  showLoader("fetching school details...");
+  try {
+    const user = await getUser();
+    const response = await fetch("getsetup.php", {
+      method: "POST",
     });
+    const result = await response.json();
+    const thisSchool = result.filter((s) => s.schoolId === user.schoolId);
+    return thisSchool;
+  } catch (error) {
+    console.log("setup error", error);
+  } finally {
+    removeLoader();
+  }
+}
 
-    getClassMeans(data.mode, data.marks , (chartData) => {
-      displayStreamData(chartData)
-    });
+async function mySubjects() {
+  const setup = await getSetup();
+  if (setup.length === 0) return;
+  const schoolSubjects = getSubject(setup[0].subjects);
 
-    getGenderMeans(data.marks , (chartData) => {
-      displayGenderChart(chartData)
-    });
+  return schoolSubjects;
+}
 
-    getGenderNumbers(data.marks , (chartData) => {
-      displayGenderNumber(chartData);
-    })
+function getSubject(rawSubjects) {
+  const rawstreamArray = rawSubjects.split("-");
+  const streamArray = rawstreamArray.map((s) => {
+    const [classes] = s.split("/");
+    return classes;
+  });
+  return streamArray;
+}
 
-  }else{
+function getStreams(rawStreams) {
+  let result = {};
+  const rawstreamArray = rawStreams.split("-");
+
+  rawstreamArray.forEach((stream) => {
+    const parts = stream.split(":");
+    if (parts.length === 2) {
+      const [clas, streams] = parts;
+      result[clas] = streams.split("/");
+    }
+  });
+
+  return result;
+}
+
+function getClases(rawClases) {
+  const rawclasesArray = rawClases.split("-");
+  const classArray = rawclasesArray.map((s) => {
+    const [classes] = s.split("/");
+    return classes;
+  });
+  return classArray;
+}
+
+async function mainFunction() {
+  if (data.marks.length > 0) {
+    const subjectChartData = await getSubjectTotalMeans(data.marks);
+    displaySubjectsChart(subjectChartData);
+
+    await getClassMeans(data.marks, data.mode);
+
+    const genderData = await getGenderMeans(data.marks);
+    console.log(genderData);
+    await displayGenderChart(genderData);
+
+    const numbers = await getGenderNumbers(data.marks);
+    displayGenderNumber(numbers)
+
+    // getGenderMeans(data.marks , (chartData) => {
+    //   displayGenderChart(chartData)
+    // });
+
+    // getGenderNumbers(data.marks , (chartData) => {
+    //   displayGenderNumber(chartData);
+    // })
+  } else {
     window.location.href = "analysis.html";
   }
 }
 
 //function to get subject mean totals
-function getSubjectTotalMeans(analysisData,callback){
-  getStudents((studente) => {
-    const subjectArrays = {};
-    const subjectMeans = {};
-     analysisData.forEach(studentMark => {
-        const studentData = studente.find(s => s.admission === studentMark.admission);
+async function getSubjectTotalMeans(analysisData) {
+  const students = await getStudents();
+  const subjectMeans = {};
+  const subjectData = {};
+  const subjects = await mySubjects();
 
-        if(studentData){
-          for(let subj = 0; subj < subjects.length; subj++){
-            if(studentData[subjects[subj]] !== "not-selected"){
-               if(!subjectArrays[subjects[subj]]) subjectArrays[subjects[subj]] = [];
-               subjectArrays[subjects[subj]].push(Number(studentMark[subjects[subj]])); 
+  //this gets all subject data and arranges them in an array
+  for (const [index, mark] of analysisData.entries()) {
+    const student = students.find((s) => s.admission === mark.admission);
 
-               const total = subjectArrays[subjects[subj]].reduce((total , value) => total + value , 0);
-               subjectMeans[subjects[subj]] =  total / subjectArrays[subjects[subj]].length;
-            }
-          }
+    if (student) {
+      subjects.map((subj, idx) => {
+        const status = student[myDefaultSubjects[idx]];
+        if (status !== "not-selected") {
+          if (!subjectData[subj]) subjectData[subj] = []; //create an arry to store all the subject marks
+          subjectData[subj].push(mark[myDefaultSubjects[idx]]); //push the marks of that specific subject
         }
-     });
-     callback(subjectMeans)
-  })
+      });
+    }
+  }
+
+  //function to get mean and total
+  Object.entries(subjectData).forEach(([subject, dataArray]) => {
+    const subjectTotal = dataArray.reduce(
+      (total, mark) => total + Number(mark),
+      0
+    );
+    const mean = subjectTotal / dataArray.length;
+    subjectMeans[subject] = mean;
+  });
+
+  return subjectMeans;
 }
 
 //function to display subjects chart
 let chart = null;
-function displaySubjectsChart(chartData){
+function displaySubjectsChart(chartData) {
   const canvas = document.getElementById("my-chart");
-  if(chart !== null){
+  if (chart !== null) {
     chart.destroy();
   }
 
   const dataObject = {
-    labels : Object.keys(chartData),
-    datasets : [
+    labels: Object.keys(chartData).map((name) => name.substring(0, 4)),
+    datasets: [
       {
-        data : Object.values(chartData),
-        label : "subjects"
-      }
-    ]
-  }
+        data: Object.values(chartData),
+        label: "subjects",
+      },
+    ],
+  };
 
-  chart = new Chart(
-     canvas,
-     {
-      type : 'bar',
-      data : dataObject,
-      options : {
-        responsive : true,
-      }
-     }
-  )
-
+  chart = new Chart(canvas, {
+    type: "bar",
+    data: dataObject,
+    options: {
+      responsive: true,
+    },
+  });
 }
 
 //function to get both class and stream acording to the data
-function getClassMeans(mode, analysisData,callback){
-  getMarks((marks) => {
-      const term = analysisData[0].term;
-      const exam = analysisData[0].exam;
-      const clas = analysisData[0].class;
-      let comparingData;
-    
-      if(mode === "stream"){
-        comparingData = marks.filter(mark => {
-          return (
-            mark.class === clas &&
-            mark.exam === exam &&
-            mark.term === term
-          )
-        })       
-      }else if(mode === "classes"){
-        comparingData = analysisData;
+async function getClassMeans(analysisData, mode) {
+  const setup = await getSetup();
+  const streams = await getStreams(setup[0].streams);
+  const thisClass = analysisData[0].class;
+  const thisstream = analysisData[0].stream;
+
+  const classData = {};
+
+  const thisClassStreams = streams[thisClass];
+
+  if (mode === "class") {
+    for (const stream of thisClassStreams) {
+      const streamData = analysisData
+        .filter((s) => s.stream === stream)
+        .map((s) => Number(s.mean));
+
+      if (streamData.length > 0) {
+        const total = streamData.reduce((a, b) => a + b, 0);
+        const mean = total / streamData.length;
+        classData[stream] = mean;
+      } else {
+        classData[stream] = 3;
       }
-
-      const classMeans = {};
-
-      for(let x = 0; x < streams.length; x++){
-        const streamData = comparingData.filter(mark => mark.stream === streams[x])
-        const totals = streamData.reduce((total , value) => total + Number(value.mean) , true);
-        classMeans[streams[x]] = totals / streamData.length;
-      }
-      callback(classMeans)
-  })
-}
-
-function covertStream(rawStream) {
-  switch (rawStream) {
-    case "111":
-      return "green";
-      break;
-    case "222":
-      return "blue";
-      break;
-    case "333":
-      return "red";
-      break;
-    case "444":
-      return "purle";
-      break;
-    default:
-      return "green";
+    }
+    displayStreamData(classData, thisClass);
+  } else if (mode === "stream") {
+    //if mode is stream diaply line chart with all their mrks
+    const data = analysisData.map((s) => s.mean).sort((a, b) => b - a);
+    const className = thisClass + " " + thisstream;
+    await displayStreamChart(data, className);
   }
 }
 
 let streamChart = null;
-function displayStreamData(chartData){
-  const canvas = document.getElementById("agenda");
-  if(streamChart !== null) streamChart.destroy();
+async function displayStreamChart(data, name) {
+  if (streamChart !== null) streamChart.destroy();
+
+  const canvas = document.getElementById("agenda").getContext("2d");
+  const gradient = canvas.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, "blue");
+  gradient.addColorStop(1, "white");
 
   const streamData = {
-    labels : Object.keys(chartData).map(m => covertStream(m)),
-    datasets : [
+    labels: data,
+    datasets: [
       {
-        data : Object.values(chartData),
-        label : "stream data"
-      }
-    ]
-  }
+        data: data,
+        label: name,
+        fill: true, // enable area under the line
+        backgroundColor: gradient,
+        borderWidth: 1,
+        borderColor: "blue",
+        tension: 0.4, // smooth curves
+        pointRadius: 0,
+      },
+    ],
+    options: [
+      {
+        responsive: true,
+      },
+    ],
+  };
 
-  streamChart = new Chart(
-    canvas,
-    {
-      type : 'bar',
-      data : streamData
-    }
-  )
-
-}
-
-function getGenderMeans(analysisData, callback) {
-  const genders = ["male", "female"];
-
-  getStudents((students) => {
-    const genderMean = {};
-
-    genders.forEach(gender => {
-      // Get all student admissions for this gender
-      const genderAdmissions = students
-        .filter(s => s.gender === gender)
-        .map(s => s.admission);
-
-      // Get analysisData entries that belong to these students
-      const genderData = analysisData.filter(entry =>
-        genderAdmissions.includes(entry.admission)
-      );
-
-      // Sum their 'mean' values
-      const total = genderData.reduce((sum, entry) => sum + Number(entry.mean), 0);
-      const mean = genderData.length > 0 ? total / genderData.length : 0;
-
-      genderMean[gender] = mean;
-    });
-
-    callback(genderMean);
+  streamChart = new Chart(canvas, {
+    type: "line",
+    data: streamData,
   });
 }
 
+function displayStreamData(chartData, name) {
+  const canvas = document.getElementById("agenda");
+  if (streamChart !== null) streamChart.destroy();
+
+  const streamData = {
+    labels: Object.keys(chartData),
+    datasets: [
+      {
+        data: Object.values(chartData),
+        label: name,
+      },
+    ],
+  };
+
+  streamChart = new Chart(canvas, {
+    type: "bar",
+    data: streamData,
+  });
+}
+
+async function getGenderMeans(analysisData) {
+  const genders = ["male", "female"];
+  const students = await getStudents();
+  const genderData = {};
+  for (const gender of genders) {
+    const genderArray = analysisData
+      .filter((mark) => {
+        const student = students.find(
+          (s) => s.admission === mark.admission && s.gender === gender
+        );
+        if (student) {
+          return mark.mean;
+        }
+      })
+      .map((s) => Number(s.mean));
+    const genderTotal = genderArray.reduce((a, b) => a + b, 0);
+    const genderMean = genderTotal / genderArray.length;
+    genderData[gender] = genderMean;
+  }
+  return genderData;
+}
 
 let genderChart = null;
 
-function displayGenderChart(chartData){
+function displayGenderChart(chartData) {
   const canvas = document.getElementById("gender-chart");
-  if(genderChart !== null) genderChart.destroy();
+  if (genderChart !== null) genderChart.destroy();
 
   const streamData = {
-    labels : Object.keys(chartData),
-    datasets : [
+    labels: Object.keys(chartData),
+    datasets: [
       {
-        data : Object.values(chartData),
-        label : "stream data"
-      }
-    ]
-  }
+        data: Object.values(chartData),
+        label: "stream data",
+      },
+    ],
+  };
 
-  genderChart = new Chart(
-    canvas,
-    {
-      type : 'bar',
-      data : streamData
-    }
-  )
+  genderChart = new Chart(canvas, {
+    type: "bar",
+    data: streamData,
+  });
 }
 
+async function getGenderNumbers(analysisData, callback) {
+  const students = await getStudents();
+  const genderNumbers = {};
+  const genders = ["male", "female"];
+  genders.forEach((gender) => {
+    const genderArry = students
+      .filter((s) => s.gender === gender)
+      .map((s) => s.admission);
+    const number = analysisData.filter((entry) =>
+      genderArry.includes(entry.admission)
+    );
 
-function getGenderNumbers(analysisData,callback){
-  getStudents((students) => {
-      const genderNumbers = {};
-      const genders = ["male", "female"];
-     genders.forEach(gender => {
-       const genderArry = students.filter(s => s.gender === gender).map(s => s.admission);
-       const number = analysisData.filter(entry => genderArry.includes(entry.admission));
-
-       genderNumbers[gender] = number.length;
-    })
-    callback(genderNumbers)
-  })  
+    genderNumbers[gender] = number.length;
+  });
+  return genderNumbers;
 }
 
 let numberChart = null;
-function displayGenderNumber(chartData){
-  if(numberChart !== null) numberChart.destroy();
+function displayGenderNumber(chartData) {
+  if (numberChart !== null) numberChart.destroy();
   const canvas = document.getElementById("all-students");
   const streamData = {
-    labels : Object.keys(chartData),
-    datasets : [
+    labels: Object.keys(chartData),
+    datasets: [
       {
-        data : Object.values(chartData),
-        label : "stream data"
-      }
-    ]
-  }
+        data: Object.values(chartData),
+        label: "stream data",
+      },
+    ],
+  };
 
-  console.log(chartData)
+  console.log(chartData);
 
-  numberChart = new Chart(
-    canvas,
-    {
-      type : 'doughnut',
-      data : streamData,
-      options : {
-        responsive : true,
-        maintainAspectRatio: false,
-        cutout: '50%' 
-      }
-    }
-  )
+  numberChart = new Chart(canvas, {
+    type: "doughnut",
+    data: streamData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "50%",
+    },
+  });
 }
 
 mainFunction();
 
+function showLoader(message) {
+  progressContainer.classList.remove("removes");
+  progressContainer.classList.add("active");
+  const messageText = progressContainer.querySelector(".text");
+  messageText.textContent = message;
+}
+
+function removeLoader() {
+  progressContainer.classList.add("removes");
+  progressContainer.classList.remove("active");
+}

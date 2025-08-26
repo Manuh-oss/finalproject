@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
     <link rel="stylesheet" href="aside.css" />
     <link rel="stylesheet" href="qrcode.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+   </style>
 </style>
 
   </head>
@@ -156,16 +159,104 @@
         </div>
 
         <div class="main">
-          <div class="qr-container">
-
+          <div class="options">
+            <button type="button" class="teacher">teacher attendance</button>
+            <button type="button" class="student">student attendance</button>
+            <button type="button" class="codes">qr codes</button>
+          </div>
+          <div class="session">
+            <h2 class="today"></h2>
+            <h1 class="now">17:15<span>pm</span></h1>
+            <h3>session 10 / session 10</h3>
+          </div>
+          <div class="table-section">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>t-Code</th>
+                  <th>name</th>
+                  <th>monday</th>
+                  <th>tuesday</th>
+                  <th>wednesday</th>
+                  <th>thursday</th>
+                  <th>friday</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>t/HM/0001</td>
+                  <td>emmanuel mwendwa muia</td>
+                  <td>
+                    <div class="spans">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                   </div>
+                </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="qr-codes-container">
+            <div class="category-box">
+              <h2>pre-primary</h2>
+              <div class="body">
+                <div class="class-box">
+                  <h3>playgroup</h3>
+                  <div class="streams">
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                  </div>
+                  <button type="button" class="download">download</button>
+                </div>
+                <div class="class-box">
+                  <h3>playgroup</h3>
+                  <div class="streams">
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                      <span>
+                        <img src="">
+                        <h4>green</h4>
+                     </span>
+                  </div>
+                  <button type="button" class="download">download</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
       </div>
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
-    <script src="qrcode.js"></script>
     <script src="tittle.js"></script>
+    <script src="qrcode.js"></script>
   </body>
 </html>

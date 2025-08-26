@@ -16,6 +16,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         if($result){
             while($row = $result->fetch_assoc()){
                $feedback [] = [
+                "id" => $row['Student_id'],
                 "admission" => $row['admission'],
                 "mathematics" => $row['mathematics'],
                 "mathematics_position" => $row['mathematics_position'],
@@ -43,6 +44,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 "computer_position" => $row['computer_position'],
                 "french" => $row['french'],
                 "french_position" => $row['french_position'],
+                "subject14" => $row['subject14'],
+                "subject14_position" => $row['subject14_position'],
+                "subject15" => $row['subject15'],
+                "subject15_position" => $row['subject15_position'],
+                "subject16" => $row['subject16'],
+                "subject16_position" => $row['subject16_position'],
                 "streamPosition" => $row['Total_position'],
                 "meanPosition" => $row['mean_position'],
                 "total" => $row['Total'],
@@ -71,6 +78,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         if($result){
             while($row = $result->fetch_assoc()){
                $feedback [] = [
+                "id" => $row['Student_id'],
                 "admission" => $row['admission'],
                 "mathematics" => $row['mathematics'],
                 "mathematics_position" => $row['mathematics_position'],
