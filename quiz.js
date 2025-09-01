@@ -509,29 +509,32 @@ let doneQuestions = [];
 async function displayQuestions(questions) {
    const nextBtn = quizBox.querySelector("#next");
 
-    const remainingQuestions = questions.filter(q => 
-        !doneQuestions.some(doneQ => doneQ.question === q.question)
-    );
+   const remainingQuestions = questions.filter(q => 
+       !doneQuestions.some(doneQ => doneQ.question === q.question)
+   );
 
-    if (remainingQuestions.length === 0) {
-        showSuccessMessage("Quiz done");
-        setTimeout(() => {
-            showResult();
-        }, 2000);
-        return;
-    }
+   if (remainingQuestions.length === 0) {
+       showSuccessMessage("Quiz done");
+       setTimeout(() => {
+           showResult();
+       }, 2000);
+       return;
+   }
 
-    const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-    const currentQuestion = remainingQuestions[randomIndex];
+   const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+   const currentQuestion = remainingQuestions[randomIndex];
 
-    doneQuestions.push(currentQuestion);
+   doneQuestions.push(currentQuestion);
 
-    if (remainingQuestions.length === 1) {
-        nextBtn.textContent = "Finish";
-    }
+   if (remainingQuestions.length === 1) {
+       nextBtn.textContent = "Finish";
+   } else {
+       nextBtn.textContent = "Next"; 
+   }
 
-    showQuestion(currentQuestion);
+   showQuestion(currentQuestion);
 }
+
 
 function showQuestion(questions){
   console.log(questions)

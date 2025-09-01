@@ -249,3 +249,12 @@ updateSideNav();
      console.log("notification error" , error);
    }
  }
+
+ async function logoutUser(){
+  const user = await getUser();
+  if(user.from === ""){
+    window.location.href = "main.html"
+  }
+ }
+
+ logoutUser();

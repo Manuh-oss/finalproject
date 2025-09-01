@@ -924,6 +924,7 @@ function postStudentForm(url,inputs,editForm,clas,stream,rank) {
       formData.append("class" , clas);
       formData.append("stream" , stream);
       formData.append("rank" , rank);
+      formData.append("schoolId" , user.schoolId);
     }
     formData.append("id" , user.schoolId);
     const xhr = new XMLHttpRequest();

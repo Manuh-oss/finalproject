@@ -238,9 +238,9 @@ function postExamForm(){
             let alah;
             response.message.trim() === "update success" ? alah = "updated" : alah = "added";
             showSuccessMessage(`exam was ${alah} succesfully`);
-            const message = `The ${convertExam(examSelect.value)} exam for Form${classSelect.value} has just been set`;
+            const message = `The ${convertExam(examSelect.value)} exam for ${classSelect.value} has just been set`;
             const destination = `teacher-${classSelect.value}`;
-            const description = `new ${convertExam(examSelect)} exam for form${classSelect.value} was just uploaded wanna check out`;
+            const description = `new ${convertExam(examSelect)} exam for ${classSelect.value} was just uploaded wanna check out`;
             const type = `educative-exam-${classSelect.value}`;
             const from = `H.O.D-examination`
             postFeedback(message,destination,from,description,type);

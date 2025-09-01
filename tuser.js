@@ -502,6 +502,7 @@ setInterval(showSlideShow, 5000);
 async function displayCalendar() {
   const dates = await getAllDates();
   const allEvents = await getEvents();
+  const user = await getUser();
   const spans = document.querySelector(".calendar .body");
   const eventDesc = document.querySelector(".calendar .event");
   spans.innerHTML = "";
@@ -516,7 +517,7 @@ async function displayCalendar() {
      `;
     if (
       event &&
-      (event.destination === "all" || event.destination === "teacher")
+      (event.destination === "all" || event.destination === "teacher" || event.user === user.code)
     ) {
       span.style.backgroundColor = eventColors[event.category];
       span.style.color = "#fff";
@@ -524,6 +525,11 @@ async function displayCalendar() {
         eventDesc.innerHTML = `
           <h3>${event.tittle}</h3>
           <h4>${event.description}</h4>
+        `;
+      }else{
+        eventDesc.innerHTML = `
+          <h3>no events for today</h3>
+          <h4></h4>
         `;
       }
     }
@@ -568,20 +574,18 @@ async function getMarksChartData() {
         const classMatch = normalise(mark.class) === normalise(lesson.class);
         const streamMatch = normalise(mark.stream) === normalise(lesson.stream);
 
-        if (streamMatch && classMatch) {
-          const exam = `${mark.class}-${mark.stream}-${convertExam(
-            mark.exam
-          )}-term${mark.term}`;
-          if (!allExams[exam]) {
-            allExams[exam] = [];
-          }
-          allExams[exam].push(Number(mark[lesson.subject]));
-        }
+        return classMatch && streamMatch
+      })
+      const classMarks = classResults.map(mark => {
+         const exam = `${lesson.class}-${lesson.stream}-${lesson.subject}-${convertExam(mark.exam)}-term${mark.term}`;
+         if(!allExams[exam]) allExams[exam] = [];
+         allExams[exam].push(Number(mark[lesson.subject])) 
       });
     }
   }
 
   const allExamEntries = Object.entries(allExams);
+  console.log(allExamEntries)
 
   // Check if we are at the end of the array and reset if needed
   if (currentMarkIndex >= allExamEntries.length) {
@@ -593,6 +597,7 @@ async function getMarksChartData() {
   if (currentExam[1].length > 0) {
     const completed = currentExam[1].filter((m) => m !== 0);
     const progress = (completed.length / currentExam[1].length) * 100;
+
     displayChart(currentExam);
     displayMarkProgrees(progress, currentExam[0].split("-"));
   }
@@ -744,9 +749,12 @@ async function getNotificaions() {
       method: "POST",
     });
     const result = await response.json();
-
-    const thisSchool = result.filter((n) => n.schoolId === user.schoolId);
-    return thisSchool;
+    if(result.length === 0) {
+       return [];
+    }else{
+      const thisSchool = result.filter((n) => n.schoolId === user.schoolId);
+      return thisSchool;
+    }
   } catch (error) {
     console.log("notification error", error);
   }
@@ -755,6 +763,14 @@ async function getNotificaions() {
 async function displayNotifications() {
   const lessons = await getLessons();
   const notifications = await getNotificaions();
+
+  if(notifications.length === 0){
+    const h3 = document.createElement("h4");
+    h3.textContent = "oops there are no notifications";
+    notificationContainer.appendChild(h3);
+    return;
+  }
+
   let myNotifications;
   lessons.forEach((lesson) => {
     myNotifications = notifications.filter((not) => {
@@ -964,3 +980,35 @@ function showSuccessMessage(messages) {
 
   setTimeout(hideSuccessMessage, 5000);
 }
+
+const phones = ['+254757467372','+254799923669'];
+const message = "finewave technologies says hey kwani rada n gani man";
+
+async function postSms(){
+   try{
+     const response = await fetch("http://manuhacademy.myschools.local:3000/smsService" , {
+        method : 'POST',
+        headers : { "Content-Type": "application/json" },
+        body : JSON.stringify({
+          phones : phones.join(","),
+          message : message
+        })
+     })
+
+     const result = await response.text();
+     return result
+   }catch(error){
+    console.log("sms error" , error);
+   }
+}
+
+async function logs(){
+  const smsResponse = await postSms();
+  console.log("✅ SMS API Response:", smsResponse);
+
+  if(smsResponse && smsResponse.response) {
+    console.log("Raw AfricaTalking response:", smsResponse.response);
+  }
+}
+
+logs();

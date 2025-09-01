@@ -585,6 +585,7 @@
                 <div class="left">
                   <div class="head">
                     <label for="new-slide" id="new-slide-label"><i class="fa fa-image"></i>new slider</label>
+                    <button type="button" class="delete">delete</button>
                     <div class="btn" style="display: none;">
                       <button type="button" class="remove">remove</button>
                       <button type="button" class="apply">apply</button>
@@ -593,12 +594,11 @@
                   </div>
                   <div class="body">
                     <div class="image">
-                      <label for="change"><i class="fas fa-right-left"></i></label>
-                      <input type="file" style="display: none;" id="change">
+                      <label for="new-slide" id="change"><i class="fas fa-right-left"></i></label>
                     </div>
                     <div class="lower">
                       <input type="text" class="tittle" placeholder="slider title">
-                      <textarea class="desc"></textarea>
+                      <textarea class="desc" placeholder="type slider description 10 >"></textarea>
                     </div>
                   </div>
                 </div>
@@ -618,7 +618,7 @@
                         <span></span>
                         <span></span>
                       </div>
-                    </div>
+                  </div>
                 </div>
               </div>
               <h2>school information</h2>
@@ -635,9 +635,6 @@
                   <h2>vision</h2>
                   <textarea id="vision"></textarea>
                  </div>
-              </div>
-              <div class="apply-btn">
-                <button type="button" class="applyz">apply</button>
               </div>
               <h2>school heads</h2>
               <div class="school-head">
@@ -662,9 +659,6 @@
                         <input type="text" placeholder="rank" id="rank">
                       </span>
                       <textarea id="information"></textarea>
-                      <div class="apply-btn">
-                         <button type="button" class="apply">apply</button>
-                      </div>
                     </div>
                   </div>
               </div>
@@ -683,9 +677,6 @@
                    <i class="fa-brands fa-instagram"></i>
                    <input type="text" class="instagram">
                  </span>
-                 <div class="apply-btn">
-                    <button type="button" class="applyi">apply</button>
-                 </div>
                 </div>
                 <div class="right">
                   <i class="fa fa-heart fa-beat"></i>
@@ -695,6 +686,7 @@
             </div>
 
             <div class="btn-section" >
+              <button type="button" class="apply">apply</button>
               <button type="button" class="back">back</button>
             </div>
 
@@ -728,8 +720,15 @@
 
       </div>
 
+      <div class="progress-container removes" id="container">
+        <div class="box">
+          <div class="spinner"></div>
+          <p class="text">Uploading marks please wait...</p>
+        </div>
+       </div>
+
     </main>
-    <script src="tittle.js"></script>
     <script src="setup.js"></script>
+    <script src="navbar.js"></script>
   </body>
 </html>

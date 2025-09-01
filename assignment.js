@@ -95,14 +95,14 @@ function displayMyassignments() {
             if (assignment.type === "document") {
               li.innerHTML = `
                <a href="${assignment.path}" target="_blank">
-                <h3>${assignment.fileName}</h3>
+                <h3>${assignment.fileName.split(".")[0]}</h3>
                 <h4>${assignment.subject}</h4>
                 <a href="${assignment.path} download"><p>download</p></a>
                </a> 
               `;
             } else if (assignment.type === "image") {
               li.innerHTML = `
-                  <h3>${assignment.fileName}</h3>
+                  <h3>${assignment.fileName.split(".")[0]}</h3>
                   <h4>${assignment.subject}</h4>
                   <a href="${assignment.path} download"><p>download</p></a>
                 `;

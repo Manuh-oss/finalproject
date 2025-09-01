@@ -4,6 +4,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $sqlGet = "SELECT * FROM `notifications`";
     $result = $conn->query($sqlGet);
     if($result){
+
+        if(mysqli_num_rows($result) > 0){
+
        while($row = $result->fetch_assoc()){
          $feedback[] = [
             "message" => $row['message'],
@@ -15,6 +18,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
          ];
        } 
        echo json_encode($feedback);
+       }else{
+         echo json_encode([]);
+       }
     }else{
         echo json_encode([
             "message" => "contact support",

@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="portal.css" />
+    <link rel="stylesheet" href="dashboard.css" />
     <link rel="stylesheet" href="fontawesome-free-6.7.2-web/css/all.css" />
-    <link rel="stylesheet" href="aside.css">
+    <link rel="stylesheet" href="aside.css" />
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
     </style>
   </head>
   <body>
@@ -21,16 +21,17 @@
     <main>
       <aside class="navigation">
         <nav class="navigation-container">
-           <div class="head">
+          <div class="head">
             <strong>
               <span><i class="fa fa-user-graduate"></i></span>
-              highschool</strong>
+              highschool</strong
+            >
           </div>
-            <div class="body"></div>
+          <div class="body"></div>
         </nav>
       </aside>
-      <div class="main-main" style="background-color: #f1f5f9;">
-        <div class="notification-div"> </div>
+      <div class="main-main" style="background-color: #f1f5f9">
+        <div class="notification-div"></div>
         <h1>Dashboard</h1>
         <div class="main">
           <!--welcome messsage stsrt here-->
@@ -106,7 +107,10 @@
                   <h3>educative</h3>
                 </div>
                 <div class="body">
-                  <p>mr kamau just posted 20 questions on introduction to busiiness studeies topic</p>
+                  <p>
+                    mr kamau just posted 20 questions on introduction to
+                    busiiness studeies topic
+                  </p>
                 </div>
                 <div class="link">
                   <a href="#">check it out</a>
@@ -114,9 +118,7 @@
               </li>
               <li>
                 <i class="fa fa-comment"></i>
-                <p>
-                  mr kamau requested all his class members 
-                </p>
+                <p>mr kamau requested all his class members</p>
               </li>
               <li>
                 <i class="fa fa-comment"></i>
@@ -222,7 +224,13 @@
         </div>
       </div>
     </main>
+    <div class="progress-container removes" id="container">
+      <div class="box">
+        <div class="spinner"></div>
+        <p class="text">Uploading marks please wait...</p>
+      </div>
+    </div>
     <script src="dashboard.js"></script>
-    <script src="tittle.js"></script>
+    <script src="navbar.js"></script>
   </body>
 </html>

@@ -92,10 +92,10 @@ function displayNotification(name){
       const destination = `student-${classSelect.value}`;
       const from = user.code;
       const description = `
-        📘 New assignment "<strong>${name}</strong>" has been posted in <strong>${subjectSelect.value} / form${classSelect.value}</strong>. Check it out!
+        📘 New assignment "<strong>${name.split(".")[0]}</strong>" has been posted in <strong>${subjectSelect.value} / ${classSelect.value}</strong>. Check it out!
       `;
       const type = `educative-assignment-${classSelect.value}`;
-      postFeedback(message,destination,from,description,type);
+      postFeedback(message,destination,from,description,type,user.schoolId);
     })
   })
 }
@@ -114,13 +114,14 @@ function getGender(data){
   }
 }
 
-function postFeedback(message,destination,from,description,type){
+function postFeedback(message,destination,from,description,type,id){
   const data = new FormData();
   data.append("message" , message);
   data.append("destination" , destination);
   data.append("from" , from);
   data.append("description" , description);
   data.append("type" , type);
+  data.append("id" , id);
   const xhr = new XMLHttpRequest();
   xhr.open('POST','postfeedback.php',true);
   xhr.onload = () => {

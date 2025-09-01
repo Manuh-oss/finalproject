@@ -499,12 +499,12 @@
   background-color: whitesmoke;
   display: flex;
   flex-direction: column;
-  transition: 0.8s ease-in-out;
-  position: absolute;
   z-index: 100;
-  visibility: none;
-  transform: translateY(-200%);
-  transition: transform 1s ease-in-out;
+  transform: scale(.5) translateY(-100vh);
+  opacity: 0;
+  transition-delay: .4s;
+  transition: transform 1s ease-in-out,opacity 1s ease-in-out;
+  display: none;
 }
 
 .modal-box .create-event .head {

@@ -183,6 +183,7 @@ main .slideshow .text-content{
     transform: translateY(100%) scale(0.5);
     transition: transform .6s ease-in-out;
     transition-delay: .6s;
+    text-shadow: .1rem .1rem .2rem #000;
 }
 
 main .slideshow .text-content h2{
